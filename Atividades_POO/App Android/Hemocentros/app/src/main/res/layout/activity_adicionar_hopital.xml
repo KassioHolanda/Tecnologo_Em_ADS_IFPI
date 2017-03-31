@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3E5F5"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F3E5F5"
+    android:padding="8dp"
+    tools:context="hemocentros.com.example.kassio.hemocentros.hemocentros.activitys.AdicionarHospitalActivity">
+
+    <ImageView
+        android:background="@drawable/image_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/edit_text_nova_unidade_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome da Unidade"/>
+    <EditText
+        android:id="@+id/edit_text_novo_contato_id"
+        android:inputType="phone"
+        android:hint="Contatos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+</ScrollView>
