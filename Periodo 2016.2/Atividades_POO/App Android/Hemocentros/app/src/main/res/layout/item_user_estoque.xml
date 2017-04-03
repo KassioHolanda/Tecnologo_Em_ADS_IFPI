@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    card_view:cardBackgroundColor="#F3E5F5"
+    android:background="#F3E5F5"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="8dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="60dp" >
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="15sp"
+                android:id="@+id/text_view_tipo_sangue_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de Sangue" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="15sp"
+                android:text="Numero de Bolsas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="15sp"
+                android:id="@+id/text_view_numero_bolsas_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doacao" />
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
