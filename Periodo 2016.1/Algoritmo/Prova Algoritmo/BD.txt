@@ -1,0 +1,1 @@
+{'Cargo': 'PREFEITO', 'Nome': 'KASSIO', 'Numero': 45, 'Sexo': 'M', 'ID': 1, 'Sigla do Partido': 'PSDB'}

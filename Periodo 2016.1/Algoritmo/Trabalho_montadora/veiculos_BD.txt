@@ -1,0 +1,2 @@
+{'Motor': 1.4, 'Nome': 'Palio', 'Ano': 2014, 'Montadora': 'Fiat', 'Valor': 40000.0, 'ID': 1}
+{'Motor': 2.0, 'Nome': 'Camaro', 'Ano': 2015, 'Montadora': 'Chevrolet', 'Valor': 1000000.0, 'ID': 2}
