@@ -1,5 +1,5 @@
 def main():
-    print "\n\nmain"
+    print "\nInicio"
     resultado = 0
     existentes = [5,2,3,1]
     disponiveis = [3,1,1,0]
@@ -25,7 +25,7 @@ def main():
     consultar_matrizes(existentes, disponiveis, alocados, resultado, requisitados)
 
 def consultar_matrizes(existentes, disponiveis, alocados, resultado, requisitados):
-    print "\n\nConsultar matrizes"
+    print "\nConsultar matrizes"
 
     for i in range(len(disponiveis)):
         for j in range(len(disponiveis)):
@@ -37,22 +37,22 @@ def consultar_matrizes(existentes, disponiveis, alocados, resultado, requisitado
                 disponiveis[3] += alocados[i][3]
                 resultado += 1
                 break
+
     consultar_deadlock(existentes, disponiveis, resultado)
 
 def consultar_deadlock(existentes, disponiveis, resultado):
 
-    print "\n\nConsultar deadlock"
+    print "\nConsultar deadlock"
+
     print disponiveis[0] == existentes[0]
     print disponiveis[1] == existentes[1]
     print disponiveis[2] == existentes[2]
     print disponiveis[3] == existentes[3]
 
     if resultado == 4 and disponiveis[0] == existentes[0] and disponiveis[1] == existentes[1] and disponiveis[2] == existentes[2] and disponiveis[3] == existentes[3]:
-        print "\n"
-        print "Sem DeadLock"
+        print "\nSem DeadLock"
     else:
-        print "\n"
-        print "DeadLock"
+        print "\nDeadLock"
 
 if __name__ == "__main__":
     main()
