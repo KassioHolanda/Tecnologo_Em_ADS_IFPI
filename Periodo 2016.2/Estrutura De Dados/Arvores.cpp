@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 using namespace std;
 
@@ -100,6 +101,32 @@ class Arvore{
 			}
 		}
 		
+		int quantidade_de_No(No *arv){
+			if(arv == NULL){
+				return 0;
+			} else {
+				int quantidade = 1;
+				quantidade += quantidade_de_No(arv->esq);
+				quantidade += quantidade_de_No(arv->dir);
+				return quantidade;
+			}
+		}
+		
+		int altura_Minima(No *arv){
+			int quantidade = quantidade_de_No(arv);
+			
+			return log2(quantidade) + 1;
+		}
+		
+		void consultar_Completa(No *arv){
+			if(altura_Minima(arv) == altura(arv) + 1){
+				cout<<"\nCompleta\n";
+
+			} else {
+				cout<<"\nIncompleta\n";
+			}
+		}
+				
 };
 
 
@@ -118,7 +145,7 @@ int main(){
 	No *no_f = arv->cria_No('f', NULL, NULL);	
 	
 	cout<<"Imprimindo a arvore\n";
-	arv->imprime(raiz);
+	arv->imprime(arv->raiz);
 	
 	cout<<"\n\nImprimindo a arvore apos criar novo elemento e inseri-lo\n";
 	
@@ -130,15 +157,13 @@ int main(){
 	arv->insere(no_a, no_c, 1, no_a->info);
 	arv->insere(no_a, no_d, 2, no_a->info);
 	
-	//adicionando no no B
-	arv->insere(no_b, no_e, 1, no_b->info);
-	arv->insere(no_b, no_f, 2, no_b->info);
+
 	
 	arv->imprime(raiz);
 	
 	//tamanho da arvore
 	cout<<"\nTamanho da arvore: ";
-	arv->altura(raiz);
+	arv->consultar_Completa(arv->raiz);
 	cout<<"\n";
 	
 		
