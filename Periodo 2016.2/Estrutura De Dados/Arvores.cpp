@@ -45,46 +45,29 @@ class Arvore{
 		
 		
 		void insere(No *arv, No *novo, int lado, char pai){
+			
 			if(arv!=NULL){
+				
 				if(arv->info == pai){
+					
 					if(lado == 1){
 						if(arv->esq == NULL){
 							arv->esq = novo;
 						} else {
 							cout<<"\nERRO - ja existe um No nessa posição";
 						}
+					
 					} if (lado == 2){
 						if(arv->dir == NULL){
 							arv->dir = novo;
 						} else {
 							cout<<"\nERRO - ja existe um No nessa posição";
 						}
-					}		
+					}
+						
 				} else {
 					insere(arv->esq, novo, lado, pai);
 					insere(arv->dir, novo, lado, pai);
-				}
-			}
-		}
-		
-		void insere_ordenado(No *arv, No *novo){
-			if(arv!=NULL){
-				arv = (No *)malloc(sizeof(No));
-				arv->esq = NULL;
-				arv->dir = NULL;
-				arv->info = novo->info; 
-			} else {
-				if(novo->info < arv->esq->info){
-					if (arv->esq != NULL){
-						insere_ordenado(arv->esq, novo);
-					}
-					insere_ordenado(arv->esq, novo);
-				}
-				if(novo->info > arv->dir->info){
-					if(arv->dir != NULL){
-						insere_ordenado(arv->esq, novo);
-					}
-					insere_ordenado(arv->dir, novo);
 				}
 			}
 		}
@@ -289,7 +272,7 @@ main(){
 	
 	Arvore *arv = new Arvore();	
 	arv->cria_vazia();
-	No *raiz = arv->cria_Raiz(10, NULL, NULL);
+	No *raiz = arv->cria_Raiz('r', NULL, NULL);
 	
 	No *no_a = arv->cria_No('a', NULL, NULL);
 	No *no_b = arv->cria_No('b', NULL, NULL);
@@ -300,43 +283,34 @@ main(){
 	No *no_f = arv->cria_No('f', NULL, NULL);
 	No *no_g = arv->cria_No('g', NULL, NULL);
 	No *no_h = arv->cria_No('h', NULL, NULL);
-		
+	
+	cout<<"\n\nImprimindo a arvore apos criar novo elemento e inseri-lo\n";
+	
 	//adicionando na raiz
-	// arv->insere(raiz, no_a, 1, raiz->info);
-	// arv->insere(raiz, no_b, 2, raiz->info);
-	// 
+	arv->insere(raiz, no_a, 1, raiz->info);
+	arv->insere(raiz, no_b, 2, raiz->info);
+	
 	//adicionando no no A
-	// arv->insere(no_a, no_c, 1, no_a->info);
-	// arv->insere(no_a, no_d, 2, no_a->info);
-	// 
+	arv->insere(no_a, no_c, 1, no_a->info);
+	arv->insere(no_a, no_d, 2, no_a->info);
+	
 	//adicionando no no B
-	// arv->insere(no_b, no_e, 1, no_b->info);
-	// arv->insere(no_b, no_f, 2, no_b->info);
-	// 
-	// 
-	// cout<<"\nPre Ordem:\n";
-	// arv->imprime_pre_ordem(raiz);
-	// 
-	// cout<<"\nOrdem Simetrica:\n";
-	// arv->imprime_simetrica(raiz);
-	// 
-	// cout<<"\nPos Ordem:\n";
-	// arv->imprime_pos_ordem(raiz);
-	// 
-	//tamanho da arvore
-	// arv->consultar_Completa(arv->raiz);
-	// cout<<"\n";
-	// 
-	// arv->buscar(raiz, 'c');
+	arv->insere(no_b, no_e, 1, no_b->info);
+	arv->insere(no_b, no_f, 2, no_b->info);
 	
 	
-// 	inserindo ordenado
-
-	No *um = arv->cria_No(2, NULL, NULL);
-	No *dois = arv->cria_No(12, NULL, NULL);
-	
-	arv->insere_ordenado(raiz, um);
+	cout<<"\nPre Ordem:\n";
 	arv->imprime_pre_ordem(raiz);
+	
+	cout<<"\nOrdem Simetrica:\n";
+	arv->imprime_simetrica(raiz);
+	
+	cout<<"\nPos Ordem:\n";
+	arv->imprime_pos_ordem(raiz);
+	
+	//tamanho da arvore
+	arv->consultar_Completa(arv->raiz);
+	cout<<"\n";
 	
 		
 }
