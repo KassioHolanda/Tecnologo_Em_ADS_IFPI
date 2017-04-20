@@ -72,14 +72,46 @@ class Arvore{
 			}
 		}
 		
-		void imprime(No *n){
+		void imprime_pre_ordem(No *n){
 			if(raiz == NULL){
 				cout<<"\n <VAZIO>";
 			} else {
 				if(n != NULL ){
 					cout<<"<"<<n->info;
-					imprime(n->esq);
-					imprime(n->dir);
+					imprime_pre_ordem(n->esq);
+					imprime_pre_ordem(n->dir);
+					cout<<">";
+				} else {
+					cout<<"<>";
+				}
+			}
+		}
+		
+		void imprime_simetrica(No *n){
+			if(raiz == NULL){
+				cout<<"\n <VAZIO>";
+			} else {
+				if(n != NULL ){
+					cout<<"<";
+					imprime_simetrica(n->esq);
+					cout<<n->info;
+					imprime_simetrica(n->dir);
+					cout<<">";
+				} else {
+					cout<<"<>";
+				}
+			}
+		}
+		
+		void imprime_pos_ordem(No *n){
+			if(raiz == NULL){
+				cout<<"\n <VAZIO>";
+			} else {
+				if(n != NULL ){
+					cout<<"<";
+					imprime_pos_ordem(n->esq);
+					imprime_pos_ordem(n->dir);
+					cout<<n->info;
 					cout<<">";
 				} else {
 					cout<<"<>";
@@ -120,17 +152,120 @@ class Arvore{
 		
 		void consultar_Completa(No *arv){
 			if(altura_Minima(arv) == altura(arv) + 1){
-				cout<<"\nArvore Completa\n";
+				cout<<"\n\nArvore Completa\n";
 
 			} else {
-				cout<<"\nArvore Incompleta\n";
+				cout<<"\n\nArvore Incompleta\n";
 			}
 		}
+		
+		int arv_vazia(No* a){
+			return a == NULL;
+		}
+		
+		No* arv_libera (No* a){
+			if(!arv_vazia(a)){
+				arv_libera(a->esq);
+				arv_libera(a->dir);
+				free(a);
+			}
+			return NULL;
+		}
+		
+		void liberaFilho(char procurado, No *n){
+			No *tmp = NULL;
+			if(raiz->info == procurado){
+				tmp = raiz;
+				libera(tmp);
+				raiz = NULL;
+			} else {
+				if(n->dir != NULL){
+					if(n->dir->info == procurado){
+						No *prox = n->dir;
+						n->dir = NULL;
+						libera(prox);
+					} else {
+						liberaFilho(procurado, n->dir);
+					}
+				}
+				if(n->esq != NULL){
+					if(n->esq->info == procurado){
+						No *prox = n->esq;
+						n->esq = NULL;
+						libera(prox);
+					} else {
+						liberaFilho(procurado, n->esq);
+					}
+				}
+			}
+		}
+		
+		
+		void libera(No *pai){
+			No *tmp;
+			if(pai!= NULL){
+				if(pai->esq != NULL){
+					libera(pai->esq);
+				}
+				if(pai->dir != NULL){
+					libera(pai->dir);
+				}
+				
+				free(pai);
+			}
+		}
+
+
+		int arv_pertence(No* a, char c){
+			
+			if (arv_vazia(a)){
+				   return 0; /* arvore vazia: nao encontrou */	
+			} else {
+				return a->info == c || 
+				arv_pertence(a->esq, c) || 
+				arv_pertence(a->dir, c);
+			}	
+		}
+		
+		void buscar(No* ele, char n){
+			if(ele->info == n){
+				cout<<"\nElemento "<<ele->info<<" encontrado!!!";
+			} else {
+				if (ele->dir != NULL){
+					buscar(ele->dir, n);
+				}
+				if (ele->esq != NULL){
+					buscar(ele->esq, n);
+				}
+			}
+		}
+		
+		No *buscarOrd(No *ele, char n){
+			if(ele->info == n){
+				return ele;
+			} else {
+				if(ele->info < n){
+					if(ele->dir != NULL){
+						return buscarOrd(ele->dir, n);
+					} else {
+						return NULL;
+					}
+				}
+				if (ele->info > n){
+					if(ele->esq != NULL){
+						return buscarOrd(ele->esq, n); 
+					} else {
+						return NULL;
+					}
+				}
+			}
+		}
+		
 				
 };
 
 
-int main(){
+main(){
 	
 // 	1 - adicionar a esquerda
 //	2 - adicionar a direitra 
@@ -148,10 +283,6 @@ int main(){
 	No *no_f = arv->cria_No('f', NULL, NULL);
 	No *no_g = arv->cria_No('g', NULL, NULL);
 	No *no_h = arv->cria_No('h', NULL, NULL);
-		
-	
-	cout<<"Imprimindo a arvore\n";
-	arv->imprime(arv->raiz);
 	
 	cout<<"\n\nImprimindo a arvore apos criar novo elemento e inseri-lo\n";
 	
@@ -167,17 +298,21 @@ int main(){
 	arv->insere(no_b, no_e, 1, no_b->info);
 	arv->insere(no_b, no_f, 2, no_b->info);
 	
-	//adicionando no no F
-	arv->insere(no_f, no_g, 2, no_f->info);
 	
-	//adicionando no no G
-	arv->insere(no_g, no_h, 2, no_g->info);
+	cout<<"\nPre Ordem:\n";
+	arv->imprime_pre_ordem(raiz);
 	
-	arv->imprime(raiz);
+	cout<<"\nOrdem Simetrica:\n";
+	arv->imprime_simetrica(raiz);
+	
+	cout<<"\nPos Ordem:\n";
+	arv->imprime_pos_ordem(raiz);
 	
 	//tamanho da arvore
 	arv->consultar_Completa(arv->raiz);
 	cout<<"\n";
+	
+	arv->buscar(raiz, 'c');
 	
 		
 }
