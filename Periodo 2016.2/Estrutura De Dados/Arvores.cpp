@@ -74,10 +74,16 @@ class Arvore{
 				arv->dir = NULL;
 				arv->info = novo->info; 
 			} else {
-				if(novo->info < arv->info){
+				if(novo->info < arv->esq->info){
+					if (arv->esq != NULL){
+						insere_ordenado(arv->esq, novo);
+					}
 					insere_ordenado(arv->esq, novo);
 				}
-				if(novo->info > arv->info){
+				if(novo->info > arv->dir->info){
+					if(arv->dir != NULL){
+						insere_ordenado(arv->esq, novo);
+					}
 					insere_ordenado(arv->dir, novo);
 				}
 			}
