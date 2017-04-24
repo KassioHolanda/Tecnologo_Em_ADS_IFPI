@@ -1,6 +1,9 @@
-#include <string>
-#include <iostream>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <iostream>
+
 using namespace std;
 
 class TProduto{
@@ -9,29 +12,33 @@ class TProduto{
 		string descricao;
 		float unidade;
 		int quant;
+		
 	public:
 		TProduto(int cod, string desc, float unid, int q){
-			this->codigo = cod;
-			this->descricao = desc;
-			this->unidade = unid;
-			this->quant = q;
+			codigo = cod;
+			descricao = desc;
+			unidade = unid;
+			quant = q;
 		}
+		
 		string getDesc(){
-			return this->descricao;
+			return descricao;
 		}
+		
 		float getUnid(){
-			return this->unidade;
+			return unidade;
 		}
+		
 		int getQuant(){
-			return this->quant;
+			return quant;
 		}
 		
 		int getCodigo(){
-			return this->codigo;
+			return codigo;
 		}
 		
 		void mostrar(){
-			cout<<"Codigo: "<<this->codigo <<" Descricao: "<<this->descricao <<" Unidade: "<< this->unidade <<" Quantidade: " << this->quant <<endl;
+			cout<<"Codigo: "<<getCodigo() <<" Descricao: "<<getDesc() <<" Unidade: "<<getUnid() <<" Quantidade: " <<getQuant() <<"\n";
 		}
 		
 };
@@ -39,25 +46,25 @@ class TProduto{
 class TLista{
 	private:
 		TProduto *l[30];
-		int quant;
+		int quantidade;
 	public:
 		TLista(){
-			quant = 0;
+			quantidade = 0;
 		}
 		
 		void inserir(int cod, string desc, float unid, int quant){
 			TProduto *novo = new TProduto(cod, desc, unid, quant);
-			l[quant] = novo;
-			quant++;
+			l[quantidade] = novo;
+			quantidade++;
 		}
 		
 		void consultar(int produto){
 			int i;
 			bool encontrou = false;
-			for(i = 0; i <= quant; i++){
+			for(i = 0; i <= quantidade-1; i++){
 				if(l[i]->getCodigo() == produto){
 					encontrou = true;
-					cout<<"Codigo: "<<l[i]->getCodigo()<<" Descricao: "<<l[i]->getDesc() <<" Unidade: "<< l[i]->getUnid() <<" Quantidade: " << l[i]->getQuant()<<endl;
+					l[i]->mostrar();
 				}
 			}
 			if(!encontrou){
@@ -67,19 +74,23 @@ class TLista{
 		
 		void mostrar(){
 			int i;
-			for(i = 0; i <= quant; i++){
-				cout<<"Codigo: "<<l[i]->getCodigo()<<" Descricao: "<<l[i]->getDesc() <<" Unidade: "<< l[i]->getUnid() <<" Quantidade: " << l[i]->getQuant()<<endl;
+			for(i = 0; i <= quantidade-1; i++){
+				l[i]->mostrar();
 			}
 		}
 };
 
 main(){
 	TLista *lista = new TLista();
-	lista->inserir(2, "abacaxi", 2.50, 20);
+	
+	lista->inserir(1, "abacaxi", 3.50, 20);
+	lista->inserir(2, "banana", 2.50, 5);
+	lista->inserir(3, "limao", 1.00, 3);
 	
 	lista->mostrar();
 	cout<<"\n";
-	lista->consultar(1);
+	cout<<"Item Buscado: ";
+	lista->consultar(2);
 
 	
 }
