@@ -4,7 +4,6 @@ Empresa de ônibus:
 				Nome
 				CPF
 				Salario
-				Horário de trabalho
 				Escala:
 				•	Ônibus
 				•	Horário
