@@ -1,0 +1,92 @@
+1.	Sistema de Transporte Urbano
+	Pessoa:
+			Nome
+			CPF
+	Empresa de ônibus:
+			Funcionário entends Pessoa:
+			o	Escala:
+					Ônibus
+					Horário
+			o	Cargo:
+					Motorista
+					Cobrador:
+					Fiscal
+			Ônibus:
+			o	Número Identificador
+			o	Escala:
+					Horário de Viagens
+					Rota
+			o	Locais:
+					Paradas
+			o	Linha:
+					Número da Linha
+					Identificador de Parada
+
+2.	Sistema de Controle de Atualizações, Autenticação, permissões em um sistema:
+	Pessoa:
+			Nome
+			CPF
+			Sexo
+	Empresa:
+			Funcionário extends Pessoa:
+			o	Permissões
+			o	Cargo:
+					Permissões
+
+
+
+
+
+
+
+
+
+3.	Sistema de transporte aéreo:
+	Pessoa:
+			Nome
+			CPF
+	Aeroporto:
+			Funcionários extends Pessoa:
+			o	Cargo
+			o	Escala
+			o	Salario
+			Companhia Aérea: 
+			o	Funcionários extends Pessoa:
+					Cargo
+					Salario
+					Escala:
+					•	Horário
+					•	Avião
+			o	Aviões:
+					Número Identificador
+					Número de Vagas
+					Escala:
+					•	Horário
+					•	Rota
+					•	Destino
+
+4.	Programa de Fidelidade, recompensa e resgate
+
+	Pessoa:
+			Nome
+			CPF
+
+	Produto:
+			Nome
+			Preço
+
+	Estabelecimento ou Empresa:
+			Funcionário extends Pessoa:
+			o	Salario
+			o	Horário de Trabalho
+			o	Identificador da Loja
+			Nome
+			Endereço
+			Produto
+
+	ClienteCompra extends Pessoa:
+			Produto
+			Número de Compras
+			Estabelecimento ou Empresa
+			Data
+
