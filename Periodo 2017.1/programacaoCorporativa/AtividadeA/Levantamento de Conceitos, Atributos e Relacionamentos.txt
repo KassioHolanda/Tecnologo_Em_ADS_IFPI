@@ -22,6 +22,7 @@
 					Número da Linha
 					Identificador de Parada
 
+
 2.	Sistema de Controle de Atualizações, Autenticação, permissões em um sistema:
 	Pessoa:
 			Nome
@@ -32,13 +33,6 @@
 			o	Permissões
 			o	Cargo:
 					Permissões
-
-
-
-
-
-
-
 
 
 3.	Sistema de transporte aéreo:
@@ -64,6 +58,7 @@
 					•	Horário
 					•	Rota
 					•	Destino
+
 
 4.	Programa de Fidelidade, recompensa e resgate
 
