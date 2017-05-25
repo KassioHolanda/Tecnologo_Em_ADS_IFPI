@@ -16,9 +16,9 @@
 			o	Escala:
 					Horário de Viagens
 					Rota
-			o	Locais:
-					Paradas
-			o	Linha:
+			o	Rota:
+					Parada
+					Identificador Parada
 					Número da Linha
 					Identificador de Parada
 
