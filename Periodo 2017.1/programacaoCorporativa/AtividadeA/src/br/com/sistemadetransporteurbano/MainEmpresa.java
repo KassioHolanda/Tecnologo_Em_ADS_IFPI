@@ -1,5 +1,7 @@
 package br.com.sistemadetransporteurbano;
 
+import br.com.sistemadecontrole.Empresa;
+
 public class MainEmpresa {
 	
 	public static void main(String[] args) {
@@ -10,8 +12,10 @@ public class MainEmpresa {
 		EscalaFuncionario escalaFuncionario = new EscalaFuncionario("12:00", onibus);
 		Funcionario funcionario = new Funcionario("Kassio", "123", escalaFuncionario);
 		
+		EmpresaOnibus empresa = new EmpresaOnibus(funcionario, onibus);
 		
-		System.out.println("Bairro Linha de Onibus: " + funcionario.getEscalaFuncionario().getOnibus().getEscalaOnibus().getLinha().getParadas().getBairroParada());
+		
+		System.out.println("Bairro Linha de Onibus: " + empresa.getFuncionario().getEscalaFuncionario().getOnibus().getEscalaOnibus().getLinha().getParadas().getBairroParada());
 		
 	}
 	

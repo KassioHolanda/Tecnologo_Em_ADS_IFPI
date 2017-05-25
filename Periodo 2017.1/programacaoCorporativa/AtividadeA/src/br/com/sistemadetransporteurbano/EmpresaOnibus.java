@@ -22,5 +22,21 @@ public class EmpresaOnibus {
 	public void adicionarOnibusEmpresa(Onibus onibus){
 		this.onibusEmpresa.add(onibus);
 	}
+	
+	public ArrayList<Funcionario> getFuncionarioEmpresa() {
+		return funcionarioEmpresa;
+	}
+	
+	public ArrayList<Onibus> getOnibusEmpresa() {
+		return onibusEmpresa;
+	}
+	
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+	
+	public Onibus getOnibus() {
+		return onibus;
+	}
 
 }

@@ -15,19 +15,19 @@
 			o	Número Identificador
 			o	Escala:
 					Horário de Viagens
-					Rota
-			o	Rota:
-					Parada
-					Identificador Parada
+					Linha
+			o	Linha:
+					Paradas
 					Número da Linha
-					Identificador de Parada
+			o	Paradas:
+					Identificador Parada
+					Bairro Parada
 
 
 2.	Sistema de Controle de Atualizações, Autenticação, permissões em um sistema:
 	Pessoa:
 			Nome
 			CPF
-			Sexo
 	Empresa:
 			Funcionário extends Pessoa:
 			o	Permissões
@@ -43,7 +43,9 @@
 			Funcionários extends Pessoa:
 			o	Cargo
 			o	Escala
-			o	Salario
+			o	Salario:
+					Horario
+					Companhia Aerea
 			Companhia Aérea: 
 			o	Funcionários extends Pessoa:
 					Cargo
