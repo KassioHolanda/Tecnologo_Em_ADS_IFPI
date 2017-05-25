@@ -45,7 +45,6 @@
 			o	Escala
 			o	Salario:
 					Horario
-					Companhia Aerea
 			Companhia Aérea: 
 			o	Funcionários extends Pessoa:
 					Cargo
