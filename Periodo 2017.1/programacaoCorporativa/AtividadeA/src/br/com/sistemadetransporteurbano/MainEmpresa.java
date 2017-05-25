@@ -11,7 +11,7 @@ public class MainEmpresa {
 		Funcionario funcionario = new Funcionario("Kassio", "123", escalaFuncionario);
 		
 		
-		System.out.println("Bairro Linha de Onibus: " + funcionario.getEscala().getOnibus().getEscala().getLinha().getParadas().getBairroParada());
+		System.out.println("Bairro Linha de Onibus: " + funcionario.getEscalaFuncionario().getOnibus().getEscalaOnibus().getLinha().getParadas().getBairroParada());
 		
 	}
 	

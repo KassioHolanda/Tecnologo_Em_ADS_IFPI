@@ -13,7 +13,7 @@ public class Onibus {
 		return numeroIdentificador;
 	}
 
-	public EscalaOnibus getEscala() {
+	public EscalaOnibus getEscalaOnibus() {
 		return escalaOnibus;
 	}
 }

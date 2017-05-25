@@ -19,7 +19,7 @@ public class Funcionario extends Pessoa{
 		return super.getNome();
 	}
 	
-	public EscalaFuncionario getEscala() {
+	public EscalaFuncionario getEscalaFuncionario() {
 		return escalaFuncionario;
 	}
 
