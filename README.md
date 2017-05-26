@@ -1,6 +1,4 @@
 # Tecnologo_Em_ADS_IFPI           
-ATIVIDADES RELACIONADAS AO CURSO DE ADS 
-MATERIA: PROGRAMAÇÃO CORPORATIVA        
-PROF: ROGERIO                        
+ATIVIDADES RELACIONADAS AO CURSO DE ADS                       
   
 
