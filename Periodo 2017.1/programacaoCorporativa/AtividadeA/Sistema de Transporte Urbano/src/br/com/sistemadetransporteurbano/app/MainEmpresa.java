@@ -12,7 +12,7 @@ public class MainEmpresa {
 	
 	public static void main(String[] args) {
 		Onibus onibus = new Onibus(123312);
-		Paradas paradas = new Paradas(13, "São Paulo");
+		Paradas paradas = new Paradas(13, "SÃ£o Paulo");
 		EscalaLinha escalaLinha = new EscalaLinha(onibus, "8:00", paradas);
 		Linha linha = new Linha(escalaLinha, 405);
 		
@@ -23,7 +23,7 @@ public class MainEmpresa {
 		EmpresaOnibus empresa = new EmpresaOnibus(funcionario, linha);
 		
 		
-	System.out.println("Bairro Linha de Onibus: " + empresa.getLinha().getEscalaLinha().getParadas().getBairroParada());	
+		System.out.println("Bairro Linha de Onibus: " + empresa.getLinha().getEscalaLinha().getParadas().getBairroParada());	
 	}
 	
 }
