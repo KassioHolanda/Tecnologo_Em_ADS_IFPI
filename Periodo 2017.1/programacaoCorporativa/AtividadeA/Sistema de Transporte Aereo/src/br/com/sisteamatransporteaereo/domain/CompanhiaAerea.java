@@ -1,24 +1,26 @@
 package br.com.sisteamatransporteaereo.domain;
 
 public class CompanhiaAerea {
-	private int numeroIdentificador;
-	private int numeroVagas;
-	private EscalaAviao escalaAviao;
+	private Aviao aviao;
+	private String nome;
+	private Funcionarios funcionarios;
 	
-	public CompanhiaAerea(int numeroIdentificador, int numeroVagas, EscalaAviao escalaAviao) {
-		this.numeroIdentificador = numeroIdentificador;
-		this.escalaAviao = escalaAviao;
+	public CompanhiaAerea(Aviao aviao, Funcionarios funcionarios) {
+		this.aviao = aviao;
+		this.nome = "JacaAviacoes";
+		this.funcionarios = funcionarios;
 	}
-
-	public int getNumeroIdentificador() {
-		return numeroIdentificador;
+	
+	public Aviao getAviao() {
+		return aviao;
 	}
-
-	public int getNumeroVagas() {
-		return numeroVagas;
+	
+	public String getNome() {
+		return nome;
 	}
-
-	public EscalaAviao getEscalaAviao() {
-		return escalaAviao;
-	}	
+	
+	public Funcionarios getFuncionarios() {
+		return funcionarios;
+	}
+	
 }

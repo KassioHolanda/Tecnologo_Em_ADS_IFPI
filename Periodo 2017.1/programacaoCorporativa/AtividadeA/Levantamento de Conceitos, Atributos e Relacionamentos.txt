@@ -11,14 +11,14 @@
 					Motorista
 					Cobrador:
 					Fiscal
-			Ônibus:
-			o	Número Identificador
+			Linha:
+			o	Número da Linha
 			o	Escala:
+					Onibus
 					Horário de Viagens
 					Linha
-			o	Linha:
 					Paradas
-					Número da Linha
+			
 			o	Paradas:
 					Identificador Parada
 					Bairro Parada

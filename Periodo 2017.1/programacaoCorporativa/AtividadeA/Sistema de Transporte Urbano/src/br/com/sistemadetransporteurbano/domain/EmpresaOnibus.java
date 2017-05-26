@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class EmpresaOnibus {
 	private Funcionario funcionario;
-	private Onibus onibus;
+	private Linha linha;
 	private ArrayList<Onibus> onibusEmpresa;
 	private ArrayList<Funcionario> funcionarioEmpresa;
 	
-	public EmpresaOnibus(Funcionario funcionario, Onibus onibus) {
+	public EmpresaOnibus(Funcionario funcionario, Linha linha) {
 		this.funcionario = funcionario;
-		this.onibus = onibus;
+		this.linha = linha;
 		this.onibusEmpresa = new ArrayList<>();
 		this.funcionarioEmpresa = new ArrayList<>();
 	}
@@ -35,8 +35,8 @@ public class EmpresaOnibus {
 		return funcionario;
 	}
 	
-	public Onibus getOnibus() {
-		return onibus;
+	public Linha getLinha() {
+		return linha;
 	}
 
 }

@@ -1,12 +1,12 @@
 package br.com.sistemadetransporteurbano.domain;
 
 public class Linha {
-	private Paradas paradas;
+	private EscalaLinha escalaLinha;
 	private int numeroLinha;
 	
-	public Linha(Paradas paradas, int numeroLinha) {
-		this.paradas = paradas;
+	public Linha(EscalaLinha escalaLinhas, int numeroLinha) {
 		this.numeroLinha = numeroLinha;
+		this.escalaLinha = escalaLinhas;
 	}
 	
 	
@@ -14,7 +14,7 @@ public class Linha {
 		return numeroLinha;
 	}
 	
-	public Paradas getParadas() {
-		return paradas;
+	public EscalaLinha getEscalaLinha() {
+		return escalaLinha;
 	}
 }

@@ -2,7 +2,7 @@ package br.com.sistemadetransporteurbano.app;
 
 import br.com.sistemadetransporteurbano.domain.EmpresaOnibus;
 import br.com.sistemadetransporteurbano.domain.EscalaFuncionario;
-import br.com.sistemadetransporteurbano.domain.EscalaOnibus;
+import br.com.sistemadetransporteurbano.domain.EscalaLinha;
 import br.com.sistemadetransporteurbano.domain.Funcionario;
 import br.com.sistemadetransporteurbano.domain.Linha;
 import br.com.sistemadetransporteurbano.domain.Onibus;
@@ -11,18 +11,19 @@ import br.com.sistemadetransporteurbano.domain.Paradas;
 public class MainEmpresa {
 	
 	public static void main(String[] args) {
+		Onibus onibus = new Onibus(123312);
 		Paradas paradas = new Paradas(13, "São Paulo");
-		Linha linha = new Linha(paradas, 1);
-		EscalaOnibus escalaOnibus = new EscalaOnibus("12:30", linha);
-		Onibus onibus = new Onibus(1, escalaOnibus);
+		EscalaLinha escalaLinha = new EscalaLinha(onibus, "8:00", paradas);
+		Linha linha = new Linha(escalaLinha, 405);
+		
+
 		EscalaFuncionario escalaFuncionario = new EscalaFuncionario("12:00", onibus);
 		Funcionario funcionario = new Funcionario("Kassio", "123", escalaFuncionario);
 		
-		EmpresaOnibus empresa = new EmpresaOnibus(funcionario, onibus);
+		EmpresaOnibus empresa = new EmpresaOnibus(funcionario, linha);
 		
 		
-		System.out.println("Bairro Linha de Onibus: " + empresa.getFuncionario().getEscalaFuncionario().getOnibus().getEscalaOnibus().getLinha().getParadas().getBairroParada());
-		
+	System.out.println("Bairro Linha de Onibus: " + empresa.getLinha().getEscalaLinha().getParadas().getBairroParada());	
 	}
 	
 }
