@@ -17,7 +17,7 @@ public class MainEmpresa {
 		Linha linha = new Linha(escalaLinha, 405);
 		
 
-		EscalaFuncionario escalaFuncionario = new EscalaFuncionario("12:00", onibus);
+		EscalaFuncionario escalaFuncionario = new EscalaFuncionario("12:00", linha);
 		Funcionario funcionario = new Funcionario("Kassio", "123", escalaFuncionario);
 		
 		EmpresaOnibus empresa = new EmpresaOnibus(funcionario, linha);
