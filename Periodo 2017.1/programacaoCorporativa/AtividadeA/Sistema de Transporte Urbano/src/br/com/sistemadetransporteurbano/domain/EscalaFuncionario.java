@@ -2,18 +2,18 @@ package br.com.sistemadetransporteurbano.domain;
 
 public class EscalaFuncionario {
 	private String horario;
-	private Onibus onibus;
+	private Linha linha;
 	
-	public EscalaFuncionario(String horario, Onibus onibus) {
+	public EscalaFuncionario(String horario, Linha linha) {
 		this.horario = horario;
-		this.onibus = onibus;
-	}
-	
-	public Onibus getOnibus() {
-		return onibus;
+		this.linha = linha;
 	}
 	
 	public String getHorario() {
 		return horario;
+	}
+	
+	public Linha getLinha() {
+		return linha;
 	}
 }
