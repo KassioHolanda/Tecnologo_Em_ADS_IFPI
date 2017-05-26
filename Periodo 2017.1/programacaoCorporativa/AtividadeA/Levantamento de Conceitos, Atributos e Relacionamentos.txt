@@ -3,6 +3,8 @@
 			Nome
 			CPF
 	Empresa de ônibus:
+			Onibus:
+			o	Identificador Onibus
 			Funcionário entends Pessoa:
 			o	Escala:
 					Ônibus
@@ -16,7 +18,6 @@
 			o	Escala:
 					Onibus
 					Horário de Viagens
-					Linha
 					Paradas
 			
 			o	Paradas:
