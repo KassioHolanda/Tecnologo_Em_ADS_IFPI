@@ -29,11 +29,20 @@ public class Facebook {
 			Iterator<Historia> iteratorFeed = perfis.getListaHistoria().iterator();
 			while (iteratorFeed.hasNext()) {
 				Historia historia = iteratorFeed.next();
-				historias += perfis.getNome().toUpperCase() + "\nTitulo: " + historia.getTitulo() + "\n   Historia: " + historia.getHistoria() + "\n\n";
+				historias += perfis.getNome().toUpperCase() + "\nTitulo: " + historia.getTitulo() + "\n   Historia: "
+						+ historia.getHistoria() + "\n\n";
 			}
 		}
 
 		return historias;
+	}
+
+	public void excluirTodosAmigos(Perfil perfil) {
+		perfil.getListaAmigos().clear();
+	}
+
+	public void alterarTipoAmizade(Perfil perfil, Perfil perfilAlterar, TipoAmigo tipoAmigo, String tipoAmizade) {
+		perfil.getListaAmigos().get(perfilAlterar).setTipoAmigo(tipoAmizade);
 	}
 
 	public void adicionarPerfilBD(Perfil perfil) {

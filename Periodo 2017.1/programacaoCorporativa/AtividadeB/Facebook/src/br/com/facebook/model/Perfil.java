@@ -60,13 +60,9 @@ public class Perfil extends Pessoa {
 			listaSolicitacoesAmizade.remove(perfilSolicitado);
 		}
 	}
-	
-	public void alterarTipoAmizade(Perfil perfil, TipoAmigo tipoAmigo, String tipoAmizade){
-		perfil.listaAmigos.get(perfil).setTipoAmigo(tipoAmizade);
-	}
-	
-	public void excluirTodosAmigos(Perfil perfil){
-		perfil.listaAmigos.clear();
+
+	public void mostrarTodosAmigos(){
+		
 	}
 
 	public String getFotoCapa() {

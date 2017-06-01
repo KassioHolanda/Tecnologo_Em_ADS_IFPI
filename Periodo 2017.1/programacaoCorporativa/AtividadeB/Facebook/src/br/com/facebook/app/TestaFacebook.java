@@ -19,7 +19,7 @@ public class TestaFacebook {
 		
 
 		Perfil segundoPerfil = new Perfil("Karlos Jordano", "01/06/1999", configuracoes);
-		Historia historiaDois = new Historia("Sentimo", "Sentindo-se Triste");
+		Historia historiaDois = new Historia("Sentimento", "Sentindo-se Triste");
 		
 		segundoPerfil.adicionarHistoriaBD(historiaDois);
 		
@@ -30,7 +30,8 @@ public class TestaFacebook {
 		facebook.adicionarPerfilBD(segundoPerfil);
 		
 
-		System.out.println(facebook.mostrarFeed());
+		 System.out.println(facebook.mostrarFeed());
+	
 	}
 	
 
