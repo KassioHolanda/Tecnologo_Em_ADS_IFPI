@@ -22,7 +22,6 @@ public class FeedNoticias {
 			Historia historias = perfisIterator.next();
 			feedNoticias.add(historias);
 		}
-
 	}
 
 	public Perfil getPerfis() {
