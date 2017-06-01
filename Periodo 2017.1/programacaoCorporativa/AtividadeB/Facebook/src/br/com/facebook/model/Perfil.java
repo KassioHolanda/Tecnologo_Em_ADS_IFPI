@@ -8,6 +8,7 @@ import java.util.Map;
 public class Perfil extends Pessoa {
 	private Configuracoes Configuracoes;
 	private List<Historia> listaHistoria;
+	private Map<Perfil, Perfil> listaSolicitacoesAmizade;
 	private Map<Perfil, TipoAmigo> listaAmigos;
 	private String fotoPerfil;
 	private String fotoCapa;
@@ -44,6 +45,20 @@ public class Perfil extends Pessoa {
 	
 	public void adicionarHistoriaBD(Historia historia){
 		listaHistoria.add(historia);
+	}
+	
+	public void solicitacaoAmizadeBD(Perfil perfilSolicitado, Perfil perfilSolicitante){
+		listaSolicitacoesAmizade.put(perfilSolicitado, perfilSolicitante);
+	}
+	
+	public void aceitarSolicitacao(Perfil perfilSolicitado, Perfil perfilSolicitante, boolean aceitar){
+		if(aceitar){
+			TipoAmigo tipo = new TipoAmigo();
+			listaAmigos.put(perfilSolicitante, tipo);
+			listaSolicitacoesAmizade.remove(perfilSolicitado);
+		} else {
+			listaSolicitacoesAmizade.remove(perfilSolicitado);
+		}
 	}
 
 	public String getFotoCapa() {

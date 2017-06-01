@@ -23,5 +23,4 @@ public class Grupos {
 	public Perfil getPerfilAdministrador() {
 		return perfilAdministrador;
 	}
-
 }

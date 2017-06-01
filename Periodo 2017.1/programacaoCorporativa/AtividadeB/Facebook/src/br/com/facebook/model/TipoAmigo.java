@@ -7,6 +7,10 @@ public class TipoAmigo {
 		this.tipoAmigo = tipoAmigo;
 	}
 	
+	public TipoAmigo(){
+		this.tipoAmigo = "Padrao";
+	}
+	
 	public String getTipoAmigo() {
 		return tipoAmigo;
 	}
