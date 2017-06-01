@@ -8,7 +8,6 @@ import java.util.Map;
 public class Perfil extends Pessoa {
 	private Configuracoes Configuracoes;
 	private List<Historia> listaHistoria;
-	private List<Grupos> listaGrupos;
 	private Map<Perfil, TipoAmigo> listaAmigos;
 	private String fotoPerfil;
 	private String fotoCapa;
@@ -20,15 +19,13 @@ public class Perfil extends Pessoa {
 		this.fotoPerfil = fotoPerfil;
 		listaAmigos = new HashMap<>();
 		listaHistoria = new ArrayList<>();
-		listaGrupos = new ArrayList<>();
 	}
-	
+
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes) {
 		super(nome, dataNascimento);
 		this.Configuracoes = configuracoes;
 		listaAmigos = new HashMap<>();
 		listaHistoria = new ArrayList<>();
-		listaGrupos = new ArrayList<>();
 	}
 
 	@Override
@@ -36,13 +33,17 @@ public class Perfil extends Pessoa {
 		// TODO Auto-generated method stub
 		return super.getDataNascimento();
 	}
-	
-	public void adicionarAmigo(TipoAmigo tipoAmigo, Perfil perfil){
+
+	public void adicionarAmigoBD(TipoAmigo tipoAmigo, Perfil perfil) {
 		listaAmigos.put(perfil, tipoAmigo);
 	}
-	
-	public void removerAmigo(Perfil perfil){
+
+	public void removerAmigo(Perfil perfil) {
 		listaAmigos.remove(perfil);
+	}
+	
+	public void adicionarHistoriaBD(Historia historia){
+		listaHistoria.add(historia);
 	}
 
 	public String getFotoCapa() {
@@ -67,10 +68,6 @@ public class Perfil extends Pessoa {
 		return listaHistoria;
 	}
 
-	public List<Grupos> getListaGrupos() {
-		return listaGrupos;
-	}
-	
 	public Map<Perfil, TipoAmigo> getListaAmigos() {
 		return listaAmigos;
 	}

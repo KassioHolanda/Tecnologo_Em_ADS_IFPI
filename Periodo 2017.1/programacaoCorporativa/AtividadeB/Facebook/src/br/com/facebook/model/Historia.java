@@ -43,15 +43,15 @@ public class Historia {
 	public String getTitulo() {
 		return titulo;
 	}
-	
+
 	public List<Qualificacao> getListaDeQualificacoes() {
 		return listaDeQualificacoes;
 	}
-	
+
 	public List<Compartilhamento> getListaCompartilhamento() {
 		return listaCompartilhamento;
 	}
-	
+
 	public Calendar getDataHistoria() {
 		return dataHistoria;
 	}
