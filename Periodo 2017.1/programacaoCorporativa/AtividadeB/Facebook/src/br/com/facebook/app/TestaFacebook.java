@@ -4,7 +4,6 @@ import br.com.facebook.model.Configuracoes;
 import br.com.facebook.model.Facebook;
 import br.com.facebook.model.Historia;
 import br.com.facebook.model.Perfil;
-import br.com.facebook.model.TipoAmigo;
 
 public class TestaFacebook {
 	public static void main(String[] args) {
@@ -20,8 +19,6 @@ public class TestaFacebook {
 		Perfil segundoPerfil = new Perfil("Karlos Jordano", "01/06/1999", configuracoes);
 		Historia historiaDois = new Historia("Sentimento", "Sentindo-se Triste");
 		segundoPerfil.adicionarHistoriaBD(historiaDois);
-
-		TipoAmigo tipoAmigo = new TipoAmigo();
 
 		primeiroPerfil.solicitacaoAmizadeBD(segundoPerfil);
 		System.out.println(segundoPerfil.aceitarSolicitacao(primeiroPerfil, true));
