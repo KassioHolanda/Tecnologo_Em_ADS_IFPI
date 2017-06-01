@@ -60,6 +60,14 @@ public class Perfil extends Pessoa {
 			listaSolicitacoesAmizade.remove(perfilSolicitado);
 		}
 	}
+	
+	public void alterarTipoAmizade(Perfil perfil, TipoAmigo tipoAmigo, String tipoAmizade){
+		perfil.listaAmigos.get(perfil).setTipoAmigo(tipoAmizade);
+	}
+	
+	public void excluirTodosAmigos(Perfil perfil){
+		perfil.listaAmigos.clear();
+	}
 
 	public String getFotoCapa() {
 		return fotoCapa;
@@ -86,5 +94,15 @@ public class Perfil extends Pessoa {
 	public Map<Perfil, TipoAmigo> getListaAmigos() {
 		return listaAmigos;
 	}
+	
+	public void setFotoCapa(String fotoCapa) {
+		this.fotoCapa = fotoCapa;
+	}
+	
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
+	}
+	
+	
 
 }
