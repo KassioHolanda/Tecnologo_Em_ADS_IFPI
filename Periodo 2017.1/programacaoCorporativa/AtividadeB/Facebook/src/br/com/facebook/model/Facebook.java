@@ -27,19 +27,6 @@ public class Facebook {
 
 	}
 
-	public String mostrarFeedNoticias() {
-		String feedNoticias = "";
-
-		while (listaPerfis.iterator().hasNext()) {
-			Perfil perfil = listaPerfis.iterator().next();
-			while (perfil.getListaHistoria().iterator().hasNext()) {
-				feedNoticias += "Feed Noticias: \n" + perfil.getListaHistoria().iterator().next().getTitulo();
-			}
-		}
-
-		return feedNoticias;
-	}
-
 	public void adicionarPerfilBD(Perfil perfil) {
 		listaPerfis.add(perfil);
 	}

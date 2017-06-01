@@ -38,7 +38,7 @@ public class Perfil extends Pessoa {
 		listaAmigos.put(perfil, tipoAmigo);
 	}
 
-	public void removerAmigo(Perfil perfil) {
+	public void removerAmigoBD(Perfil perfil) {
 		listaAmigos.remove(perfil);
 	}
 	
