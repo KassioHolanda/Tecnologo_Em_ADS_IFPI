@@ -1,5 +1,6 @@
 package br.com.facebook.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Grupos {
@@ -8,12 +9,15 @@ public class Grupos {
 	private String nomeGrupo;
 	private Perfil perfilAdministrador;
 	private List<Perfil> listaParticipantes;
+	private List<Perfil> solicitacoesGrupo;
 
 	public Grupos(String nomeGrupo, Perfil perfilAdministrador, String fotoGrupo, String fotoCapaGrupo){
 		this.fotoCapaGrupo = fotoCapaGrupo;
 		this.fotoGrupo = fotoGrupo;
 		this.nomeGrupo = nomeGrupo;
 		this.perfilAdministrador = perfilAdministrador;
+		listaParticipantes = new ArrayList<>();
+		solicitacoesGrupo = new ArrayList<>();
 	}
 	
 	public Grupos(String nomeGrupo, Perfil perfilAdministrador) {
@@ -47,5 +51,9 @@ public class Grupos {
 	
 	public void setFotoGrupo(String fotoGrupo) {
 		this.fotoGrupo = fotoGrupo;
+	}
+	
+	public List<Perfil> getSolicitacoesGrupo() {
+		return solicitacoesGrupo;
 	}
 }

@@ -36,6 +36,8 @@ public class Facebook {
 
 		return historias;
 	}
+	
+	
 
 	public void excluirTodosAmigos(Perfil perfil) {
 		perfil.getListaAmigos().clear();

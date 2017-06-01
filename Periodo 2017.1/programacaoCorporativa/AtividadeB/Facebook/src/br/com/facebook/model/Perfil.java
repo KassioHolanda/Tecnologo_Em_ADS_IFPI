@@ -8,7 +8,7 @@ import java.util.Map;
 public class Perfil extends Pessoa {
 	private Configuracoes Configuracoes;
 	private List<Historia> listaHistoria;
-	private Map<Perfil, Perfil> listaSolicitacoesAmizade;
+	private List<Perfil> listaSolicitacoesAmizade;
 	private Map<Perfil, TipoAmigo> listaAmigos;
 	private String fotoPerfil;
 	private String fotoCapa;
@@ -26,6 +26,7 @@ public class Perfil extends Pessoa {
 		super(nome, dataNascimento);
 		this.Configuracoes = configuracoes;
 		listaAmigos = new HashMap<>();
+		listaSolicitacoesAmizade = new ArrayList<>();
 		listaHistoria = new ArrayList<>();
 	}
 
@@ -42,27 +43,31 @@ public class Perfil extends Pessoa {
 	public void removerAmigoBD(Perfil perfil) {
 		listaAmigos.remove(perfil);
 	}
-	
-	public void adicionarHistoriaBD(Historia historia){
+
+	public void adicionarHistoriaBD(Historia historia) {
 		listaHistoria.add(historia);
 	}
-	
-	public void solicitacaoAmizadeBD(Perfil perfilSolicitado, Perfil perfilSolicitante){
-		listaSolicitacoesAmizade.put(perfilSolicitado, perfilSolicitante);
+
+	public void solicitacaoAmizadeBD(Perfil perfilSolicitado) {
+		perfilSolicitado.getListaSolicitacoesAmizade().add(this);
+
+		this.getListaSolicitacoesAmizade().add(perfilSolicitado);
 	}
 	
-	public void aceitarSolicitacao(Perfil perfilSolicitado, Perfil perfilSolicitante, boolean aceitar){
-		if(aceitar){
+	public String aceitarSolicitacao(Perfil perfilSolicitante, boolean aceitar) {
+		if (aceitar) {
 			TipoAmigo tipo = new TipoAmigo();
 			listaAmigos.put(perfilSolicitante, tipo);
-			listaSolicitacoesAmizade.remove(perfilSolicitado);
+			listaSolicitacoesAmizade.remove(this);
+			return "Voce e " + perfilSolicitante.getNome() + " agora são amigos";
 		} else {
-			listaSolicitacoesAmizade.remove(perfilSolicitado);
+			listaSolicitacoesAmizade.remove(this);
+			return perfilSolicitante.getNome() + " foi apagado de sua lista de solicitações\n";
 		}
 	}
 
-	public void mostrarTodosAmigos(){
-		
+	public void mostrarTodosAmigos() {
+
 	}
 
 	public String getFotoCapa() {
@@ -90,15 +95,17 @@ public class Perfil extends Pessoa {
 	public Map<Perfil, TipoAmigo> getListaAmigos() {
 		return listaAmigos;
 	}
-	
+
+	public List<Perfil> getListaSolicitacoesAmizade() {
+		return listaSolicitacoesAmizade;
+	}
+
 	public void setFotoCapa(String fotoCapa) {
 		this.fotoCapa = fotoCapa;
 	}
-	
+
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
-	
-	
 
 }
