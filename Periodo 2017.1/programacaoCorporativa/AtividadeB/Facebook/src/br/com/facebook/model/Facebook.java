@@ -1,12 +1,13 @@
 package br.com.facebook.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Facebook {
+
 	private List<Perfil> listaPerfis;
 	private List<Grupos> listaGrupos;
-	private FeedNoticias feedNoticias;
 	private static Facebook instance;
 
 	public static Facebook getInstance() {
@@ -17,14 +18,22 @@ public class Facebook {
 	}
 
 	public Facebook() {
-
-	}
-
-	public Facebook(FeedNoticias feedNoticias) {
 		listaPerfis = new ArrayList<>();
 		listaGrupos = new ArrayList<>();
-		this.feedNoticias = feedNoticias;
+	}
 
+	public String mostrarFeed() {
+
+		String historias = "FEED DE NOTICIAS\n\n";
+		for (Perfil perfis : listaPerfis) {
+			Iterator<Historia> iteratorFeed = perfis.getListaHistoria().iterator();
+			while (iteratorFeed.hasNext()) {
+				Historia historia = iteratorFeed.next();
+				historias += perfis.getNome().toUpperCase() + "\nTitulo: " + historia.getTitulo() + "\n   Historia: " + historia.getHistoria() + "\n\n";
+			}
+		}
+
+		return historias;
 	}
 
 	public void adicionarPerfilBD(Perfil perfil) {
@@ -33,10 +42,6 @@ public class Facebook {
 
 	public void adicionarGrupoBD(Grupos grupo) {
 		listaGrupos.add(grupo);
-	}
-
-	public FeedNoticias getFeedNoticias() {
-		return feedNoticias;
 	}
 
 	public List<Perfil> getListaPerfis() {

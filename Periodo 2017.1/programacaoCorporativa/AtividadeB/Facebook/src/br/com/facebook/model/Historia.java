@@ -6,13 +6,14 @@ import java.util.List;
 
 public class Historia {
 	private String titulo;
+	private String historia;
 	private Perfil marcarPerfil;
 	private List<Comentarios> listaDeComentarios;
 	private List<Qualificacao> listaDeQualificacoes;
 	private List<Compartilhamento> listaCompartilhamento;
 	private Calendar dataHistoria;
 
-	public Historia(String titulo, Perfil marcarPerfil) {
+	public Historia(String titulo,String historia, Perfil marcarPerfil) {
 		this.titulo = titulo;
 		this.marcarPerfil = marcarPerfil;
 		this.listaDeComentarios = new ArrayList<>();
@@ -22,8 +23,9 @@ public class Historia {
 		listaCompartilhamento = new ArrayList<>();
 	}
 
-	public Historia(String titulo) {
+	public Historia(String titulo, String historia) {
 		this.titulo = titulo;
+		this.historia = historia;
 		this.marcarPerfil = null;
 		this.listaDeComentarios = new ArrayList<>();
 		this.dataHistoria = Calendar.getInstance();
@@ -54,5 +56,9 @@ public class Historia {
 
 	public Calendar getDataHistoria() {
 		return dataHistoria;
+	}
+	
+	public String getHistoria() {
+		return historia;
 	}
 }

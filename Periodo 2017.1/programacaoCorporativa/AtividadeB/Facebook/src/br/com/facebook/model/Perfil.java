@@ -35,7 +35,7 @@ public class Perfil extends Pessoa {
 		return super.getDataNascimento();
 	}
 
-	public void adicionarAmigoBD(TipoAmigo tipoAmigo, Perfil perfil) {
+	public void adicionarAmigoBD(Perfil perfil, TipoAmigo tipoAmigo) {
 		listaAmigos.put(perfil, tipoAmigo);
 	}
 
