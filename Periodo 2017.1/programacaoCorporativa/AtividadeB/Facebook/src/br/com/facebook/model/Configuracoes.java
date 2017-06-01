@@ -11,6 +11,8 @@ public class Configuracoes {
 
 	public Configuracoes(String senha) {
 		listaPerfisBloqueados = new ArrayList<>();
+		permitirCurtirFotos = new PermitirCurtirFotos();
+		permitirVisualizarFotos = new PermitirVisualizarFotos();
 		this.senha = senha;
 	}
 

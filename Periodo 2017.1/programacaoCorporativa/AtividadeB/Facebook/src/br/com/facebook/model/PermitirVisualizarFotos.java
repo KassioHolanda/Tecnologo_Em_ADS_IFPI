@@ -6,6 +6,10 @@ public class PermitirVisualizarFotos {
 	PermitirVisualizarFotos(boolean permitir){
 		this.permitirCurtirFotos = true;
 	}
+	
+	public PermitirVisualizarFotos() {
+		this.permitirCurtirFotos = true;
+	}
 
 	public boolean isPermitir() {
 		return permitirCurtirFotos;
