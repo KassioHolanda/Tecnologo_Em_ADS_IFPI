@@ -30,12 +30,6 @@ public class Perfil extends Pessoa {
 		listaHistoria = new ArrayList<>();
 	}
 
-	@Override
-	public String getDataNascimento() {
-		// TODO Auto-generated method stub
-		return super.getDataNascimento();
-	}
-
 	public void adicionarAmigoBD(Perfil perfil, TipoAmigo tipoAmigo) {
 		listaAmigos.put(perfil, tipoAmigo);
 	}
@@ -98,6 +92,12 @@ public class Perfil extends Pessoa {
 
 	public List<Perfil> getListaSolicitacoesAmizade() {
 		return listaSolicitacoesAmizade;
+	}
+	
+	@Override
+	public String getDataNascimento() {
+		// TODO Auto-generated method stub
+		return super.getDataNascimento();
 	}
 
 	public void setFotoCapa(String fotoCapa) {
