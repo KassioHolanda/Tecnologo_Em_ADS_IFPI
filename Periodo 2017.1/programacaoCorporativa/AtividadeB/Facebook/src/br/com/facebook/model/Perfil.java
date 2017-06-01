@@ -37,6 +37,10 @@ public class Perfil extends Pessoa {
 	public void removerAmigoBD(Perfil perfil) {
 		listaAmigos.remove(perfil);
 	}
+	
+	public void limparListaSolicitacoes(){
+		this.listaSolicitacoesAmizade.clear();
+	}
 
 	public void adicionarHistoriaBD(Historia historia) {
 		listaHistoria.add(historia);

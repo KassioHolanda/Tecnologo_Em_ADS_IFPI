@@ -24,6 +24,19 @@ public class Grupos {
 		this.nomeGrupo = nomeGrupo;
 		this.perfilAdministrador = perfilAdministrador;
 	}
+	
+	public void solicitacaoGrupoBD(Perfil perfilSolicitado) {
+		this.solicitacoesGrupo.add(perfilSolicitado);
+	}
+	
+	public void aceitarSolicitacao(Perfil perfilSolicitante, boolean aceitar) {
+		if (aceitar) {
+			listaParticipantes.add(perfilSolicitante);
+			solicitacoesGrupo.remove(perfilSolicitante);
+		} else {
+			solicitacoesGrupo.remove(perfilSolicitante);
+		}
+	}
 
 	public List<Perfil> getListaParticipantes() {
 		return listaParticipantes;
@@ -56,4 +69,5 @@ public class Grupos {
 	public List<Perfil> getSolicitacoesGrupo() {
 		return solicitacoesGrupo;
 	}
+
 }
