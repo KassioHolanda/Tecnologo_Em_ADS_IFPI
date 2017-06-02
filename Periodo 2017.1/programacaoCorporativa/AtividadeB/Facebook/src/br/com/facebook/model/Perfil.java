@@ -1,6 +1,7 @@
 package br.com.facebook.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Perfil extends Pessoa {
@@ -10,12 +11,15 @@ public class Perfil extends Pessoa {
 	private List<Amigos> listaAmigos;
 	private String fotoPerfil;
 	private String fotoCapa;
+	private Calendar data;
 
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes, String fotoPerfil, String fotoCapa) {
 		super(nome, dataNascimento);
 		this.configuracoes = configuracoes;
 		this.fotoCapa = fotoCapa;
 		this.fotoPerfil = fotoPerfil;
+		
+		data = Calendar.getInstance();
 		listaAmigos = new ArrayList<>();
 		listaPost = new ArrayList<>();
 	}

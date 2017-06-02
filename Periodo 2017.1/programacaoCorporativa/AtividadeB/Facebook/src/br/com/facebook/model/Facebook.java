@@ -30,7 +30,7 @@ public class Facebook {
 			while (iteratorFeed.hasNext()) {
 				Post historia = iteratorFeed.next();
 				historias += perfis.getNome().toUpperCase() + "\nTitulo: " + historia.getTitulo() + "\n   Historia: "
-						+ historia.getHistoria() + "\n Curtidas: " + historia.getListaDeCurtidas().size();
+						+ historia.getHistoria() + "\n Curtidas: " + historia.getListaDeCurtidas().size()+"\n\n";
 			}
 		}
 		return historias;

@@ -33,7 +33,8 @@ public class TestaFacebook {
 		segundoPerfil.solicitacaoAmizadeBD(primeiroPerfil);
 		System.out.println(primeiroPerfil.aceitarSolicitacao(segundoPerfil, false));
 	
-		
+		// primeiroPerfil.getConfiguracoes().getListaPerfisBloqueados().add(segundoPerfil);
+		System.out.println(primeiroPerfil.getConfiguracoes().getPermitirVisualizarFotos().isPermitir());
 
 		primeiroPerfil.alterarTipoAmizade(segundoPerfil, "Desconhecido");
 		System.out.println(primeiroPerfil.mostrarTodosAmigos());

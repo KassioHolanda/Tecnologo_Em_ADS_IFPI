@@ -2,14 +2,14 @@ package br.com.facebook.model;
 
 public class Compartilhamento {
 	private Perfil perfilQueCompartilhou;
-	private Post historiaCompartilhada;
+	private Post postCompartilhada;
 
-	public Compartilhamento(Perfil perfilQueCompartilhou, Post historiaCompartilhada) {
-		this.perfilQueCompartilhou.getListaHistoria().add(historiaCompartilhada);
+	public Compartilhamento(Perfil perfilQueCompartilhou, Post postCompartilhado) {
+		this.perfilQueCompartilhou.getListaPost().add(postCompartilhada);
 	}
 
-	public Post getHistoriaCompartilhada() {
-		return historiaCompartilhada;
+	public Post getPostCompartilhada() {
+		return postCompartilhada;
 	}
 
 	public Perfil getPerfilQueCompartilhou() {

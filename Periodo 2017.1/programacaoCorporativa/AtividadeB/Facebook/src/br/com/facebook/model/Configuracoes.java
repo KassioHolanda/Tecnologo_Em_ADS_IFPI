@@ -6,6 +6,7 @@ import java.util.List;
 public class Configuracoes {
 	private PermitirVisualizarFotos permitirVisualizarFotos;
 	private PermitirCurtirFotos permitirCurtirFotos;
+	private PermitirCompartilharFotos permitirCompartilharFotos;
 	private List<Perfil> listaPerfisBloqueados;
 	private String senha;
 
@@ -13,6 +14,7 @@ public class Configuracoes {
 		listaPerfisBloqueados = new ArrayList<>();
 		permitirCurtirFotos = new PermitirCurtirFotos();
 		permitirVisualizarFotos = new PermitirVisualizarFotos();
+		permitirCompartilharFotos = new PermitirCompartilharFotos();
 		this.senha = senha;
 	}
 
@@ -38,5 +40,9 @@ public class Configuracoes {
 
 	public PermitirVisualizarFotos getPermitirVisualizarFotos() {
 		return permitirVisualizarFotos;
+	}
+	
+	public PermitirCompartilharFotos getPermitirCompartilharFotos() {
+		return permitirCompartilharFotos;
 	}
 }
