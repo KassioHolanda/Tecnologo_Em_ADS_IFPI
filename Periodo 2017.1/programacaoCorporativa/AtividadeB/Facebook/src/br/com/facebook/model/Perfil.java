@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Perfil extends Pessoa {
 	private Configuracoes configuracoes;
-	private List<Post> listaHistoria;
+	private List<Post> listaPost;
 	private List<Perfil> listaSolicitacoesAmizade;
 	private List<Amigos> listaAmigos;
 	private String fotoPerfil;
@@ -17,7 +17,7 @@ public class Perfil extends Pessoa {
 		this.fotoCapa = fotoCapa;
 		this.fotoPerfil = fotoPerfil;
 		listaAmigos = new ArrayList<>();
-		listaHistoria = new ArrayList<>();
+		listaPost = new ArrayList<>();
 	}
 
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes) {
@@ -25,7 +25,7 @@ public class Perfil extends Pessoa {
 		this.configuracoes = configuracoes;
 		listaAmigos = new ArrayList<>();
 		listaSolicitacoesAmizade = new ArrayList<>();
-		listaHistoria = new ArrayList<>();
+		listaPost = new ArrayList<>();
 	}
 
 	public String alterarTipoAmizade(Perfil perfil, String tipoAmigo) {
@@ -56,8 +56,8 @@ public class Perfil extends Pessoa {
 		this.listaSolicitacoesAmizade.clear();
 	}
 
-	public void adicionarHistoriaBD(Post historia) {
-		listaHistoria.add(historia);
+	public void adicionarPostBD(Post post) {
+		listaPost.add(post);
 	}
 
 	public void solicitacaoAmizadeBD(Perfil perfilSolicitado) {
@@ -107,8 +107,8 @@ public class Perfil extends Pessoa {
 		return super.getNome();
 	}
 
-	public List<Post> getListaHistoria() {
-		return listaHistoria;
+	public List<Post> getListaPost() {
+		return listaPost;
 	}
 
 	public List<Amigos> getListaAmigos() {

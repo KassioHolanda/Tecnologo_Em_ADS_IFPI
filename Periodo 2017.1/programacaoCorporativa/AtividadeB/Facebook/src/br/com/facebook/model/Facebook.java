@@ -26,11 +26,11 @@ public class Facebook {
 
 		String historias = "FEED DE NOTICIAS\n\n";
 		for (Perfil perfis : listaPerfis) {
-			Iterator<Post> iteratorFeed = perfis.getListaHistoria().iterator();
+			Iterator<Post> iteratorFeed = perfis.getListaPost().iterator();
 			while (iteratorFeed.hasNext()) {
 				Post historia = iteratorFeed.next();
 				historias += perfis.getNome().toUpperCase() + "\nTitulo: " + historia.getTitulo() + "\n   Historia: "
-						+ historia.getHistoria() + "\n\n";
+						+ historia.getHistoria() + "\n Curtidas: " + historia.getListaDeCurtidas().size();
 			}
 		}
 		return historias;

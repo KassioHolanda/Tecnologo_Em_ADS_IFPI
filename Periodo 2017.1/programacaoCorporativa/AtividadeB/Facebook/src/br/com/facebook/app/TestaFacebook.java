@@ -12,13 +12,16 @@ public class TestaFacebook {
 		Configuracoes configuracoes = new Configuracoes("123");
 
 		Perfil primeiroPerfil = new Perfil("Kássio Holanda", "05/04/1997", configuracoes);
-
-		Post historia = new Post("Pensamento do Dia", "Todo Animal Morto é um animal sem vida");
-		primeiroPerfil.adicionarHistoriaBD(historia);
+		facebook.adicionarPerfilBD(primeiroPerfil);
+		
+		Post post = new Post("Pensamento do Dia", "Todo Animal Morto é um animal sem vida");
+		primeiroPerfil.adicionarPostBD(post);
 
 		Perfil segundoPerfil = new Perfil("Karlos Jordano", "01/06/1999", configuracoes);
-		Post historiaDois = new Post("Sentimento", "Sentindo-se Triste");
-		segundoPerfil.adicionarHistoriaBD(historiaDois);
+		facebook.adicionarPerfilBD(segundoPerfil);
+		
+		Post postDois = new Post("Sentimento", "Sentindo-se Triste");
+		segundoPerfil.adicionarPostBD(postDois);
 
 		//Aceitando Solicitacao
 		primeiroPerfil.solicitacaoAmizadeBD(segundoPerfil);
@@ -30,8 +33,7 @@ public class TestaFacebook {
 		segundoPerfil.solicitacaoAmizadeBD(primeiroPerfil);
 		System.out.println(primeiroPerfil.aceitarSolicitacao(segundoPerfil, false));
 	
-		facebook.adicionarPerfilBD(primeiroPerfil);
-		facebook.adicionarPerfilBD(segundoPerfil);
+		
 
 		primeiroPerfil.alterarTipoAmizade(segundoPerfil, "Desconhecido");
 		System.out.println(primeiroPerfil.mostrarTodosAmigos());

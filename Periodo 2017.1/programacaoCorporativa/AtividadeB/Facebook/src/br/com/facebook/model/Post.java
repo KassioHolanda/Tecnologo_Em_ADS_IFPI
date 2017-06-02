@@ -9,7 +9,7 @@ public class Post {
 	private String historia;
 	private Perfil marcarPerfil;
 	private List<Comentarios> listaDeComentarios;
-	private List<TipoCurtida> listaDeQualificacoes;
+	private List<TipoCurtida> listaDeCurtidas;
 	private List<Compartilhamento> listaCompartilhamento;
 	private Calendar dataHistoria;
 
@@ -19,7 +19,7 @@ public class Post {
 		this.listaDeComentarios = new ArrayList<>();
 		this.dataHistoria = Calendar.getInstance();
 		listaDeComentarios = new ArrayList<>();
-		listaDeQualificacoes = new ArrayList<>();
+		listaDeCurtidas = new ArrayList<>();
 		listaCompartilhamento = new ArrayList<>();
 	}
 
@@ -30,10 +30,20 @@ public class Post {
 		this.listaDeComentarios = new ArrayList<>();
 		this.dataHistoria = Calendar.getInstance();
 		listaDeComentarios = new ArrayList<>();
-		listaDeQualificacoes = new ArrayList<>();
+		listaDeCurtidas = new ArrayList<>();
 		listaCompartilhamento = new ArrayList<>();
 	}
+	
+	public void curtirPost(Post post, String tipoCurtida){
+		TipoCurtida tipoCurt = new TipoCurtida(tipoCurtida);
+		listaDeCurtidas.add(tipoCurt);
+	}
 
+	public void comentarPost(Post post, String comentario){
+		Comentarios coment = new Comentarios(comentario);
+		listaDeComentarios.add(coment);
+	}
+	
 	public List<Comentarios> getListaDeComentarios() {
 		return listaDeComentarios;
 	}
@@ -46,8 +56,8 @@ public class Post {
 		return titulo;
 	}
 
-	public List<TipoCurtida> getListaDeQualificacoes() {
-		return listaDeQualificacoes;
+	public List<TipoCurtida> getListaDeCurtidas() {
+		return listaDeCurtidas;
 	}
 
 	public List<Compartilhamento> getListaCompartilhamento() {
