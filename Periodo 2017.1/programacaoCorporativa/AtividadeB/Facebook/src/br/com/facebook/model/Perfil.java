@@ -27,6 +27,8 @@ public class Perfil extends Pessoa {
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes) {
 		super(nome, dataNascimento);
 		this.configuracoes = configuracoes;
+		
+		data = Calendar.getInstance();
 		listaAmigos = new ArrayList<>();
 		listaSolicitacoesAmizade = new ArrayList<>();
 		listaPost = new ArrayList<>();
@@ -135,6 +137,10 @@ public class Perfil extends Pessoa {
 
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
+	}
+	
+	public Calendar getData() {
+		return data;
 	}
 
 }
