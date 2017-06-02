@@ -1,48 +1,62 @@
 package br.com.facebook.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Perfil extends Pessoa {
-	private Configuracoes Configuracoes;
-	private List<Historia> listaHistoria;
+	private Configuracoes configuracoes;
+	private List<Post> listaHistoria;
 	private List<Perfil> listaSolicitacoesAmizade;
-	private Map<Perfil, TipoAmigo> listaAmigos;
+	private List<Amigos> listaAmigos;
 	private String fotoPerfil;
 	private String fotoCapa;
 
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes, String fotoPerfil, String fotoCapa) {
 		super(nome, dataNascimento);
-		this.Configuracoes = configuracoes;
+		this.configuracoes = configuracoes;
 		this.fotoCapa = fotoCapa;
 		this.fotoPerfil = fotoPerfil;
-		listaAmigos = new HashMap<>();
+		listaAmigos = new ArrayList<>();
 		listaHistoria = new ArrayList<>();
 	}
 
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes) {
 		super(nome, dataNascimento);
-		this.Configuracoes = configuracoes;
-		listaAmigos = new HashMap<>();
+		this.configuracoes = configuracoes;
+		listaAmigos = new ArrayList<>();
 		listaSolicitacoesAmizade = new ArrayList<>();
 		listaHistoria = new ArrayList<>();
 	}
 
-	public void adicionarAmigoBD(Perfil perfil, TipoAmigo tipoAmigo) {
-		listaAmigos.put(perfil, tipoAmigo);
+	public String alterarTipoAmizade(Perfil perfil, String tipoAmigo) {
+		for (Amigos amigos : listaAmigos) {
+			if (amigos.equals(perfil)) {
+				amigos.getTipoAmigo().setTipoAmigo(tipoAmigo);
+				return "ALteracao Concluida";
+			} else {
+				return "Perfil nao encontrado";
+			}
+		}
+		return "Erro";
+	}
+
+	public String mostrarTodosAmigos() {
+		String listaAmigos = "";
+		for (Amigos amigos : this.listaAmigos) {
+			listaAmigos += "Nome: " + amigos.getPerfil().getNome() + "\n";
+		}
+		return listaAmigos;
 	}
 
 	public void removerAmigoBD(Perfil perfil) {
 		listaAmigos.remove(perfil);
 	}
-	
-	public void limparListaSolicitacoes(){
+
+	public void limparListaSolicitacoes() {
 		this.listaSolicitacoesAmizade.clear();
 	}
 
-	public void adicionarHistoriaBD(Historia historia) {
+	public void adicionarHistoriaBD(Post historia) {
 		listaHistoria.add(historia);
 	}
 
@@ -51,21 +65,28 @@ public class Perfil extends Pessoa {
 
 		this.getListaSolicitacoesAmizade().add(perfilSolicitado);
 	}
-	
+
+	public String listarSolicitacoesAmizade() {
+		String listaSolic = "";
+
+		for (Perfil listaSolicitacoes : this.listaSolicitacoesAmizade) {
+			listaSolic += "Perfil: " + listaSolicitacoes.getNome() + " quer ser seu amigo\n";
+		}
+
+		return listaSolic;
+	}
+
 	public String aceitarSolicitacao(Perfil perfilSolicitante, boolean aceitar) {
 		if (aceitar) {
 			TipoAmigo tipo = new TipoAmigo();
-			listaAmigos.put(perfilSolicitante, tipo);
+			Amigos amigo = new Amigos(perfilSolicitante, tipo);
+			listaAmigos.add(amigo);
 			listaSolicitacoesAmizade.remove(this);
 			return "Voce e " + perfilSolicitante.getNome() + " agora são amigos";
 		} else {
 			listaSolicitacoesAmizade.remove(this);
 			return perfilSolicitante.getNome() + " foi apagado de sua lista de solicitações\n";
 		}
-	}
-
-	public void mostrarTodosAmigos() {
-
 	}
 
 	public String getFotoCapa() {
@@ -77,7 +98,7 @@ public class Perfil extends Pessoa {
 	}
 
 	public Configuracoes getConfiguracoes() {
-		return Configuracoes;
+		return configuracoes;
 	}
 
 	@Override
@@ -86,18 +107,18 @@ public class Perfil extends Pessoa {
 		return super.getNome();
 	}
 
-	public List<Historia> getListaHistoria() {
+	public List<Post> getListaHistoria() {
 		return listaHistoria;
 	}
 
-	public Map<Perfil, TipoAmigo> getListaAmigos() {
+	public List<Amigos> getListaAmigos() {
 		return listaAmigos;
 	}
 
 	public List<Perfil> getListaSolicitacoesAmizade() {
 		return listaSolicitacoesAmizade;
 	}
-	
+
 	@Override
 	public String getDataNascimento() {
 		// TODO Auto-generated method stub
