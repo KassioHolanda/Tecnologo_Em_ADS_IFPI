@@ -20,13 +20,16 @@ public class TestaFacebook {
 		Post historiaDois = new Post("Sentimento", "Sentindo-se Triste");
 		segundoPerfil.adicionarHistoriaBD(historiaDois);
 
+		//Aceitando Solicitacao
 		primeiroPerfil.solicitacaoAmizadeBD(segundoPerfil);
+		//Listando Solicitacoes
 		System.out.println(primeiroPerfil.listarSolicitacoesAmizade());
 		System.out.println(segundoPerfil.aceitarSolicitacao(primeiroPerfil, true));
-
+		
+		//Negando Solicitacoes
 		segundoPerfil.solicitacaoAmizadeBD(primeiroPerfil);
 		System.out.println(primeiroPerfil.aceitarSolicitacao(segundoPerfil, false));
-
+	
 		facebook.adicionarPerfilBD(primeiroPerfil);
 		facebook.adicionarPerfilBD(segundoPerfil);
 
