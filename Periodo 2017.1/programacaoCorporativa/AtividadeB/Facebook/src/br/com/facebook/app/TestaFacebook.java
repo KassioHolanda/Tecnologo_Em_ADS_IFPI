@@ -1,9 +1,9 @@
 package br.com.facebook.app;
 
-import br.com.facebook.model.Configuracoes;
 import br.com.facebook.model.Facebook;
-import br.com.facebook.model.Perfil;
-import br.com.facebook.model.Post;
+import br.com.facebook.model.configuracoes.Configuracoes;
+import br.com.facebook.model.perfil.Perfil;
+import br.com.facebook.model.post.Post;
 
 public class TestaFacebook {
 	public static void main(String[] args) {

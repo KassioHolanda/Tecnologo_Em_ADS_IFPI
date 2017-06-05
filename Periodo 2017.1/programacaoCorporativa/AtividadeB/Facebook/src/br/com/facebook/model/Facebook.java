@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import br.com.facebook.model.perfil.Grupos;
+import br.com.facebook.model.perfil.Perfil;
+import br.com.facebook.model.post.Post;
+
 public class Facebook {
 
 	private List<Perfil> listaPerfis;
