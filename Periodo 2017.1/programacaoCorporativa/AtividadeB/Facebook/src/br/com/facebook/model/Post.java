@@ -35,7 +35,7 @@ public class Post {
 	}
 
 	public void curtirPost(Perfil perfilCurtiu, Perfil perfilPostou, Post post, String tipoCurtida) {
-		if (perfilPostou.getConfiguracoes().getPermitirCurtirFotos().isPermitirCurtirFotos()
+		if (perfilPostou.getConfiguracoes().getPermitirCurtir().isPermitirCurtir()
 				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCurtiu)) {
 			TipoCurtida tipoCurt = new TipoCurtida(tipoCurtida);
 			listaDeCurtidas.add(tipoCurt);
@@ -43,7 +43,7 @@ public class Post {
 	}
 
 	public void comentarPost(Perfil perfilComentou, Perfil perfilPostou, Post post, String comentario) {
-		if (perfilPostou.getConfiguracoes().getPermitirCurtirFotos().isPermitirCurtirFotos()
+		if (perfilPostou.getConfiguracoes().getPermitirComentar().isPermitirComentar()
 				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilComentou)) {
 			Comentarios coment = new Comentarios(comentario);
 			listaDeComentarios.add(coment);
@@ -51,7 +51,7 @@ public class Post {
 	}
 
 	public void compartilharPost(Perfil perfilCompartilhou, Perfil perfilPostou, Post post, String comentario) {
-		if (perfilPostou.getConfiguracoes().getPermitirCompartilharFotos().isPermitir()
+		if (perfilPostou.getConfiguracoes().getPermitirCompartilhar().isPermitirCompartilhar()
 				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCompartilhou)) {
 			Compartilhamento compartilhamento = new Compartilhamento(perfilCompartilhou, this);
 			listaCompartilhamento.add(compartilhamento);

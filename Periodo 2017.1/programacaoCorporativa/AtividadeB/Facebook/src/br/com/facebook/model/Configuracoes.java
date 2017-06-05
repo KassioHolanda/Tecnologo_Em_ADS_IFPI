@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Configuracoes {
-	private PermitirVisualizarFotos permitirVisualizarFotos;
-	private PermitirCurtirFotos permitirCurtirFotos;
-	private PermitirCompartilharFotos permitirCompartilharFotos;
+	private PermitirComentar permitirComentar;
+	private PermitirCurtir permitirCurtir;
+	private PermitirCompartilhar permitirCompartilhar;
 	private List<Perfil> listaPerfisBloqueados;
 	private String senha;
 
 	public Configuracoes(String senha) {
 		listaPerfisBloqueados = new ArrayList<>();
-		permitirCurtirFotos = new PermitirCurtirFotos();
-		permitirVisualizarFotos = new PermitirVisualizarFotos();
-		permitirCompartilharFotos = new PermitirCompartilharFotos();
+		permitirCurtir = new PermitirCurtir();
+		permitirComentar = new PermitirComentar();
+		permitirCompartilhar = new PermitirCompartilhar();
 		this.senha = senha;
 	}
 
@@ -26,8 +26,8 @@ public class Configuracoes {
 		listaPerfisBloqueados.remove(perfil);
 	}
 
-	public PermitirCurtirFotos getPermitirCurtirFotos() {
-		return permitirCurtirFotos;
+	public PermitirCurtir getPermitirCurtir() {
+		return permitirCurtir;
 	}
 	
 	public List<Perfil> getListaPerfisBloqueados() {
@@ -38,11 +38,11 @@ public class Configuracoes {
 		return senha;
 	}
 
-	public PermitirVisualizarFotos getPermitirVisualizarFotos() {
-		return permitirVisualizarFotos;
+	public PermitirComentar getPermitirComentar() {
+		return permitirComentar;
 	}
 	
-	public PermitirCompartilharFotos getPermitirCompartilharFotos() {
-		return permitirCompartilharFotos;
+	public PermitirCompartilhar getPermitirCompartilhar() {
+		return permitirCompartilhar;
 	}
 }
