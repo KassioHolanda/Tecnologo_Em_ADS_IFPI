@@ -36,7 +36,7 @@ public class Perfil extends Pessoa {
 
 	public String alterarTipoAmizade(Perfil perfil, String tipoAmigo) {
 		for (Amigos amigos : listaAmigos) {
-			if (amigos.equals(perfil)) {
+			if (amigos.getPerfil().equals(perfil)) {
 				amigos.getTipoAmigo().setTipoAmigo(tipoAmigo);
 				return "ALteracao Concluida";
 			} else {
@@ -54,8 +54,8 @@ public class Perfil extends Pessoa {
 		return listaAmigos;
 	}
 
-	public void removerAmigoBD(Perfil perfil) {
-		listaAmigos.remove(perfil);
+	public void removerAmigoBD(Amigos amigos) {
+		listaAmigos.remove(amigos);
 	}
 
 	public void limparListaSolicitacoes() {

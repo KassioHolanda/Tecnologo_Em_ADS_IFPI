@@ -18,14 +18,6 @@ public class Configuracoes {
 		this.senha = senha;
 	}
 
-	public List<Perfil> getListaPerfisBloqueados() {
-		return listaPerfisBloqueados;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
 	public void bloquearPerfil(Perfil perfil) {
 		listaPerfisBloqueados.add(perfil);
 	}
@@ -36,6 +28,14 @@ public class Configuracoes {
 
 	public PermitirCurtirFotos getPermitirCurtirFotos() {
 		return permitirCurtirFotos;
+	}
+	
+	public List<Perfil> getListaPerfisBloqueados() {
+		return listaPerfisBloqueados;
+	}
+
+	public String getSenha() {
+		return senha;
 	}
 
 	public PermitirVisualizarFotos getPermitirVisualizarFotos() {

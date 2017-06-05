@@ -37,6 +37,16 @@ public class Grupos {
 			solicitacoesGrupo.remove(perfilSolicitante);
 		}
 	}
+	
+	public String listarSolicitacoesAmizade() {
+		String listaSolic = "";
+
+		for (Perfil listaSolicitacoes : this.solicitacoesGrupo) {
+			listaSolic += "Perfil: " + listaSolicitacoes.getNome() + " quer ser seu amigo\n";
+		}
+
+		return listaSolic;
+	}
 
 	public List<Perfil> getListaParticipantes() {
 		return listaParticipantes;
