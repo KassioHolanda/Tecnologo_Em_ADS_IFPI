@@ -40,7 +40,7 @@ public class Facebook {
 		return historias;
 	}
 
-	public void excluirTodosAmigos(Perfil perfil) {
+	public void excluirTodosAmigos() {
 		perfil.getListaAmigos().clear();
 	}
 
