@@ -35,21 +35,24 @@ public class Post {
 	}
 
 	public void curtirPost(Perfil perfilCurtiu, Perfil perfilPostou, Post post, String tipoCurtida) {
-		if (perfilPostou.getConfiguracoes().getPermitirCurtirFotos().isPermitirCurtirFotos() && !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCurtiu)) {
+		if (perfilPostou.getConfiguracoes().getPermitirCurtirFotos().isPermitirCurtirFotos()
+				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCurtiu)) {
 			TipoCurtida tipoCurt = new TipoCurtida(tipoCurtida);
 			listaDeCurtidas.add(tipoCurt);
 		}
 	}
 
 	public void comentarPost(Perfil perfilComentou, Perfil perfilPostou, Post post, String comentario) {
-		if (perfilPostou.getConfiguracoes().getPermitirCurtirFotos().isPermitirCurtirFotos() && !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilComentou)) {
+		if (perfilPostou.getConfiguracoes().getPermitirCurtirFotos().isPermitirCurtirFotos()
+				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilComentou)) {
 			Comentarios coment = new Comentarios(comentario);
 			listaDeComentarios.add(coment);
 		}
 	}
 
 	public void compartilharPost(Perfil perfilCompartilhou, Perfil perfilPostou, Post post, String comentario) {
-		if (perfilPostou.getConfiguracoes().getPermitirCompartilharFotos().isPermitir() && !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCompartilhou)) {
+		if (perfilPostou.getConfiguracoes().getPermitirCompartilharFotos().isPermitir()
+				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCompartilhou)) {
 			Compartilhamento compartilhamento = new Compartilhamento(perfilCompartilhou, this);
 			listaCompartilhamento.add(compartilhamento);
 			perfilCompartilhou.getListaPost().add(this);

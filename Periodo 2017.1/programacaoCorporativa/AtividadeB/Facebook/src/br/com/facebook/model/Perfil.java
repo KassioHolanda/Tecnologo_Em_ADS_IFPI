@@ -18,7 +18,7 @@ public class Perfil extends Pessoa {
 		this.configuracoes = configuracoes;
 		this.fotoCapa = fotoCapa;
 		this.fotoPerfil = fotoPerfil;
-		
+
 		data = Calendar.getInstance();
 		listaAmigos = new ArrayList<>();
 		listaPost = new ArrayList<>();
@@ -27,7 +27,7 @@ public class Perfil extends Pessoa {
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes) {
 		super(nome, dataNascimento);
 		this.configuracoes = configuracoes;
-		
+
 		data = Calendar.getInstance();
 		listaAmigos = new ArrayList<>();
 		listaSolicitacoesAmizade = new ArrayList<>();
@@ -95,6 +95,15 @@ public class Perfil extends Pessoa {
 		}
 	}
 
+	public String consultarTipoAmigo(Perfil perfil) {
+		for (Amigos amigos : listaAmigos) {
+			if(amigos.getPerfil().equals(perfil)){
+				return amigos.getTipoAmigo().getTipoAmigo();
+			}
+		}
+		return "Nao encontrado";
+	}
+
 	public String getFotoCapa() {
 		return fotoCapa;
 	}
@@ -138,7 +147,7 @@ public class Perfil extends Pessoa {
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
-	
+
 	public Calendar getData() {
 		return data;
 	}

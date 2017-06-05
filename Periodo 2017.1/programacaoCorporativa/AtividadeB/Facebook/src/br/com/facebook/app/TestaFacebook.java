@@ -38,6 +38,9 @@ public class TestaFacebook {
 
 		primeiroPerfil.alterarTipoAmizade(segundoPerfil, "Desconhecido");
 		System.out.println(primeiroPerfil.mostrarTodosAmigos());
+		
+		System.out.println(segundoPerfil.consultarTipoAmigo(primeiroPerfil));
+		System.out.println(primeiroPerfil.consultarTipoAmigo(segundoPerfil));
 
 		System.out.println(facebook.mostrarFeed());
 
