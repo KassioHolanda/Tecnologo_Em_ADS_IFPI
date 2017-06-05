@@ -37,7 +37,7 @@ public class Grupos {
 			solicitacoesGrupo.remove(perfilSolicitante);
 		}
 	}
-	
+
 	public String listarSolicitacoesAmizade() {
 		String listaSolic = "";
 
@@ -68,6 +68,10 @@ public class Grupos {
 		return fotoGrupo;
 	}
 
+	public List<Perfil> getSolicitacoesGrupo() {
+		return solicitacoesGrupo;
+	}
+
 	public void setFotoCapaGrupo(String fotoCapaGrupo) {
 		this.fotoCapaGrupo = fotoCapaGrupo;
 	}
@@ -75,9 +79,4 @@ public class Grupos {
 	public void setFotoGrupo(String fotoGrupo) {
 		this.fotoGrupo = fotoGrupo;
 	}
-
-	public List<Perfil> getSolicitacoesGrupo() {
-		return solicitacoesGrupo;
-	}
-
 }

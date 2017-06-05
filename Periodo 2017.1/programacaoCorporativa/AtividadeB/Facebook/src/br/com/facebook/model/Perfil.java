@@ -97,11 +97,20 @@ public class Perfil extends Pessoa {
 
 	public String consultarTipoAmigo(Perfil perfil) {
 		for (Amigos amigos : listaAmigos) {
-			if(amigos.getPerfil().equals(perfil)){
+			if (amigos.getPerfil().equals(perfil)) {
 				return amigos.getTipoAmigo().getTipoAmigo();
 			}
 		}
 		return "Nao encontrado";
+	}
+	
+	public Amigos consultarDadosAmigo(Perfil perfil){
+		for (Amigos amigos : listaAmigos) {
+			if(amigos.getPerfil().equals(perfil)){
+				return amigos;
+			}
+		}
+		return null;
 	}
 
 	public String getFotoCapa() {
@@ -140,16 +149,16 @@ public class Perfil extends Pessoa {
 		return super.getDataNascimento();
 	}
 
+	public Calendar getData() {
+		return data;
+	}
+
 	public void setFotoCapa(String fotoCapa) {
 		this.fotoCapa = fotoCapa;
 	}
 
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
-	}
-
-	public Calendar getData() {
-		return data;
 	}
 
 }
