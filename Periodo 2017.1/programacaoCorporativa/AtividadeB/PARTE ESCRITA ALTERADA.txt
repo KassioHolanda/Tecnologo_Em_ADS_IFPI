@@ -1,9 +1,9 @@
 FACEBOOK
 
 No facebook, antes de comecarms a utilizar temos de fazer um cadastro
-Apos o cadastro realizamos algumas configurações de privacidade
+Apos o cadastro realizamos algumas configuraÃ§Ãµes de privacidade
 
-Cada usuario é chamado de Perfil, cada perfil tem suas caracteristicas, como nome
+Cada usuario Ã© chamado de Perfil, cada perfil tem suas caracteristicas, como nome
 foto, foto de capa, data de criacao do seu perfil, e suas configuracoes que sao definidas
 como padrao, mas podem ser alteradas
 
@@ -11,25 +11,26 @@ VOce pode alterar as configuracoes para, ninguem COMENTAR, CURTIR, OU COMPARTILH
 podendo ainda ate BLOQUEAR um PERFIL
 
 No face temos um PERFIL que se relacionam com outros PERFIS
-Um PERFIL possui uma LISTA DE AMIGOS, onde cada amigo é um PERFIL diferente
+Um PERFIL possui uma LISTA DE AMIGOS, onde cada amigo Ã© um PERFIL diferente
+um PERFIL tambem possui uma LISTA DE GRUPOS,
 cada AMIGO possui um tipo, pode ser da familia, amigos de escola, etc
 
-Ao se realizar uma solicitacao no FACEBOOK, o PERFIL que solicitou é adicionado a LISTA
-DE SOLICITAÇOES de outro PERFIL, ate que ele seja adicionado ou excluido,
+Ao se realizar uma solicitacao no FACEBOOK, o PERFIL que solicitou Ã© adicionado a LISTA
+DE SOLICITAÃ‡OES de outro PERFIL, ate que ele seja adicionado ou excluido,
 se ele for adicionar ele tambem sera excluido da LISTA DE SOLICITACOES,
 porem sera adicionado na lista de amigos,
 Um PERFIL pode excluir um usuario de sua LISTA DE AMIGOS
 
-Um PERFIL possui uma LISTA DE POST, que são suas publicacoes, que possui suas caracteriscas,
+Um PERFIL possui uma LISTA DE POST, que sÃ£o suas publicacoes, que possui suas caracteriscas,
 como TTULO, HISTORIA DO POST, OPCAO DE MARCAR ALGUM PERFIL uma LISTA DE COMENTARIOS, 
-e uma LISTA DE COMPARTILHAMENTOS, o PERFIL que compartilhar o post, o post é adicionado a sua
+e uma LISTA DE COMPARTILHAMENTOS, o PERFIL que compartilhar o post, o post Ã© adicionado a sua
 LISTA DE POSTS
 
 Voce pode fazer um COMENTARIO em um Post, um COMENTARIO recebe uma LISTA DE RESPOSTAS, 
 Voce pode avaliar um post de diferentes maneiras, voce pode definir seu TIPO DE CURTIR
 a maneira que voce gostou do post ou nao
 
-Os GRUPOS possuem uma LISTA DE PARTICIPANTES, que logo é uma lista de perfis,
+Os GRUPOS possuem uma LISTA DE PARTICIPANTES, que logo Ã© uma lista de perfis,
 cada grupo possui um ADMINISTRADOR responsavel por adicionar as pessoas
 
 
