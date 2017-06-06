@@ -65,6 +65,10 @@ public class Perfil extends Pessoa {
 		this.listaSolicitacoesAmizade.clear();
 	}
 
+	public void excluirTodosAmigos(Perfil perfil) {
+		perfil.getListaAmigos().clear();
+	}
+	
 	public void adicionarPostBD(Post post) {
 		listaPost.add(post);
 	}
@@ -74,6 +78,7 @@ public class Perfil extends Pessoa {
 
 		this.getListaSolicitacoesAmizade().add(perfilSolicitado);
 	}
+	
 
 	public String listarSolicitacoesAmizade() {
 		String listaSolic = "";

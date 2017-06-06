@@ -40,10 +40,6 @@ public class Facebook {
 		return historias;
 	}
 
-	public void excluirTodosAmigos(Perfil perfil) {
-		perfil.getListaAmigos().clear();
-	}
-
 	public void adicionarPerfilBD(Perfil perfil) {
 		listaPerfis.add(perfil);
 	}
