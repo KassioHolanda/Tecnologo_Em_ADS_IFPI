@@ -47,4 +47,8 @@ public class Configuracoes {
 	public PermitirCompartilhar getPermitirCompartilhar() {
 		return permitirCompartilhar;
 	}
+	
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 }

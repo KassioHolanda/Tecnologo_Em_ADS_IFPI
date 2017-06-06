@@ -32,6 +32,7 @@ public class Grupos {
 	public void aceitarSolicitacao(Perfil perfilSolicitante, boolean aceitar) {
 		if (aceitar) {
 			listaParticipantes.add(perfilSolicitante);
+			perfilSolicitante.adicionarGrupoBD(this);
 			solicitacoesGrupo.remove(perfilSolicitante);
 		} else {
 			solicitacoesGrupo.remove(perfilSolicitante);

@@ -12,6 +12,7 @@ public class Perfil extends Pessoa {
 	private List<Post> listaPost;
 	private List<Perfil> listaSolicitacoesAmizade;
 	private List<Amigos> listaAmigos;
+	private List<Grupos> listaGrupos;
 	private String fotoPerfil;
 	private String fotoCapa;
 	private Calendar data;
@@ -25,6 +26,7 @@ public class Perfil extends Pessoa {
 		data = Calendar.getInstance();
 		listaAmigos = new ArrayList<>();
 		listaPost = new ArrayList<>();
+		listaGrupos = new ArrayList<>();
 	}
 
 	public Perfil(String nome, String dataNascimento, Configuracoes configuracoes) {
@@ -89,7 +91,7 @@ public class Perfil extends Pessoa {
 
 		return listaSolic;
 	}
-
+	
 	public String aceitarSolicitacao(Perfil perfilSolicitante, boolean aceitar) {
 		if (aceitar) {
 			TipoAmigo tipo = new TipoAmigo();
@@ -120,6 +122,10 @@ public class Perfil extends Pessoa {
 		}
 		return null;
 	}
+	
+	public void adicionarGrupoBD(Grupos grupo){
+		this.listaGrupos.add(grupo);
+	}
 
 	public String getFotoCapa() {
 		return fotoCapa;
@@ -149,6 +155,10 @@ public class Perfil extends Pessoa {
 
 	public List<Perfil> getListaSolicitacoesAmizade() {
 		return listaSolicitacoesAmizade;
+	}
+	
+	public List<Grupos> getListaGrupos() {
+		return listaGrupos;
 	}
 
 	@Override

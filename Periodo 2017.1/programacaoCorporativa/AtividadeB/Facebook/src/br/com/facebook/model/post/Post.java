@@ -52,7 +52,7 @@ public class Post {
 		}
 	}
 
-	public void compartilharPost(Perfil perfilCompartilhou, Perfil perfilPostou, Post post, String comentario) {
+	public void compartilharPost(Perfil perfilCompartilhou, Perfil perfilPostou, Post post) {
 		if (perfilPostou.getConfiguracoes().getPermitirCompartilhar().isPermitirCompartilhar()
 				&& !perfilPostou.getConfiguracoes().getListaPerfisBloqueados().contains(perfilCompartilhou)) {
 			Compartilhamento compartilhamento = new Compartilhamento(perfilCompartilhou, this);
