@@ -15,6 +15,7 @@ public class Amigos {
 	
 	public Amigos(Perfil perfil){
 		this.perfil = perfil;
+		this.tipoAmigo = new TipoAmigo();
 		this.data = Calendar.getInstance();
 	}
 	
