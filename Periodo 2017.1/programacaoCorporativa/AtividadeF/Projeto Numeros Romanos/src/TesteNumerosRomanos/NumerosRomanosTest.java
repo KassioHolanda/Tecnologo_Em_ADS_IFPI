@@ -16,7 +16,7 @@ public class NumerosRomanosTest {
 		numerosRomanos = new NumerosRomanos();
 	}
 	
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void consultarLetrasDentroDoSistemaNumeroRomano() {
 		assertEquals(1, numerosRomanos.pegarNumero("K"), 0);
 	}
