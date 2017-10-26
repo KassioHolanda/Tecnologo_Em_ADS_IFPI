@@ -1,0 +1,92 @@
+{% extends "base_student.html" %}
+{% block base_student %}
+
+    <div id="index-banner" class="parallax-container2">
+        <div class="section no-pad-bot">
+            <div class="container">
+                <div class="card">
+                    <div class="card-content center">
+                        <h4>Detalhe da Vaga de Estagio</h4>
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <table class="striped white">
+                                <thead>
+                                <tr >
+                                    <th>Detalhes da Vaga</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Cargo</td>
+                                    <td>{{vaga.cargo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Area de Atuação</td>
+                                    <td>
+                                        {{vaga.area_atuacao}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Quantidade de Vagas</td>
+                                    <td>{{vaga.quantidade}} Vaga(s)</td>
+                                </tr>
+                                <tr>
+                                    <td>Beneficios do Trabalho</td>
+                                    <td>{{vaga.beneficios}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Requisitos</td>
+                                    <td>{{vaga.requisitos.title}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Atividades que serão exercidas</td>
+                                    <td>{{vaga.atividades.title}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Valor da Bolsa</td>
+                                    <td>{{vaga.valor}} R$</td>
+                                </tr>
+                                <tr>
+                                    <td>Turno</td>
+                                    <td>{{vaga.turno.title }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="striped white">
+                                <thead>
+                                <tr>
+                                    <th>Dados da Empresa</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>{{ vaga.empresa_vaga.nome }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Descrição</td>
+                                    <td>{{ vaga.empresa_vaga.descricao.title }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>{{ vaga.empresa_vaga.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Telefone</td>
+                                    <td>{{ vaga.empresa_vaga.telefone }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </ul>
+                        <div class="container" align="center">
+                            <button class="btn"><a href="{% url 'send_mail' vaga.empresa_vaga.id%}" class="white-text">Enviar Email</a></button><br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="parallax"><img src="../static/img/background1.jpg" alt="Unsplashed background img 1"></div>
+    </div>
+
+{% endblock %}

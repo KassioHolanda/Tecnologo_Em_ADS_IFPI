@@ -1,0 +1,98 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <title>SIEE - Encontre Estagios</title>
+</head>
+<body>
+<nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="{% url 'institution_home' %}"><img src="/static/img/logo.png" width="250px" height="65px"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a class="black-text" href="{% url 'institution_home' %}">Pagina Inicial</a></li>
+            <li><a class="black-text" href="{% url 'logout_usuario' %}">Encerrar Sessão</a></li>
+        </ul>
+        <ul id="nav-mobile" class="side-nav">
+            <li><a class="black-text" href="{% url 'institution_home' %}">Pagina Inicial</a></li>
+            <li><a class="black-text" href="{% url 'logout_usuario' %}">Encerrar Sessão</a></li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<ul id="slide-out" class="side-nav">
+    <li><div class="userView">
+        <div class="background">
+            <img src="/static/img/fundo_eventos.jpg">
+        </div>
+        <a href="#!user"><img class="circle" src="/static/img/photo.jpg"></a>
+        <a href="#!name"><span class="white-text name">Bem Vindo, {{user.nome.title}}</span></a>
+        <a href="#!name"><span class="white-text name">Administrador</span></a>
+        <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
+    </div></li>
+{#    <li><a href="{% url 'institution_home' %}"><i class="material-icons">home</i>Pagina Inicial</a></li>#}
+    <li><a href="{% url 'list_area' %}"><i class="material-icons">chrome_reader_mode</i>Area de Atuação</a></li>
+{#    <li><a href="#"><i class="material-icons">layers</i>Documentos de Estagio</a></li>#}
+    <li><a href="{% url 'list_companies' %}"><i class="material-icons">description</i>Empresas</a></li>
+    <li><a href="{% url 'student_registration' %}"><i class="material-icons">event_note</i>Registro de Alunos</a></li>
+    <li><a href="{% url 'data_reports' %}"><i class="material-icons">insert_drive_file</i>Relatorios do Sistema</a></li>
+    <li><a href="{% url 'list_vacancies' %}"><i class="material-icons">assignment</i>Vagas Recentes</a></li>
+</ul>
+
+{% block base_institution %}
+
+{% endblock %}
+
+<div class="fixed-action-btn horizontal click-to-toggle">
+    <a href="#" data-activates="slide-out" class="button-collapse btn-floating btn-large pulse red"><i class="material-icons">menu</i></a>
+</div>
+<footer class="page-footer light-blue darken-4">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Quem somos</h5>
+                <p class="grey-text text-lighten-4">Serviço de Integração, Estágios, Egresso e Emprego - SIEE.</p>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Contatos</h5>
+                <ul>
+                    <li><a class="white-text" href="#!">3131- 9411</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+        </div>
+    </div>
+</footer>
+
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="{% static 'js/materialize.js' %}"></script>
+<script src="{% static  'js/init.js' %}"></script>
+<script>
+
+    $().ready(function() {
+        $('select').material_select();
+    });
+
+    $('.datepicker').pickadate({
+        selectMonths: false, // Creates a dropdown to control month
+        selectYears: 70,
+        min: [1917, 01, 01],
+        max: false,
+        format: 'yyyy-mm-dd'
+    });
+
+    $(document).ready(function(){
+      $('.parallax').parallax();
+    });
+
+</script>
+</body>
+</html>

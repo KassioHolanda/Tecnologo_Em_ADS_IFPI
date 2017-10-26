@@ -1,0 +1,49 @@
+from django.db import models
+
+
+# Create your models here.
+
+
+class AreaAtuacao(models.Model):
+    nome = models.CharField("Area Atuacao", max_length=255, null=False)
+    curso = models.CharField("Curso", max_length=255)
+
+    def __str__(self):
+        return self.curso
+
+
+class Empresa(models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = models.CharField(max_length=255)
+    endereco = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    telefone = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class Vaga(models.Model):
+    TIPO_VAGA = (('estagio', 'ESTAGIO'),
+                 ('emprego', 'EMPREGO'),
+                 ('jovem aprendiz', 'JOVEM APRENDIZ'))
+
+    TURNO_VAGA = (('manha', 'MANHA'),
+                  ('tarde', 'TARDE'),
+                  ('noite', 'NOITE'))
+
+    STATUS_VAGA = (('ativo', 'ATIVO'),
+                   ('inativo', 'INATIVO'))
+
+    cargo = models.CharField('Cargo', max_length=100, blank=False)
+    quantidade = models.IntegerField("Quantidade de Vagas", null=False)
+    tipo_vaga = models.CharField('Tipo Vaga', max_length=255, choices=TIPO_VAGA)
+    beneficios = models.CharField('Beneficios', max_length=255, blank=False, null=True)
+    requisitos = models.CharField('Requisitos', max_length=255, blank=False, null=True)
+    atividades = models.CharField('Atividades', max_length=255, blank=False, null=True)
+    valor = models.DecimalField("Valor", max_digits=15, decimal_places=2, default=0)
+    turno = models.CharField('Turno Vaga', max_length=255, choices=TURNO_VAGA)
+    status = models.CharField('Status Vaga', max_length=255, choices=STATUS_VAGA, default='ativo')
+    area_atuacao = models.ForeignKey('vaga.AreaAtuacao', related_name='curso_vaga')
+    empresa_vaga = models.ForeignKey('vaga.Empresa', related_name='empresa_vaga')
+    data_publicacao = models.DateField("Data de Publicação", blank=True, null=True)
