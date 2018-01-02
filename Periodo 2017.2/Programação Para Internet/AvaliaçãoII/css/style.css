@@ -1,0 +1,107 @@
+body {
+    font-family: "Yu Gothic UI";
+}
+
+main {
+
+}
+
+header {
+    padding: 5px;
+    text-align: center;
+    margin: -10px;
+    background-color: #165da4;
+}
+
+footer {
+    clear: both;
+    margin: -10px;
+    text-align: center;
+    padding: 20px;
+    color: #ffffff;
+    background-color: #165da4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+.conteudo_lado_direito {
+    margin-top: 10px;
+    height: 300px;
+    width: 48%;
+    box-sizing: border-box;
+    float: right;
+    padding: 5px;
+    text-align: justify;
+}
+
+.background_2 {
+    border-radius: 3%;
+    margin-top: 10px;
+    float: right;
+    width: 48%;
+    box-sizing: border-box;
+}
+
+.conteudo_lado_esquerdo {
+    margin-top: 10px;
+    height: 300px;
+    width: 48%;
+    box-sizing: border-box;
+    float: left;
+    padding: 5px;
+    text-align: justify;
+}
+
+.texto_inicial {
+    text-align: justify;
+    clear: both;
+}
+
+.background {
+    border-radius: 3%;
+    margin-top: 10px;
+    float: left;
+    width: 48%;
+    box-sizing: border-box;
+}
+
+.clear {
+    clear: both;
+    box-sizing: border-box;
+}
+
+.tituto {
+    font-size: 25px;
+    font-family: "Viner Hand ITC";
+    color: white;
+}
+
+.navegacao {
+    font-family: "Viner Hand ITC";
+    font-size: 16px;
+    margin-top: -15px;
+    display: inline;
+    text-decoration: none;
+}
+
+.navegacao ul li {
+    background-color: lightgray;
+    padding: 10px;
+    display: inline;
+}
+
+.navegacao ul li:hover {
+    background-color: #ffffff;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.imagem_quadrada {
+    margin-top: -10px;
+    max-width: 70%;
+    width: 5%;
+    border-radius: 50%;
+}
