@@ -1,5 +1,8 @@
 body {
     font-family: "Yu Gothic UI";
+    background-image: url("../img/background3.jpg");
+    background-repeat: repeat-x;
+    background-attachment: fixed;
 }
 
 main {
@@ -23,6 +26,8 @@ footer {
 }
 
 .container {
+    background-color: white;
+    padding: 20px;
     width: 80%;
     margin: auto;
 }
@@ -34,20 +39,14 @@ footer {
     box-sizing: border-box;
     float: right;
     padding: 5px;
+    /*height: 100%;*/
     text-align: justify;
-}
-
-.background_2 {
-    border-radius: 3%;
-    margin-top: 10px;
-    float: right;
-    width: 48%;
-    box-sizing: border-box;
 }
 
 .conteudo_lado_esquerdo {
     margin-top: 10px;
     height: 300px;
+    /*height: 100%;*/
     width: 48%;
     box-sizing: border-box;
     float: left;
@@ -55,17 +54,39 @@ footer {
     text-align: justify;
 }
 
-.texto_inicial {
-    text-align: justify;
-    clear: both;
+.imagem_lado_direito {
+    border-radius: 3%;
+    margin-top: 10px;
+    float: right;
+    width: 48%;
+    box-sizing: border-box;
+    solid-opacity: 10px;
 }
 
-.background {
+.imagem_lado_esquerdo {
     border-radius: 3%;
     margin-top: 10px;
     float: left;
     width: 48%;
     box-sizing: border-box;
+}
+
+.conteudo_lado_esquerdo:hover {
+    background-color: #dfe7d6;
+}
+
+.conteudo_lado_direito:hover {
+    background-color: #dfe7d6;
+}
+
+.texto_inicial {
+    text-align: justify;
+    clear: both;
+}
+
+.capa {
+    width: 100px;
+    height: 100px;
 }
 
 .clear {
@@ -80,7 +101,7 @@ footer {
 }
 
 .navegacao {
-    font-family: "Viner Hand ITC";
+    /*font-family: "Viner Hand ITC";*/
     font-size: 16px;
     margin-top: -15px;
     display: inline;
@@ -99,9 +120,154 @@ footer {
     padding: 10px;
 }
 
-.imagem_quadrada {
-    margin-top: -10px;
-    max-width: 70%;
-    width: 5%;
-    border-radius: 50%;
+.capa {
+    float: left;
+    width: 30%;
+    height: 35%;
+    margin: 15px;
+    border-radius: 3%;
+}
+
+.destaque_1 {
+    color: green;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_2 {
+    color: greenyellow;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_3 {
+    color: brown;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_4 {
+    color: blueviolet;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_5 {
+    color: darkturquoise;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_6 {
+    color: chocolate;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_7 {
+    color: tomato;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_8 {
+    color: darkred;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_9 {
+    color: gold;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_10 {
+    color: lawngreen;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_11 {
+    color: mediumorchid;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_12 {
+    color: #5081d3;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_13 {
+    color: #d3381e;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_14 {
+    color: #53d32e;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_15 {
+    color: #16d3a6;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_16 {
+    color: #d33d24;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_17 {
+    color: #d317bb;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_18 {
+    color: #2c8758;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_19 {
+    color: #d3d322;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_20 {
+    color: #14d3aa;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_21 {
+    color: #d33960;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_22 {
+    color: #5540ac;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_23 {
+    color: #1cd34f;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
+}
+
+.destaque_24 {
+    color: #d32645;
+    font-family: "Viner Hand ITC";
+    font-size: 18px;
 }

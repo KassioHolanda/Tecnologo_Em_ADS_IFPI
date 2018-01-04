@@ -1,4 +1,28 @@
-@media screen and (min-width: 1024px) {
-    /* ...estilo para desktop... */
+/*@media (min-width: 700px) {*/
 
+@media screen and (min-width: 400px) {
+
+    .conteudo_lado_direito {
+        width: 100%;
+        height: 100%;
+        float: none;
+    }
+
+    .conteudo_lado_esquerdo {
+        width: 100%;
+        height: 100%;
+        float: none;
+    }
+
+    .imagem_lado_direito {
+        width: 100%;
+        height: 100%;
+        float: none;
+    }
+
+    .imagem_lado_esquerdo {
+        width: 100%;
+        height: 100%;
+        float: none;
+    }
 }
