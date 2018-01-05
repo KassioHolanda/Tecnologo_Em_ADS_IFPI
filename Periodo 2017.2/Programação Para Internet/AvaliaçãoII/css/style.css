@@ -10,15 +10,24 @@ main {
 }
 
 header {
+    /*display: inline;*/
     padding: 5px;
-    text-align: center;
+    position: fixed;
+    width: 100%;
+    /*border-radius: 10px;*/
+    /*text-align: center;*/
     margin: -10px;
     background-color: #165da4;
 }
 
+/*.nome_logo:hover {*/
+    /*!*background-color: #165da4;*!*/
+    /*color: #165da4;*/
+/*}*/
+
 footer {
     clear: both;
-    margin: -10px;
+    margin: auto -10px;
     text-align: center;
     padding: 20px;
     color: #ffffff;
@@ -29,7 +38,7 @@ footer {
     background-color: white;
     padding: 20px;
     width: 80%;
-    margin: auto;
+    margin: 10px auto;
 }
 
 .conteudo_lado_direito {
