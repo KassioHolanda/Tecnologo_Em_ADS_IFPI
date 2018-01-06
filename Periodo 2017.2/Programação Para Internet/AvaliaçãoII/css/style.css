@@ -17,7 +17,7 @@ header {
     /*border-radius: 10px;*/
     /*text-align: center;*/
     margin: -10px;
-    background-color: #165da4;
+    background-color: #4A148C;
 }
 
 /*.nome_logo:hover {*/
@@ -31,7 +31,7 @@ footer {
     text-align: center;
     padding: 20px;
     color: #ffffff;
-    background-color: #165da4;
+    background-color: #4A148C;
 }
 
 .container {
@@ -128,8 +128,9 @@ footer {
 
 .navegacao ul li:hover {
     background-color: #ffffff;
-    color: #ffffff;
+    color: #222;
     padding: 10px;
+    border-bottom: 5px solid #d3d322;
 }
 
 .capa {
@@ -139,6 +140,8 @@ footer {
     margin: 15px;
     border-radius: 3%;
 }
+
+
 
 .destaque_1 {
     color: green;
