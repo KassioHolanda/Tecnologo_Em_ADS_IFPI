@@ -21,8 +21,8 @@ header {
 }
 
 /*.nome_logo:hover {*/
-    /*!*background-color: #165da4;*!*/
-    /*color: #165da4;*/
+/*!*background-color: #165da4;*!*/
+/*color: #165da4;*/
 /*}*/
 
 footer {
@@ -38,7 +38,9 @@ footer {
     background-color: white;
     padding: 20px;
     width: 80%;
-    margin: 10px auto;
+    /*height: 100%;*/
+    margin: 10px auto ;
+    /*margin-bottom: 20px solid #165da4;*/
 }
 
 .conteudo_lado_direito {
