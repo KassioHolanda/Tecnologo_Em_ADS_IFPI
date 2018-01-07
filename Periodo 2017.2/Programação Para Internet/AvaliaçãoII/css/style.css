@@ -3,6 +3,7 @@ body {
     background-image: url("../img/imagem_10.jpg");
     background-repeat: repeat-x;
     background-attachment: fixed;
+    overflow-x: hidden;
 }
 
 main {
@@ -27,7 +28,10 @@ header {
 
 footer {
     clear: both;
-    margin: auto -10px;
+    margin-top: 2%;
+    margin-right: -10px;
+    margin-left: -10px;
+    margin-bottom: -10px;
     text-align: center;
     padding: 20px;
     color: #ffffff;
@@ -36,17 +40,33 @@ footer {
 
 .container {
     background-color: white;
-    padding: 20px;
-    width: 80%;
-    /*height: 100%;*/
+    padding-top: 2%;
+    padding-bottom: 26%;
+    padding-left: 1%;
+    padding-right: 1%;
+    width: 70%;
+    /*height: auto;*/
+    margin: 10px auto ;
+    /*margin-bottom: 20px solid #165da4;*/
+}
+
+.container_2 {
+    background-color: white;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 1%;
+    padding-right: 1%;
+    width: 70%;
+    /*height: auto;*/
     margin: 10px auto ;
     /*margin-bottom: 20px solid #165da4;*/
 }
 
 .conteudo_lado_direito {
+    font-size: 18px;
     margin-top: 10px;
     height: 300px;
-    width: 48%;
+    width: 45%;
     box-sizing: border-box;
     float: right;
     padding: 5px;
@@ -58,7 +78,7 @@ footer {
     margin-top: 10px;
     height: 300px;
     /*height: 100%;*/
-    width: 48%;
+    width: 45%;
     box-sizing: border-box;
     float: left;
     padding: 5px;
@@ -69,27 +89,27 @@ footer {
     border-radius: 3%;
     margin-top: 10px;
     float: right;
-    width: 48%;
+    width: 52%;
     box-sizing: border-box;
-    solid-opacity: 10px;
+    /*solid-opacity: 10px;*/
 }
 
 .imagem_lado_esquerdo {
     border-radius: 3%;
     margin-top: 10px;
     float: left;
-    width: 48%;
+    width: 52%;
     box-sizing: border-box;
 }
 
-.conteudo_lado_esquerdo:hover {
-    background-color: #dfe7d6;
+/*.conteudo_lado_esquerdo:hover {*/
+    /*background-color: #dfe7d6;*/
 
-}
+/*}*/
 
-.conteudo_lado_direito:hover {
-    background-color: #dfe7d6;
-}
+/*.conteudo_lado_direito:hover {*/
+    /*background-color: #dfe7d6;*/
+/*}*/
 
 .texto_inicial {
     text-align: justify;
@@ -113,7 +133,7 @@ footer {
 }
 
 .navegacao {
-    /*font-family: "Viner Hand ITC";*/
+    font-style: inherit;
     font-size: 16px;
     margin-top: -15px;
     display: inline;
@@ -135,13 +155,11 @@ footer {
 
 .capa {
     float: left;
-    width: 30%;
-    height: 35%;
+    width: 27%;
+    height: 40%;
     margin: 15px;
     border-radius: 3%;
 }
-
-
 
 .destaque_1 {
     color: green;
