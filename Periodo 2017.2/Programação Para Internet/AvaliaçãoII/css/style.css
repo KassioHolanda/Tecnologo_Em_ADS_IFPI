@@ -1,31 +1,3 @@
-body {
-    font-family: "Yu Gothic UI";
-    background-image: url("../img/imagem_10.jpg");
-    background-repeat: repeat-x;
-    background-attachment: fixed;
-    overflow-x: hidden;
-}
-
-main {
-
-}
-
-header {
-    /*display: inline;*/
-    padding: 5px;
-    position: fixed;
-    width: 100%;
-    /*border-radius: 10px;*/
-    /*text-align: center;*/
-    margin: -10px;
-    background-color: #4A148C;
-}
-
-/*.nome_logo:hover {*/
-/*!*background-color: #165da4;*!*/
-/*color: #165da4;*/
-/*}*/
-
 footer {
     clear: both;
     margin-top: 2%;
@@ -34,82 +6,21 @@ footer {
     margin-bottom: -10px;
     text-align: center;
     padding: 20px;
-    color: #ffffff;
-    background-color: #4A148C;
+    /*color: #ffffff;*/
+    /*background-color: #4A148C;*/
 }
 
 .container {
     background-color: white;
     padding-top: 2%;
-    padding-bottom: 26%;
-    padding-left: 1%;
-    padding-right: 1%;
-    width: 70%;
-    /*height: auto;*/
-    margin: 10px auto ;
-    /*margin-bottom: 20px solid #165da4;*/
-}
-
-.container_2 {
-    background-color: white;
-    padding-top: 2%;
     padding-bottom: 2%;
     padding-left: 1%;
     padding-right: 1%;
-    width: 70%;
+    width: 90%;
     /*height: auto;*/
-    margin: 10px auto ;
+    margin: 10px auto;
     /*margin-bottom: 20px solid #165da4;*/
 }
-
-.conteudo_lado_direito {
-    font-size: 18px;
-    margin-top: 10px;
-    height: 300px;
-    width: 45%;
-    box-sizing: border-box;
-    float: right;
-    padding: 5px;
-    /*height: 100%;*/
-    text-align: justify;
-}
-
-.conteudo_lado_esquerdo {
-    margin-top: 10px;
-    height: 300px;
-    /*height: 100%;*/
-    width: 45%;
-    box-sizing: border-box;
-    float: left;
-    padding: 5px;
-    text-align: justify;
-}
-
-.imagem_lado_direito {
-    border-radius: 3%;
-    margin-top: 10px;
-    float: right;
-    width: 50%;
-    box-sizing: border-box;
-    /*solid-opacity: 10px;*/
-}
-
-.imagem_lado_esquerdo {
-    border-radius: 3%;
-    margin-top: 10px;
-    float: left;
-    width: 50%;
-    box-sizing: border-box;
-}
-
-/*.conteudo_lado_esquerdo:hover {*/
-    /*background-color: #dfe7d6;*/
-
-/*}*/
-
-/*.conteudo_lado_direito:hover {*/
-    /*background-color: #dfe7d6;*/
-/*}*/
 
 .texto_inicial {
     text-align: justify;
@@ -161,146 +72,165 @@ footer {
     border-radius: 3%;
 }
 
-.destaque_1 {
-    color: green;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+/*CRIANDO NOVO LAYOUT*/
+
+* {
+    font-family: "Yu Gothic UI";
+    box-sizing: border-box;
 }
 
-.destaque_2 {
-    color: greenyellow;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-1 {
+    width: 8.33%;
 }
 
-.destaque_3 {
-    color: brown;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-2 {
+    width: 16.66%;
 }
 
-.destaque_4 {
-    color: blueviolet;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-3 {
+    width: 25%;
 }
 
-.destaque_5 {
-    color: darkturquoise;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-4 {
+    width: 33.33%;
 }
 
-.destaque_6 {
-    color: chocolate;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-5 {
+    width: 41.66%;
 }
 
-.destaque_7 {
-    color: tomato;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-6 {
+    width: 50%;
 }
 
-.destaque_8 {
-    color: darkred;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-7 {
+    width: 58.33%;
 }
 
-.destaque_9 {
-    color: gold;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-8 {
+    width: 66.66%;
 }
 
-.destaque_10 {
-    color: lawngreen;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-9 {
+    width: 75%;
 }
 
-.destaque_11 {
-    color: mediumorchid;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-10 {
+    width: 83.33%;
 }
 
-.destaque_12 {
-    color: #5081d3;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-11 {
+    width: 91.66%;
 }
 
-.destaque_13 {
-    color: #d3381e;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.col-12 {
+    width: 100%;
 }
 
-.destaque_14 {
-    color: #53d32e;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    /*border: 1px solid red;*/
 }
 
-.destaque_15 {
-    color: #16d3a6;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
 }
 
-.destaque_16 {
-    color: #d33d24;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.menu_navegação {
+    padding: 20px;
+
 }
 
-.destaque_17 {
-    color: #d317bb;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.menu_navegação ul {
+    margin-left: 70px;
+    padding: 15px;
+    background-color: #dddddd;
+    width: 410px;
 }
 
-.destaque_18 {
-    color: #2c8758;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.menu_navegação ul li {
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
-.destaque_19 {
-    color: #d3d322;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.menu_navegação ul li:hover {
+    background-color: #e0d9de;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    border-bottom: 4px solid #222222;
 }
 
-.destaque_20 {
-    color: #14d3aa;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.inicio {
+    color: #ffffff;
+    font-style: inherit;
+    padding: 40px;
+    margin: -10px;
+    font-family: "Yu Gothic UI";
+    background-image: url("../img/imagem_14.jpg");
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    overflow-x: hidden;
 }
 
-.destaque_21 {
-    color: #d33960;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.texto_principal {
+    font-family: "Agency FB";
+    font-size: 30px;
 }
 
-.destaque_22 {
-    color: #5540ac;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.texto_secundario {
+    font-family: "Agency FB";
+    font-size: 25px;
 }
 
-.destaque_23 {
-    color: #1cd34f;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.imagem {
+    width: 100%;
+    height: 220px;
+    border-radius: 3%;
 }
 
-.destaque_24 {
-    color: #d32645;
-    font-family: "Viner Hand ITC";
-    font-size: 18px;
+.titulo_box {
+    font-size: 20px;
+
+}
+
+.final {
+    color: #ffffff;
+    /*font-style: inherit;*/
+    padding: 40px;
+    margin: -10px;
+    font-family: "Agency FB";
+    /*font-family: "Yu Gothic UI";*/
+    /*background-image: url("../img/imagem_4.jpeg");*/
+    /*background-color: #222222;*/
+    background-image: url("../img/imagem_14.jpg");
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+.container_text {
+
+    width: 90%;
+    margin: auto;
+}
+
+.final p {
+    font-family: "Agency FB";
+    font-size: 25px;
+}
+
+.links_publicidade {
+
+}
+
+.subtitulo_box {
+    font-size: 20px;
+    font-family: "Agency FB";
 }
