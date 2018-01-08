@@ -1,7 +1,3 @@
-@media only screen and (min-width: 400px) {
-
-}
-
 @media screen and (min-width: 480px) and (max-width: 768px) {
     .conteudo_lado_direito {
         width: 100%;
@@ -24,6 +20,53 @@
     .imagem_lado_esquerdo {
         width: 100%;
         height: 100%;
+        float: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    .conteudo_lado_direito {
+        width: 100%;
+        height: 100%;
+        float: none;
+    }
+
+    .conteudo_lado_esquerdo {
+        width: 100%;
+        height: 100%;
+        float: none;
+    }
+
+    .imagem_lado_direito {
+        visibility: hidden;
+        width: 0%;
+        height: 0%;
+        float: none;
+    }
+
+    .imagem_lado_esquerdo {
+        visibility: hidden;
+        width: 0%;
+        height: 0%;
+        float: none;
+    }
+
+
+    .navegacao {
+        font-size: 10px;
+        display: flow;
+        margin: auto;
+    }
+
+    .capa {
+        padding: 10px;
+        width: 50%;
+        height: 50%;
+        float: none;
+    }
+
+    .jogos {
         float: none;
     }
 }
