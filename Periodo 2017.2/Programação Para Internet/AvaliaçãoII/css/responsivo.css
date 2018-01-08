@@ -77,3 +77,18 @@
         float: none;
     }
 }
+
+
+/*NOVO LAYOUT*/
+
+@media screen and (min-width: 480px) and (max-width: 768px) {
+    [class*="col-"] {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    [class*="col-"] {
+        width: 100%;
+    }
+}
