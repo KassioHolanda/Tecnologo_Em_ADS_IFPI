@@ -88,7 +88,21 @@
 }
 
 @media screen and (max-width: 480px) {
+    *{
+        width: 100%;
+    }
+
     [class*="col-"] {
         width: 100%;
+    }
+
+    .menu_navegação {
+        font-size: 10px;
+        margin-left: -70px;
+    }
+
+    .menu_navegação ul li {
+        text-decoration: none;
+        display: block;
     }
 }
