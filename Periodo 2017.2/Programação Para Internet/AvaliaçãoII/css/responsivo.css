@@ -85,6 +85,18 @@
     [class*="col-"] {
         width: 50%;
     }
+
+    .imagem {
+        width: 100%;
+        height: 140px;
+        border-radius: 3%;
+    }
+
+    .imagem_capa {
+        width: 100%;
+        height: 340px;
+        border-radius: 3%;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -94,6 +106,26 @@
 
     [class*="col-"] {
         width: 100%;
+    }
+
+    .texto_principal {
+        font-size: 18px;
+    }
+
+    .texto_secundario {
+        font-size: 16px;
+    }
+
+    .titulo_box {
+        font-size: 18px;
+    }
+
+    .subtitulo_box {
+        font-size: 16px;
+    }
+
+    .card_final p {
+        font-size: 18px;
     }
 
     .menu_navegação {
