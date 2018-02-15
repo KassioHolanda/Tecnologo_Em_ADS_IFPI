@@ -176,15 +176,6 @@ END;
 $inscricao_completa$ LANGUAGE plpgsql;
 
 select inscricao_completa('9', '1');
-
-SELECT * FROM Inscricao;
-SELECT * from ItemInscricao;
-select * from Atividade;
--- delete from Inscricao;
--- DELETE from ItemInscricao;
--- drop TABLE ItemInscricao;
-
-
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
   criar_inscricao      TEXT := 'select criar_inscricao(' || id_grupo_inscricao || ')';
@@ -206,15 +197,6 @@ END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
 SELECT inscricao_por_atividade('9','3');
 
-select * from atividade;
---
--- SELECT * from ItemInscricao;
---
-delete from ItemInscricao;
-delete from Inscricao;
-select * from Inscricao;
---
--- SELECT criar_inscricao(9);
 
 CREATE OR REPLACE FUNCTION associar_evento_instituicao(id_evento_associar TEXT, id_instituicao_associar TEXT) RETURNS VOID AS $associar_evento_instituicao$
   DECLARE
@@ -250,15 +232,6 @@ $aplicar_desconto$ LANGUAGE plpgsql;
 
 SELECT aplicar_desconto('8', '50');
 
-SELECT * from Grupo;
-select * from Inscricao;
-select * from GrupoUsuario;
-SELECT * from Usuario;
-select * from Inscricao;
-
-DELETE from Inscricao;
-delete from ItemInscricao;
-
 -- CRIANDO TRIGGERS
 -- Verificando email usuario
 CREATE OR REPLACE FUNCTION validar_cadastro_usuario() RETURNS TRIGGER AS $validar_cadastro_usuario$
@@ -270,19 +243,32 @@ CREATE OR REPLACE FUNCTION validar_cadastro_usuario() RETURNS TRIGGER AS $valida
 $validar_cadastro_usuario$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_usuario BEFORE INSERT OR UPDATE ON Usuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_usuario();
 
-select inserir('Usuario', 'DEFAULT, ''Kassio Lucas'', ''kassioleodido@gmail.com'', now()');
-
-drop FUNCTION validar_cadastro_atividade();
-drop TRIGGER trigger_cadastro_atividade on Atividade;
+-- drop FUNCTION validar_cadastro_atividade();
+-- drop TRIGGER trigger_cadastro_atividade on Atividade;
 
 -- validando atividade
 -- TO DO BUGADO ESSA PORRA
 CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $validar_cadastro_atividade$
   BEGIN
+    IF (SELECT periodo_inicio FROM Periodo WHERE id_periodo in
+                                                 (SELECT id_periodo FROM Evento where Evento.id_evento = new.id_evento)) >
+       (SELECT periodo_inicio FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
+      RAISE EXCEPTION 'O periodo da Atividade é Inferior a Data de Inicio do Evento';
+    END IF;
+    IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
+                                                 (SELECT id_periodo FROM Evento where Evento.id_evento = new.id_evento)) <
+       (SELECT periodo_fim FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
+      RAISE EXCEPTION 'A data para Termino da Atividade Corresponde a uma Data Apos o Fim do Evento';
+    END IF;
+    IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
+                                                 (SELECT id_periodo FROM Evento where Evento.id_evento = new.id_evento)) <
+       (SELECT periodo_inicio FROM periodo where Atividade.id_periodo = new.id_periodo) THEN
+      RAISE EXCEPTION 'O Periodo Informado Refere - se a uma Data Depois do Evento';
+    END IF;
     IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
       raise EXCEPTION 'A Evento Informado não esta Cadastrado';
     END IF;
-    IF new.valor_atividade < 0 then
+    IF new.valor_atividade < 0 THEN
       RAISE EXCEPTION 'O valor da Atividade não pode ser Inferior ou igual a Zero';
     END IF;
     IF new.quantidade_vagas < 0 THEN
@@ -437,3 +423,7 @@ SELECT * FROM EventoInstituicao;
 SELECT participar_grupo('10', '2');
 SELECT participar_grupo('10', '4');
 SELECT * FROM GrupoUsuario;
+
+-- INSCRICAO POR ATIVIDADE
+
+-- INSCRICAO POR EVENTO
