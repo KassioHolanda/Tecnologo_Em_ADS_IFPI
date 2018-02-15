@@ -216,14 +216,14 @@ select * from Inscricao;
 --
 -- SELECT criar_inscricao(9);
 
-CREATE OR REPLACE FUNCTION associar_evento_instituicao(id_instituicao_associar TEXT, id_evento_associar TEXT) RETURNS VOID AS $associar_evento_instituicao$
+CREATE OR REPLACE FUNCTION associar_evento_instituicao(id_evento_associar TEXT, id_instituicao_associar TEXT) RETURNS VOID AS $associar_evento_instituicao$
   DECLARE
-    criar_instituicao_evento TEXT := 'insert into EventoInstituicao values (default, ' || id_instituicao_associar || ', ' || id_evento_associar || ')';
+    criar_instituicao_evento TEXT := 'insert into EventoInstituicao values (default, ' || id_evento_associar || ', ' || id_instituicao_associar || ')';
   BEGIN
     EXECUTE criar_instituicao_evento;
   END;
 $associar_evento_instituicao$ LANGUAGE plpgsql;
-
+-- drop FUNCTION associar_evento_instituicao(text,text);
 
 CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT) RETURNS void AS $aplicar_desconto$
 DECLARE
@@ -423,7 +423,15 @@ SELECT inserir('Evento', 'default, ''Casa da Matematica'', 0, now(), ''EM_ANDAME
 SELECT inserir('Evento', 'default, ''FIFA'', 0, now(), ''EM_ANDAMENTO'', 2, 3, 3 ');
 SELECT * FROM Evento;
 
+-- CRIANDO ATIVIDADE
+SELECT inserir('Atividade', 'default, ''Aprendendo a Bater Falta'', ''Nessa Atividade você Aprendera a Bater Falta no FIFA'', 15, 35.50, 1, 7');
+SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 3, 7');
+SELECT * FROM Atividade;
+
 -- ASSOCIAR EVENTO INSTITUICAO
+SELECT associar_evento_instituicao('7','1');
+SELECT associar_evento_instituicao('6','2');
+SELECT * FROM EventoInstituicao;
 
 -- PARTICIPAR GRUPO
 SELECT participar_grupo('10', '2');
