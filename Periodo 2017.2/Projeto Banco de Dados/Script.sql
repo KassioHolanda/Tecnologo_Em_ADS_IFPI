@@ -185,10 +185,12 @@ DECLARE
   quantidade_vagas     TEXT :=
   'update atividade set quantidade_vagas = ((select quantidade_vagas from atividade where id_atividade = ' ||
   id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao;
+  atualizar_valor_inscricao TEXT := 'update Inscricao set valor_inscricao = (select valor_atividade from atividade where id_atividade = ' || id_atividade_inscricao || ');';
 BEGIN
   EXECUTE criar_inscricao;
   EXECUTE criar_item_inscricao;
   EXECUTE quantidade_vagas;
+  EXECUTE atualizar_valor_inscricao;
 END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
 
@@ -204,13 +206,17 @@ select * from Inscricao;
 SELECT criar_inscricao(9);
 
 
-CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT, valor_inscricao_desconto TEXT) RETURNS VOID AS $aplicar_desconto$
+CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT) RETURNS VOID AS $aplicar_desconto$
 DECLARE
   grupo_desconto INT := id_grupo_desconto;
-  valor_inscricao_10 FLOAT := cast(valor_inscricao_desconto AS DOUBLE PRECISION) - (cast(valor_inscricao_desconto AS DOUBLE PRECISION) * 0.10 / 100);
---   valor_inscricao_20 FLOAT := cast(valor_inscricao_desconto AS DOUBLE PRECISION) - (cast(valor_inscricao_desconto AS DOUBLE PRECISION) * 0.20 / 100);
-  inscricao_desconto_10 TEXT := 'UPDATE Inscricao SET valor_inscricao = ' || valor_inscricao_10 || 'WHERE id_inscricao = ' || id_inscricao_desconto;
---   inscricao_desconto_20 TEXT := 'UPDATE Inscricao SET valor_inscricao = ' || valor_inscricao_20 || 'WHERE id_inscricao = ' || id_inscricao_desconto;
+  inscricao_desconto_10 TEXT :=
+  'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
+  id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
+  || ') * 0.10) where id_inscricao = ' || id_inscricao_desconto || ';';
+  inscricao_desconto_20 TEXT :=
+  'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
+  id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
+  || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
 BEGIN
 --   IF (SELECT * FROM inscricao WHERE id_grupo = grupo_desconto) IS NULL THEN
 --     RAISE EXCEPTION 'O Grupo Informado Não Fez Nenhuma Inscrição';
@@ -218,19 +224,22 @@ BEGIN
   IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo = grupo_desconto) <= 1 THEN
     EXECUTE inscricao_desconto_10;
   END IF;
---   IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo = grupo_desconto) <= 20  THEN
---     EXECUTE inscricao_desconto_20;
---   END IF;
+  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo = grupo_desconto) >= 20  THEN
+    EXECUTE inscricao_desconto_20;
+  END IF;
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
 
-SELECT aplicar_desconto('9', '22', '20');
+SELECT aplicar_desconto('9', '50');
 
 SELECT * from Grupo;
 select * from Inscricao;
 select * from GrupoUsuario;
 SELECT * from Usuario;
 select * from Inscricao;
+
+DELETE from Inscricao;
+delete from ItemInscricao;
 
 -- CRIANDO TRIGGERS
 -- Verificando email usuario
