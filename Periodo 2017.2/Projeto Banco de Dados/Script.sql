@@ -179,8 +179,12 @@ SELECT * from ItemInscricao;
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
   criar_inscricao      TEXT := 'select criar_inscricao(' || ($1) || ')';
-  criar_item_inscricao TEXT := 'insert into ItemInscricao values (default, (select valor_atividade from atividade where id_atividade = ' || id_atividade_inscricao || '), ' || id_atividade_inscricao || ', (select max(id_inscricao) from inscricao));';
-  quantidade_vagas TEXT := 'update atividade set quantidade_vagas = ((select quantidade_vagas from atividade where id_atividade = ' || id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao;
+  criar_item_inscricao TEXT :=
+  'insert into ItemInscricao values (default, (select valor_atividade from atividade where id_atividade = ' ||
+  id_atividade_inscricao || '), ' || id_atividade_inscricao || ', (select max(id_inscricao) from inscricao));';
+  quantidade_vagas     TEXT :=
+  'update atividade set quantidade_vagas = ((select quantidade_vagas from atividade where id_atividade = ' ||
+  id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao;
 BEGIN
   EXECUTE criar_inscricao;
   EXECUTE criar_item_inscricao;
@@ -342,9 +346,9 @@ BEGIN
     DELETE from Inscricao WHERE id_inscricao IN (SELECT max(id_inscricao) FROM inscricao);
     RAISE EXCEPTION 'A Atividade não Possui Vagas Em Aberto';
   END IF;
---   if (SELECT * FROM Atividade WHERE id = new.id_atividade) IS NULL THEN
---     RAISE EXCEPTION 'A Atividade Informada não foi Cadastrada';
---   END IF;
+  if new.id_atividade NOT IN (SELECT Atividade.id_atividade FROM Atividade) THEN
+    RAISE EXCEPTION 'A Atividade Informada não foi Cadastrada';
+  END IF;
   RETURN new;
 END;
 $validar_cadastro_item_inscricao$ language plpgsql;
