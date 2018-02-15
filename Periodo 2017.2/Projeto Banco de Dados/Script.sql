@@ -131,9 +131,6 @@ BEGIN
 END;
 $remover$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE VIEW data_pagamento AS SELECT now() + INTERVAL '30 days';
-SELECT * from data_pagamento;
-
 
 CREATE OR REPLACE FUNCTION criar_inscricao(id_grupo INT) RETURNS VOID AS $criar_inscricao$
 BEGIN
@@ -142,7 +139,6 @@ BEGIN
 END;
 $criar_inscricao$ LANGUAGE plpgsql;
 
-select * from GrupoUsuario;
 
 -- PARTICIPAR GRUPO
 CREATE OR REPLACE FUNCTION participar_grupo(id_grupo_participar TEXT, id_usuario_participar TEXT) RETURNS VOID AS $participar_grupo$
@@ -191,32 +187,42 @@ select * from Atividade;
 
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
-  criar_inscricao      TEXT := 'select criar_inscricao(' || ($1) || ')';
+  criar_inscricao      TEXT := 'select criar_inscricao(' || id_grupo_inscricao || ')';
   criar_item_inscricao TEXT :=
   'insert into ItemInscricao values (default, (select valor_atividade from atividade where id_atividade = ' ||
   id_atividade_inscricao || '), ' || id_atividade_inscricao || ', (select max(id_inscricao) from inscricao));';
   quantidade_vagas     TEXT :=
   'update atividade set quantidade_vagas = ((select quantidade_vagas from atividade where id_atividade = ' ||
   id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao;
-  atualizar_valor_inscricao TEXT := 'update Inscricao set valor_inscricao = (select valor_atividade from atividade where id_atividade = ' || id_atividade_inscricao || ');';
+--   atualizar_valor_inscricao TEXT :=
+--   'update Inscricao set valor_inscricao = (select valor_atividade from atividade where id_atividade = ' ||
+--   id_atividade_inscricao || ') where id_inscricao = ' || ||';';
 BEGIN
   EXECUTE criar_inscricao;
   EXECUTE criar_item_inscricao;
   EXECUTE quantidade_vagas;
-  EXECUTE atualizar_valor_inscricao;
+--   EXECUTE atualizar_valor_inscricao;
 END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
-
 SELECT inscricao_por_atividade('9','3');
 
--- select * from atividade;
+select * from atividade;
 --
 -- SELECT * from ItemInscricao;
 --
--- delete from ItemInscricao;
--- select * from Inscricao;
+delete from ItemInscricao;
+delete from Inscricao;
+select * from Inscricao;
 --
 -- SELECT criar_inscricao(9);
+
+CREATE OR REPLACE FUNCTION associar_evento_instituicao(id_instituicao_associar TEXT, id_evento_associar TEXT) RETURNS VOID AS $associar_evento_instituicao$
+  DECLARE
+    criar_instituicao_evento TEXT := 'insert into EventoInstituicao values (default, ' || id_instituicao_associar || ', ' || id_evento_associar || ')';
+  BEGIN
+    EXECUTE criar_instituicao_evento;
+  END;
+$associar_evento_instituicao$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT) RETURNS void AS $aplicar_desconto$
@@ -344,7 +350,9 @@ CREATE OR REPLACE FUNCTION validar_cadastro_instituicao() RETURNS TRIGGER AS $va
     return new;
   END;
 $validar_cadastro_instituicao$ language plpgsql;
-CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT OR UPDATE ON Evento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_instituicao();
+CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT OR UPDATE ON Inscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_instituicao();
+
+-- drop TRIGGER trigger_cadastro_instituicao on Evento;
 
 -- validando Inscricao em Evento
 CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER AS $validar_cadastro_inscricao_evento$
@@ -399,6 +407,23 @@ SELECT * FROM Grupo;
 SELECT inserir('Instituicao', 'default, ''IFPI''');
 SELECT inserir('Instituicao', 'default, ''Prefeitura de Teresina''');
 SELECT * FROM Instituicao;
+
+-- CRIANDO TIPO EVENTO
+SELECT inserir('TipoEvento', 'default, ''Palestras'' ');
+SELECT inserir('TipoEvento', 'default, ''Mini Cursos'' ');
+SELECT * FROM TipoEvento;
+
+-- CRIANDO PERIODO
+SELECT inserir('Periodo', 'default, now(), now() + INTERVAL ''20 days'' ');
+SELECT inserir('Periodo', 'default, now(), now() + INTERVAL ''15 days'' ');
+SELECT * FROM Periodo;
+
+-- CRIANDO EVENTO
+SELECT inserir('Evento', 'default, ''Casa da Matematica'', 0, now(), ''EM_ANDAMENTO'', 4, 3, 4 ');
+SELECT inserir('Evento', 'default, ''FIFA'', 0, now(), ''EM_ANDAMENTO'', 2, 3, 3 ');
+SELECT * FROM Evento;
+
+-- ASSOCIAR EVENTO INSTITUICAO
 
 -- PARTICIPAR GRUPO
 SELECT participar_grupo('10', '2');
