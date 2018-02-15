@@ -142,6 +142,17 @@ BEGIN
 END;
 $criar_inscricao$ LANGUAGE plpgsql;
 
+select * from GrupoUsuario;
+
+-- PARTICIPAR GRUPO
+CREATE OR REPLACE FUNCTION participar_grupo(id_grupo_participar TEXT, id_usuario_participar TEXT) RETURNS VOID AS $participar_grupo$
+  DECLARE
+    criar_grupo_usuairo TEXT := 'insert into GrupoUsuario values(DEFAULT, ' || id_grupo_participar || ',' || id_usuario_participar || ' )';
+  BEGIN
+    EXECUTE criar_grupo_usuairo;
+  END;
+$participar_grupo$ LANGUAGE plpgsql;
+
 -- INSCRICAO EM EVENTO;
 CREATE OR REPLACE FUNCTION inscricao_completa(id_grupo TEXT, id_evento_inscricao TEXT) RETURNS VOID AS $inscricao_completa$
 DECLARE
@@ -158,7 +169,7 @@ BEGIN
                                       (SELECT id_atividade FROM atividade WHERE Atividade.id_atividade = i),
                                       (SELECT max(id_inscricao) FROM Inscricao));
     valor_atividades := valor_atividades + (SELECT valor_atividade FROM atividade WHERE Atividade.id_atividade = i);
-    update Atividade set quantidade_vagas = ((SELECT quantidade_vagas from atividade where id_atividade = i) - 1) where id_atividade = i; 
+    update Atividade set quantidade_vagas = ((SELECT quantidade_vagas from atividade where id_atividade = i) - 1) where id_atividade = i;
   END LOOP;
   CREATE OR REPLACE view id_insc as SELECT max(id_inscricao) from Inscricao;
   UPDATE Inscricao SET valor_inscricao = valor_atividades WHERE id_inscricao IN (SELECT * FROM id_insc);
@@ -172,6 +183,7 @@ select inscricao_completa('9', '1');
 
 SELECT * FROM Inscricao;
 SELECT * from ItemInscricao;
+select * from Atividade;
 -- delete from Inscricao;
 -- DELETE from ItemInscricao;
 -- drop TABLE ItemInscricao;
@@ -197,17 +209,17 @@ $inscricao_por_atividade$ LANGUAGE plpgsql;
 
 SELECT inscricao_por_atividade('9','3');
 
-select * from atividade;
+-- select * from atividade;
+--
+-- SELECT * from ItemInscricao;
+--
+-- delete from ItemInscricao;
+-- select * from Inscricao;
+--
+-- SELECT criar_inscricao(9);
 
-SELECT * from ItemInscricao;
 
-delete from ItemInscricao;
-select * from Inscricao;
-
-SELECT criar_inscricao(9);
-
-
-CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT) RETURNS VOID AS $aplicar_desconto$
+CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT) RETURNS void AS $aplicar_desconto$
 DECLARE
   grupo_desconto INT := id_grupo_desconto;
   inscricao_desconto_10 TEXT :=
@@ -218,10 +230,9 @@ DECLARE
   'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
   id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
   || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
+--   id_grupo_desc INTEGER := id_grupo_desconto;
 BEGIN
---   IF (SELECT * FROM inscricao WHERE id_grupo = grupo_desconto) IS NULL THEN
---     RAISE EXCEPTION 'O Grupo Informado Não Fez Nenhuma Inscrição';
---   END IF;
+--   ALTERAR METODO
   IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo = grupo_desconto) <= 1 THEN
     EXECUTE inscricao_desconto_10;
   END IF;
@@ -231,7 +242,7 @@ BEGIN
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
 
-SELECT aplicar_desconto('9', '50');
+SELECT aplicar_desconto('8', '50');
 
 SELECT * from Grupo;
 select * from Inscricao;
@@ -352,11 +363,14 @@ CREATE TRIGGER trigger_cadastro_inscricao BEFORE INSERT OR UPDATE ON Inscricao F
 -- VALIDADANDO CADASTRO ITEM INSCRICAO
 CREATE OR REPLACE FUNCTION validar_cadastro_item_inscricao() RETURNS TRIGGER AS $validar_cadastro_item_inscricao$
 BEGIN
-  if (SELECT quantidade_vagas FROM Atividade WHERE id_atividade = new.id_atividade) = 0 THEN
+  IF new.id_atividade IN (SELECT id_atividade FROM iteminscricao) THEN
+    RAISE EXCEPTION 'Você Já se Inscreveu nessa Atividade';
+  END IF;
+  IF (SELECT quantidade_vagas FROM Atividade WHERE id_atividade = new.id_atividade) = 0 THEN
     DELETE from Inscricao WHERE id_inscricao IN (SELECT max(id_inscricao) FROM inscricao);
     RAISE EXCEPTION 'A Atividade não Possui Vagas Em Aberto';
   END IF;
-  if new.id_atividade NOT IN (SELECT Atividade.id_atividade FROM Atividade) THEN
+  IF new.id_atividade NOT IN (SELECT Atividade.id_atividade FROM Atividade) THEN
     RAISE EXCEPTION 'A Atividade Informada não foi Cadastrada';
   END IF;
   RETURN new;
@@ -364,11 +378,29 @@ END;
 $validar_cadastro_item_inscricao$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_item_inscricao BEFORE INSERT OR UPDATE ON ItemInscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_item_inscricao();
 
-
-select * from ItemInscricao;
-
-
-
 drop TRIGGER trigger_cadastro_inscricao on Inscricao;
 drop FUNCTION validar_cadastro_inscricao_evento();
 
+-- ============================================================
+
+-- POPULAR BANCO DE DADOS
+
+-- CRIANDO USUARIO
+SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', now()'));
+SELECT inserir('Usuario', ('default, ''Kaio Lucas de Holanda'', ''kaioluks@gmail.com'', now()'));
+SELECT * FROM usuario;
+
+-- CRIANDO GRUPO
+SELECT inserir('Grupo', 'default, ''Grupo Da Fulia''');
+SELECT inserir('Grupo', 'default, ''Grupo Da Matematica''');
+SELECT * FROM Grupo;
+
+-- CRIANDO INSTITUICAO
+SELECT inserir('Instituicao', 'default, ''IFPI''');
+SELECT inserir('Instituicao', 'default, ''Prefeitura de Teresina''');
+SELECT * FROM Instituicao;
+
+-- PARTICIPAR GRUPO
+SELECT participar_grupo('10', '2');
+SELECT participar_grupo('10', '4');
+SELECT * FROM GrupoUsuario;
