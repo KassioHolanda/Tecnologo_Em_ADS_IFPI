@@ -158,6 +158,7 @@ BEGIN
                                       (SELECT id_atividade FROM atividade WHERE Atividade.id_atividade = i),
                                       (SELECT max(id_inscricao) FROM Inscricao));
     valor_atividades := valor_atividades + (SELECT valor_atividade FROM atividade WHERE Atividade.id_atividade = i);
+    update Atividade set quantidade_vagas = ((SELECT quantidade_vagas from atividade where id_atividade = i) - 1) where id_atividade = i; 
   END LOOP;
   CREATE OR REPLACE view id_insc as SELECT max(id_inscricao) from Inscricao;
   UPDATE Inscricao SET valor_inscricao = valor_atividades WHERE id_inscricao IN (SELECT * FROM id_insc);
