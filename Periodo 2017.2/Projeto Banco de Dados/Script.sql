@@ -248,6 +248,9 @@ CREATE TRIGGER trigger_cadastro_usuario BEFORE INSERT OR UPDATE ON Usuario FOR E
 
 -- validando atividade
 -- TO DO BUGADO ESSA PORRA
+select * from Atividade;
+SELECT * from Inscricao;
+SELECT * from ItemInscricao;
 CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $validar_cadastro_atividade$
   BEGIN
     IF (SELECT periodo_inicio FROM Periodo WHERE id_periodo in
@@ -267,6 +270,9 @@ CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $vali
     END IF;
     IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
       raise EXCEPTION 'A Evento Informado não esta Cadastrado';
+    END IF;
+    IF new.id_periodo NOT IN (SELECT id_periodo FROM Periodo) THEN
+      raise EXCEPTION 'O Periodo Informado não esta Cadastrado';
     END IF;
     IF new.valor_atividade < 0 THEN
       RAISE EXCEPTION 'O valor da Atividade não pode ser Inferior ou igual a Zero';
@@ -311,7 +317,7 @@ CREATE OR REPLACE FUNCTION validar_periodo() RETURNS TRIGGER AS $validar_periodo
 $validar_periodo$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_periodo BEFORE INSERT OR UPDATE ON Periodo FOR EACH ROW EXECUTE PROCEDURE validar_periodo();
 
-alter TABLE Evento RENAME COLUMN dono_evento to id_usuario;
+-- alter TABLE Evento RENAME COLUMN dono_evento to id_usuario;
 
 -- validando evento
 select * from Evento;
@@ -357,6 +363,7 @@ CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT OR UPDATE ON Inscricao
 -- drop TRIGGER trigger_cadastro_instituicao on Evento;
 
 -- validando Inscricao em Evento
+select * from Inscricao;
 CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER AS $validar_cadastro_inscricao_evento$
   BEGIN
     IF new.id_grupo NOT IN (SELECT id_grupo FROM grupo) THEN
@@ -371,8 +378,16 @@ $validar_cadastro_inscricao_evento$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_inscricao BEFORE INSERT OR UPDATE ON Inscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_inscricao_evento();
 
 -- VALIDADANDO CADASTRO ITEM INSCRICAO
+select * from ItemInscricao;
+SELECT * from Inscricao;
 CREATE OR REPLACE FUNCTION validar_cadastro_item_inscricao() RETURNS TRIGGER AS $validar_cadastro_item_inscricao$
 BEGIN
+  IF new.id_inscricao not in (SELECT id_inscricao from Inscricao) THEN
+    RAISE EXCEPTION 'A Inscricao Informada não foi Cadastrada';
+  END IF;
+  IF new.id_atividade not in (SELECT id_atividade from Atividade) THEN
+    RAISE EXCEPTION 'A Atividade Informada não foi Cadastrada';
+  END IF;
   IF new.id_atividade IN (SELECT id_atividade FROM iteminscricao) THEN
     RAISE EXCEPTION 'Você Já se Inscreveu nessa Atividade';
   END IF;
