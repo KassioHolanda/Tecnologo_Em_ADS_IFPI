@@ -8,7 +8,7 @@ CREATE TABLE Evento (
                                                         status_evento = 'INSCRICOES_ABERTAS' OR
                                                         status_evento = 'FECHADO' OR
                                                         status_evento = 'CANCELADO'),
-  dono_evento        INT                NOT NULL REFERENCES Usuario (id_usuario),
+  id_usuario        INT                NOT NULL REFERENCES Usuario (id_usuario),
   id_tipo_evento     INT                NOT NULL REFERENCES TipoEvento (id_tipo_evento),
   periodo_evento     INT                NOT NULL REFERENCES Periodo (id_periodo)
 );
@@ -277,6 +277,9 @@ CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $vali
     IF new.titulo_atividade IN (SELECT descricao_atividade FROM Atividade) THEN
       RAISE EXCEPTION 'A Atividade Ja foi Cadastrada';
     END IF;
+    UPDATE Evento
+      
+    SET valor_total_evento = (SELECT valor_total_evento FROM Evento WHERE Evento.id_evento = new.id_evento) + new.valor_atividade WHERE id_evento = new.id_evento;
     RETURN new;
   END;
 $validar_cadastro_atividade$ LANGUAGE plpgsql;
@@ -310,16 +313,31 @@ CREATE OR REPLACE FUNCTION validar_periodo() RETURNS TRIGGER AS $validar_periodo
 $validar_periodo$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_periodo BEFORE INSERT OR UPDATE ON Periodo FOR EACH ROW EXECUTE PROCEDURE validar_periodo();
 
+alter TABLE Evento RENAME COLUMN dono_evento to id_usuario;
+
 -- validando evento
+select * from Evento;
 CREATE OR REPLACE FUNCTION validar_cadastro_evento() RETURNS TRIGGER AS $validar_cadastro_evento$
   BEGIN
+    IF new.id_tipo_evento NOT IN (SELECT id_tipo_evento from TipoEvento) THEN
+      RAISE EXCEPTION 'O TipoEvento Informdado não foi Cadastrado';
+    END IF;
+    IF new.id_periodo NOT IN (SELECT id_periodo from Periodo) THEN
+      RAISE EXCEPTION 'O Periodo Informdado não foi Cadastrado';
+    END IF;
+    IF new.id_usuario NOT IN (SELECT id_usuario from Usuario) THEN
+      RAISE EXCEPTION 'O Usuario Informdado não foi Cadastrado';
+    END IF;
     IF new.nome_evento in (SELECT nome_evento FROM Evento) then
       RAISE EXCEPTION 'Esse nome de Evento ja foi Cadastrado';
     END IF;
-    IF new.valor_total_evento < 0 then
+    IF new.valor_total_evento < 0 THEN
       RAISE EXCEPTION 'O Valor Total do Evento não pode Ser Negativo';
     END IF;
-    IF new.data_criacao < now() then
+    IF new.valor_total_evento > 0 THEN
+      RAISE EXCEPTION 'O Valor Total do Evento Precisa ser Zero';
+    END IF;
+    IF new.data_criacao < now() THEN
       RAISE EXCEPTION 'A Data do Evento Não pode Ser Inferior a Data Atual';
     END IF;
     return new;
@@ -372,8 +390,33 @@ END;
 $validar_cadastro_item_inscricao$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_item_inscricao BEFORE INSERT OR UPDATE ON ItemInscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_item_inscricao();
 
-drop TRIGGER trigger_cadastro_inscricao on Inscricao;
-drop FUNCTION validar_cadastro_inscricao_evento();
+-- drop TRIGGER trigger_cadastro_inscricao on Inscricao;
+-- drop FUNCTION validar_cadastro_inscricao_evento();
+
+CREATE OR REPLACE FUNCTION validar_cadastro_evento_instituicao() RETURNS TRIGGER AS $validar_cadastro_evento_instituicao$
+  BEGIN
+    IF new.id_evento NOT IN (SELECT id_evento from Evento) THEN
+      RAISE EXCEPTION 'O Evento Informado não foi Cadastrado';
+    END IF;
+    IF new.id_instituicao NOT IN (SELECT id_instituicao from Instituicao) THEN
+      RAISE EXCEPTION 'A Instituicao Informada não foi Cadastrada';
+    END IF;
+  END;
+$validar_cadastro_evento_instituicao$ LANGUAGE plpgsql;
+CREATE TRIGGER trigger_cadastro_evento_instituicao BEFORE INSERT OR UPDATE ON EventoInstituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento_instituicao();
+
+CREATE OR REPLACE FUNCTION validar_cadastro_grupo_usuario() RETURNS TRIGGER AS $validar_cadastro_grupo_usuario$
+  BEGIN
+    IF new.id_grupo NOT IN (SELECT id_grupo FROM Grupo) THEN
+      RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
+    END IF;
+    IF new.id_usuario NOT IN (SELECT id_usuario FROM Usuario) THEN
+      RAISE EXCEPTION 'O Usuario Informado não foi Cadastrado';
+    END IF;
+  END;
+$validar_cadastro_grupo_usuario$ LANGUAGE plpgsql;
+CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUsuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo_usuario();
+
 
 -- ============================================================
 
