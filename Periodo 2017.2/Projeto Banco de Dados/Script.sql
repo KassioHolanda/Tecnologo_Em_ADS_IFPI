@@ -277,9 +277,7 @@ CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $vali
     IF new.titulo_atividade IN (SELECT descricao_atividade FROM Atividade) THEN
       RAISE EXCEPTION 'A Atividade Ja foi Cadastrada';
     END IF;
-    UPDATE Evento
-      
-    SET valor_total_evento = (SELECT valor_total_evento FROM Evento WHERE Evento.id_evento = new.id_evento) + new.valor_atividade WHERE id_evento = new.id_evento;
+    UPDATE Evento SET valor_total_evento = (SELECT valor_total_evento FROM Evento WHERE Evento.id_evento = new.id_evento) + new.valor_atividade WHERE id_evento = new.id_evento;
     RETURN new;
   END;
 $validar_cadastro_atividade$ LANGUAGE plpgsql;
