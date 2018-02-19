@@ -146,13 +146,11 @@ DECLARE
   criar_inscricao TEXT := 'select criar_inscricao('|| ($1) ||')';
   i INTEGER;
   valor_atividades FLOAT := 0;
---   id_evento_inscricao_atividade INT := $2;
 BEGIN
---   if (SELECT status_evento from Evento WHERE id_evento = id_evento_inscricao_atividade) != 'EM_ANDAMENTO' THEN
---     RAISE EXCEPTION 'O Evento não Permite Inscricoes';
---   END IF;
+  if (SELECT status_evento from Evento WHERE id_evento = cast(id_evento_inscricao as INT)) != 'EM_ANDAMENTO' THEN
+    RAISE EXCEPTION 'O Evento não Permite Inscricoes';
+  END IF;
   EXECUTE criar_inscricao;
---   CREATE OR REPLACE VIEW ids_atividades AS SELECT id_atividade FROM Atividade WHERE id_evento = id_evento_inscricao; -- CORRIGIR
   FOR i IN (SELECT id_atividade FROM Atividade WHERE id_evento = cast(id_evento_inscricao as INT)) LOOP
     INSERT INTO ItemInscricao VALUES (DEFAULT,
                                       (SELECT valor_atividade FROM atividade WHERE id_atividade = i),
@@ -163,27 +161,15 @@ BEGIN
   END LOOP;
   CREATE OR REPLACE view id_insc as SELECT max(id_inscricao) from Inscricao;
   UPDATE Inscricao SET valor_inscricao = valor_atividades WHERE id_inscricao IN (SELECT * FROM id_insc);
---   SELECT aplicar_desconto($1,
---                           (SELECT cast(id_inscricao as text) FROM Inscricao WHERE id_inscricao IN (SELECT * FROM id_insc)),
---                           (SELECT cast(valor_inscricao as text) FROM inscricao WHERE id_inscricao IN (SELECT * FROM id_insc)));
 END;
 $inscricao_completa$ LANGUAGE plpgsql;
 
-select * from grupo;
--- select * from Atividade INNER JOIN evento on Atividade.id_evento = Evento.id_evento;
-SELECT inscricao_completa('10', '7');
-
-select * from Atividade;
-select * from ItemInscricao;
-
-delete from ItemInscricao;
-
-select * from Atividade where id_evento = 1;
-DELETE from ItemInscricao where id_atividade = 3;
-
-select * from Inscricao;
-DELETE from Inscricao;
-SELECT * from ItemInscricao;
+delete from Inscricao;
+DELETE from ItemInscricao;
+SELECT id_evento,* from Atividade;
+SELECT inscricao_completa('10','7');
+SElect * from Grupo;
+select * from evento;
 
 -- INSCRICAO POR ATIVIDADE
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
@@ -219,30 +205,25 @@ $associar_evento_instituicao$ LANGUAGE plpgsql;
 -- drop FUNCTION associar_evento_instituicao(text,text);
 
 -- APLICANDO DESCONTOS NA INSCRICAO
-CREATE OR REPLACE FUNCTION aplicar_desconto(id_grupo_desconto TEXT, id_inscricao_desconto TEXT) RETURNS void AS $aplicar_desconto$
+CREATE OR REPLACE FUNCTION aplicar_desconto(id_inscricao_desconto TEXT) RETURNS void AS $aplicar_desconto$
 DECLARE
-  grupo_desconto INT := id_grupo_desconto;
-  inscricao_desconto_10 TEXT :=
-  'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
-  id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
-  || ') * 0.10) where id_inscricao = ' || id_inscricao_desconto || ';';
-  inscricao_desconto_20 TEXT :=
-  'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
-  id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
-  || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
---   id_grupo_desc INTEGER := id_grupo_desconto;
+  inscricao_desconto_10 TEXT := 'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') * 0.10) where id_inscricao = ' || id_inscricao_desconto || ';';
+  inscricao_desconto_20 TEXT := 'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
 BEGIN
 --   ALTERAR METODO
-  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo = grupo_desconto) <= 1 THEN
+  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo in (SELECT id_grupo from Inscricao where id_inscricao = cast(id_inscricao_desconto as INT))) = 1 THEN
     EXECUTE inscricao_desconto_10;
   END IF;
-  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo = grupo_desconto) >= 20  THEN
+  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo in (SELECT id_grupo from Inscricao where id_inscricao = cast(id_inscricao_desconto as INT))) >= 20  THEN
     EXECUTE inscricao_desconto_20;
   END IF;
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
 
-SELECT aplicar_desconto('8', '50');
+SELECT * from Inscricao;
+select * from Inscricao INNER JOIN Grupo on Inscricao.id_grupo = Grupo.id_grupo INNER JOIN grupousuario on Grupo.id_grupo = GrupoUsuario.id_grupo;
+select count(*) from GrupoUsuario where id_grupo in (SELECT id_grupo from Inscricao where id_inscricao = 83);
+SELECT aplicar_desconto('84');
 
 -- CRIANDO TRIGGERS
 -- Verificando email usuario
