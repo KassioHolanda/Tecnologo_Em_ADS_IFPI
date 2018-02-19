@@ -143,17 +143,20 @@ $participar_grupo$ LANGUAGE plpgsql;
 -- INSCRICAO EM EVENTO;
 CREATE OR REPLACE FUNCTION inscricao_completa(id_grupo TEXT, id_evento_inscricao TEXT) RETURNS VOID AS $inscricao_completa$
 DECLARE
-  id_evento_inscricao_atividade INTEGER := id_evento_inscricao;
   criar_inscricao TEXT := 'select criar_inscricao('|| ($1) ||')';
   i INTEGER;
   valor_atividades FLOAT := 0;
+--   id_evento_inscricao_atividade INT := $2;
 BEGIN
+--   if (SELECT status_evento from Evento WHERE id_evento = id_evento_inscricao_atividade) != 'EM_ANDAMENTO' THEN
+--     RAISE EXCEPTION 'O Evento não Permite Inscricoes';
+--   END IF;
   EXECUTE criar_inscricao;
-  CREATE OR REPLACE VIEW ids_atividades AS SELECT id_atividade FROM Atividade WHERE id_evento = 1; -- CORRIGIR
-  FOR i IN (SELECT * FROM ids_atividades) LOOP
+--   CREATE OR REPLACE VIEW ids_atividades AS SELECT id_atividade FROM Atividade WHERE id_evento = id_evento_inscricao; -- CORRIGIR
+  FOR i IN (SELECT id_atividade FROM Atividade WHERE id_evento = cast(id_evento_inscricao as INT)) LOOP
     INSERT INTO ItemInscricao VALUES (DEFAULT,
-                                      (SELECT valor_atividade FROM atividade WHERE Atividade.id_atividade = i),
-                                      (SELECT id_atividade FROM atividade WHERE Atividade.id_atividade = i),
+                                      (SELECT valor_atividade FROM atividade WHERE id_atividade = i),
+                                      (SELECT id_atividade FROM atividade WHERE id_atividade = i),
                                       (SELECT max(id_inscricao) FROM Inscricao));
     valor_atividades := valor_atividades + (SELECT valor_atividade FROM atividade WHERE Atividade.id_atividade = i);
     update Atividade set quantidade_vagas = ((SELECT quantidade_vagas from atividade where id_atividade = i) - 1) where id_atividade = i;
@@ -166,6 +169,22 @@ BEGIN
 END;
 $inscricao_completa$ LANGUAGE plpgsql;
 
+select * from grupo;
+-- select * from Atividade INNER JOIN evento on Atividade.id_evento = Evento.id_evento;
+SELECT inscricao_completa('10', '7');
+
+select * from Atividade;
+select * from ItemInscricao;
+
+delete from ItemInscricao;
+
+select * from Atividade where id_evento = 1;
+DELETE from ItemInscricao where id_atividade = 3;
+
+select * from Inscricao;
+DELETE from Inscricao;
+SELECT * from ItemInscricao;
+
 -- INSCRICAO POR ATIVIDADE
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
@@ -176,12 +195,16 @@ DECLARE
   criar_item_inscricao TEXT :=
   'insert into ItemInscricao values (default, (select valor_atividade from atividade where id_atividade = ' ||
   id_atividade_inscricao || '), ' || id_atividade_inscricao || ', (select max(id_inscricao) from inscricao));';
-  quantidade_vagas     TEXT := 'update Atividade set quantidade_vagas = ( (select quantidade_vagas from atividade where id_atividade = ' || id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao || ';';
+  quantidade_vagas     TEXT :=
+  'update Atividade set quantidade_vagas = ( (select quantidade_vagas from atividade where id_atividade = ' ||
+  id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao || ';';
 BEGIN
     EXECUTE criar_inscricao;
     EXECUTE criar_item_inscricao;
     EXECUTE quantidade_vagas;
-  UPDATE Inscricao SET valor_inscricao = (SELECT valor_atividade FROM Atividade WHERE id_atividade = id_atividade_insc) WHERE id_inscricao IN (SELECT max(id_inscricao) FROM Inscricao);
+  UPDATE Inscricao
+  SET valor_inscricao = (SELECT valor_atividade FROM Atividade WHERE id_atividade = id_atividade_insc) WHERE id_inscricao IN
+                                                                                              (SELECT max(id_inscricao) FROM Inscricao);
 END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
 
@@ -271,7 +294,9 @@ CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $vali
     RETURN new;
   END;
 $validar_cadastro_atividade$ LANGUAGE plpgsql;
-CREATE TRIGGER trigger_cadastro_atividade BEFORE INSERT OR UPDATE ON Atividade FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_atividade();
+CREATE TRIGGER trigger_cadastro_atividade BEFORE INSERT ON Atividade FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_atividade();
+
+drop TRIGGER trigger_cadastro_atividade on Atividade;
 
 CREATE OR REPLACE FUNCTION validar_cadastro_grupo() RETURNS TRIGGER AS $validar_cadastro_grupo$
  BEGIN
@@ -342,15 +367,13 @@ CREATE OR REPLACE FUNCTION validar_cadastro_instituicao() RETURNS TRIGGER AS $va
 $validar_cadastro_instituicao$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT OR UPDATE ON Instituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_instituicao();
 
+select * from Inscricao;
+select * from ItemInscricao;
+select * from Atividade where id_atividade = 6;
+select * from Evento;
+
 CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER AS $validar_cadastro_inscricao_evento$
   BEGIN
-    IF (SELECT status_evento FROM Evento WHERE id_grupo = new.id_grupo) != 'EM_ANDAMENTO' THEN
-      RAISE EXCEPTION 'O Evento não Permite mais Inscrições';
-    END IF;
-
-    IF new.id_grupo NOT IN (SELECT id_grupo FROM grupo) THEN
-      raise EXCEPTION 'A Grupo Informado não esta Cadastrado';
-    END IF;
     if new.data_vencimento_pagamento < now() then
       raise EXCEPTION 'A data De Criação não pode ser Inferior a Data Atual';
     END IF;
@@ -359,9 +382,21 @@ CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER A
 $validar_cadastro_inscricao_evento$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_inscricao BEFORE INSERT OR UPDATE ON Inscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_inscricao_evento();
 
+select * from Inscricao;
+SELECT * FROM ItemInscricao;
+SELECT * from Atividade;
+select * from Inscricao INNER JOIN ItemInscricao on Inscricao.id_inscricao = ItemInscricao.id_inscricao INNER JOIN Atividade on ItemInscricao.id_atividade = Atividade.id_atividade where id_grupo = 9;
+
 -- VALIDADANDO CADASTRO ITEM INSCRICAO
 CREATE OR REPLACE FUNCTION validar_cadastro_item_inscricao() RETURNS TRIGGER AS $validar_cadastro_item_inscricao$
 BEGIN
+  IF (SELECT status_evento
+      FROM Evento
+        INNER JOIN Atividade ON Evento.id_evento = Atividade.id_evento
+        INNER JOIN ItemInscricao I2 ON Atividade.id_atividade = I2.id_atividade
+      WHERE Atividade.id_atividade = new.id_atividade) != 'EM_ANDAMENTO' THEN
+    RAISE EXCEPTION 'O Evento dessa Atividade não Permite mais Inscricoes';
+  END IF;
   IF new.id_inscricao not in (SELECT id_inscricao from Inscricao) THEN
     RAISE EXCEPTION 'A Inscricao Informada não foi Cadastrada';
   END IF;
