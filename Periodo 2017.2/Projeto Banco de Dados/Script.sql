@@ -164,19 +164,13 @@ BEGIN
 END;
 $inscricao_completa$ LANGUAGE plpgsql;
 
-delete from Inscricao;
-DELETE from ItemInscricao;
-SELECT id_evento,* from Atividade;
-SELECT inscricao_completa('10','7');
-SElect * from Grupo;
-select * from evento;
+-- delete from Inscricao;
+-- DELETE from ItemInscricao;
 
 -- INSCRICAO POR ATIVIDADE
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
   id_atividade_insc INT := id_atividade_inscricao;
---   id_grupo_insc INT := id_grupo_inscricao;
-
   criar_inscricao      TEXT := 'select criar_inscricao(' || id_grupo_inscricao || ')';
   criar_item_inscricao TEXT :=
   'insert into ItemInscricao values (default, (select valor_atividade from atividade where id_atividade = ' ||
@@ -190,7 +184,7 @@ BEGIN
     EXECUTE quantidade_vagas;
   UPDATE Inscricao
   SET valor_inscricao = (SELECT valor_atividade FROM Atividade WHERE id_atividade = id_atividade_insc) WHERE id_inscricao IN
-                                                                                              (SELECT max(id_inscricao) FROM Inscricao);
+                                                                                             (SELECT max(id_inscricao) FROM Inscricao);
 END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
 
@@ -478,6 +472,20 @@ SELECT participar_grupo('10', '2');
 SELECT participar_grupo('10', '4');
 SELECT * FROM GrupoUsuario;
 
--- INSCRICAO POR ATIVIDADE
-
 -- INSCRICAO POR EVENTO
+-- INFORMAR ID_GRUPO E ID_EVENTO
+SELECT inscricao_completa('10','6');
+SELECT * FROM Inscricao
+  INNER JOIN ItemInscricao I2 ON Inscricao.id_inscricao = I2.id_inscricao
+  INNER JOIN Atividade ON I2.id_atividade = Atividade.id_atividade
+  INNER JOIN Evento ON Atividade.id_evento = Evento.id_evento
+WHERE id_grupo = 10;
+
+
+-- INSCRICAO POR ATIVIDADE
+SELECT inscricao_por_atividade('9', '3');
+SELECT * FROM ItemInscricao
+  INNER JOIN Inscricao I ON ItemInscricao.id_inscricao = I.id_inscricao
+WHERE id_grupo = 9;
+
+-- APLICANDO DESCONTOS
