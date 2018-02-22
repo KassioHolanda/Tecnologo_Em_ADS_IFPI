@@ -4,7 +4,7 @@ CREATE TABLE Evento (
   id_evento          SERIAL PRIMARY KEY NOT NULL,
   nome_evento        VARCHAR(255)       NOT NULL,
   valor_total_evento FLOAT,
-  data_criacao       TIMESTAMP          NOT NULL,
+  data_criacao       DATE          NOT NULL,
   status_evento      VARCHAR(255)       NOT NULL CHECK (status_evento = 'EM_ANDAMENTO' OR
                                                         status_evento = 'INSCRICOES_ABERTAS' OR
                                                         status_evento = 'FECHADO' OR
@@ -26,8 +26,8 @@ CREATE TABLE Atividade (
 -- PERIODO
 CREATE TABLE Periodo (
   id_periodo     SERIAL PRIMARY KEY NOT NULL,
-  periodo_inicio TIMESTAMP          NOT NULL,
-  periodo_fim    TIMESTAMP          NOT NULL
+  periodo_inicio DATE          NOT NULL,
+  periodo_fim    DATE          NOT NULL
 );
 -- TIPO EVENTO
 CREATE TABLE TipoEvento (
@@ -50,7 +50,7 @@ CREATE TABLE Usuario (
   id_usuario   SERIAL PRIMARY KEY NOT NULL,
   nome         VARCHAR(255)       NOT NULL,
   email        VARCHAR(255)       NOT NULL,
-  data_entrada TIMESTAMP          NOT NULL
+  data_entrada DATE          NOT NULL
 );
 -- GRUPO USUARIO
 CREATE TABLE GrupoUsuario (
@@ -68,25 +68,25 @@ CREATE TABLE Grupo (
 -- CRIADO
 -- CREATE TABLE InscricaoEvento (
 --   id_inscricao_evento              SERIAL PRIMARY KEY NOT NULL,
---   data_inscricao                   TIMESTAMP          NOT NULL,
+--   data_inscricao                   DATE          NOT NULL,
 --   valor_inscricao                  FLOAT              NOT NULL,
 --   status_pagamento                 VARCHAR(255)       NOT NULL CHECK (status_pagamento = 'PAGO' OR
 --                                                                       status_pagamento = 'ABERTO'),
 --   id_evento                        INT                NOT NULL REFERENCES Evento (id_evento),
 --   id_grupo                         INT                NOT NULL REFERENCES Grupo (id_grupo),
---   data_vencimento_pagamento_evento TIMESTAMP          NOT NULL
+--   data_vencimento_pagamento_evento DATE          NOT NULL
 -- );
 
 -- INSCRICAO NA ATIVIDADE
 CREATE TABLE Inscricao (
   id_inscricao    SERIAL PRIMARY KEY NOT NULL,
   valor_inscricao           FLOAT              NOT NULL,
-  data_vencimento_pagamento TIMESTAMP    NOT NULL,
+  data_vencimento_pagamento Date    NOT NULL,
   status_pagamento          VARCHAR(255) NOT NULL CHECK (status_pagamento = 'PAGO' OR
                                                          status_pagamento = 'ABERTO'),
   id_grupo                  INT          NOT NULL REFERENCES Grupo (id_grupo),
   valor_pago                FLOAT,
-  data_pagamento            TIMESTAMP
+  data_pagamento            Date
 );
 
 select * from Inscricao;
@@ -127,11 +127,12 @@ BEGIN
 END;
 $atualizar_dados$ LANGUAGE plpgsql;
 
+
 -- CRIANDO TABELA INSCRICAO
 CREATE OR REPLACE FUNCTION criar_inscricao(id_grupo INT) RETURNS VOID AS $criar_inscricao$
 BEGIN
   --   data de vencimento pagamento sempre 30 dias depois da data atual
-  INSERT INTO Inscricao VALUES (default, 0, now() + INTERVAL '30 days', 'ABERTO', $1);
+  INSERT INTO Inscricao VALUES (default, 0, current_date + INTERVAL '30 days', 'ABERTO', $1);
 END;
 $criar_inscricao$ LANGUAGE plpgsql;
 
@@ -144,7 +145,7 @@ CREATE OR REPLACE FUNCTION participar_grupo(id_grupo_participar TEXT, id_usuario
   END;
 $participar_grupo$ LANGUAGE plpgsql;
 
--- INSCRICAO EM EVENTO;
+-- INSCRICAO EM EVENTO, VOCE GANHA UM DESCONTO DE 5% SE INSCREVENDO EM UM EVENTO COMPLETO
 CREATE OR REPLACE FUNCTION inscricao_completa(id_grupo TEXT, id_evento_inscricao TEXT) RETURNS VOID AS $inscricao_completa$
 DECLARE
   criar_inscricao TEXT := 'select criar_inscricao('|| ($1) ||')';
@@ -161,10 +162,10 @@ BEGIN
                                       (SELECT id_atividade FROM atividade WHERE id_atividade = i),
                                       (SELECT max(id_inscricao) FROM Inscricao));
     valor_atividades := valor_atividades + (SELECT valor_atividade FROM atividade WHERE Atividade.id_atividade = i);
-    update Atividade set quantidade_vagas = ((SELECT quantidade_vagas from atividade where id_atividade = i) - 1) where id_atividade = i;
+    UPDATE Atividade SET quantidade_vagas = ((SELECT quantidade_vagas FROM atividade WHERE id_atividade = i) - 1) WHERE id_atividade = i;
   END LOOP;
   CREATE OR REPLACE view id_insc as SELECT max(id_inscricao) from Inscricao;
-  UPDATE Inscricao SET valor_inscricao = valor_atividades WHERE id_inscricao IN (SELECT * FROM id_insc);
+  UPDATE Inscricao SET valor_inscricao = valor_atividades-(valor_atividades*0.05) WHERE id_inscricao IN (SELECT * FROM id_insc);
 END;
 $inscricao_completa$ LANGUAGE plpgsql;
 
@@ -224,24 +225,24 @@ BEGIN
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
 
-
+SELECT current_date;
 
 -- select type(valor_inscricao) from Inscricao;
 
-CREATE OR REPLACE FUNCTION pagar_inscricao(id_inscricao TEXT, valor_pagar TEXT) RETURNS VOID AS $pagar_inscricao$
+CREATE OR REPLACE FUNCTION pagar_inscricao(id_inscricao_pagamento TEXT, valor_pagar TEXT) RETURNS VOID AS $pagar_inscricao$
 DECLARE
-  pagar_inscricao TEXT := 'UPDATE Inscricao SET status_pagamento = ''PAGO'' WHERE id_inscricao = ' || id_inscricao;
+  pagar_inscricao TEXT := 'UPDATE Inscricao SET status_pagamento = ''PAGO'' WHERE id_inscricao = ' || id_inscricao_pagamento;
   valor_pago      TEXT := 'UPDATE Inscricao SET valor_pago = ' || valor_pagar || ' WHERE id_inscricao = ' ||
-                          id_inscricao;
-  data_pagamento  TEXT := 'UPDATE Inscricao SET data_pagamento = ''now()'' WHERE id_inscricao = ' || id_inscricao;
+                          id_inscricao_pagamento;
+  data_pagamento  TEXT := 'UPDATE Inscricao SET data_pagamento = current_date WHERE id_inscricao = ' || id_inscricao_pagamento;
 BEGIN
-  if(SELECT data_vencimento_pagamento from Inscricao) > now() THEN
+  if(SELECT data_vencimento_pagamento from Inscricao where Inscricao.id_inscricao = cast(id_inscricao_pagamento as INTEGER)) < current_date THEN
     RAISE EXCEPTION 'A Periodo de Pagamento da sua Inscricao ja Venceu, Realize uma Nova Incrição';
   END IF;
-  IF (SELECT valor_inscricao FROM Inscricao) != cast(valor_pagar as DOUBLE PRECISION) THEN
+  IF (SELECT valor_inscricao FROM Inscricao where Inscricao.id_inscricao = cast(id_inscricao_pagamento as INTEGER)) != cast(valor_pagar as DOUBLE PRECISION) THEN
     RAISE EXCEPTION 'O Valor Informado é Diferente do Valor da Inscrição';
   END IF;
-  IF (SELECT valor_inscricao FROM Inscricao) = cast(valor_pagar as DOUBLE PRECISION) THEN
+  IF (SELECT valor_inscricao FROM Inscricao where Inscricao.id_inscricao = cast(id_inscricao_pagamento as INTEGER)) = cast(valor_pagar as DOUBLE PRECISION) THEN
     EXECUTE pagar_inscricao;
     EXECUTE valor_pago;
     EXECUTE data_pagamento;
@@ -250,7 +251,7 @@ BEGIN
 END;
 $pagar_inscricao$ LANGUAGE plpgsql;
 
-SELECT * FROM Inscricao;
+
 -- SELECT pagar_inscricao('3', '71');
 
 
@@ -331,10 +332,10 @@ CREATE OR REPLACE FUNCTION validar_periodo() RETURNS TRIGGER AS $validar_periodo
     IF new.periodo_fim < new.periodo_inicio then
       RAISE EXCEPTION 'A data de Inicio é Anterior a Data de Fim';
     END IF;
-    IF new.periodo_inicio < now() then
+    IF new.periodo_inicio < current_date then
       RAISE EXCEPTION 'A data de Inicio é Anterior a Data Atual';
     END IF;
-    IF new.periodo_fim < now() then
+    IF new.periodo_fim < current_date then
       RAISE EXCEPTION 'A data de Fim é Anterior a Data Atual';
     END IF;
     RETURN new;
@@ -366,13 +367,15 @@ CREATE OR REPLACE FUNCTION validar_cadastro_evento() RETURNS TRIGGER AS $validar
     IF new.valor_total_evento > 0 THEN
       RAISE EXCEPTION 'O Valor Total do Evento Precisa ser Zero';
     END IF;
-    IF new.data_criacao < now() THEN
+    IF new.data_criacao < current_date THEN
       RAISE EXCEPTION 'A Data do Evento Não pode Ser Inferior a Data Atual';
     END IF;
     return new;
   END;
 $validar_cadastro_evento$ language plpgsql;
-CREATE TRIGGER trigger_cadastro_evento BEFORE INSERT OR UPDATE ON Evento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento();
+CREATE TRIGGER trigger_cadastro_evento BEFORE INSERT ON Evento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento();
+
+-- drop TRIGGER trigger_cadastro_evento on Evento;
 
 -- validando instituicao
 CREATE OR REPLACE FUNCTION validar_cadastro_instituicao() RETURNS TRIGGER AS $validar_cadastro_instituicao$
@@ -395,7 +398,7 @@ CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER A
     IF (new.id_grupo not in (SELECT id_grupo from Grupo)) THEN
       RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
     END IF;
-    IF new.data_vencimento_pagamento < now() THEN
+    IF new.data_vencimento_pagamento < current_date THEN
       raise EXCEPTION 'A data De Criação não pode ser Inferior a Data Atual';
     END IF;
     RETURN new;
@@ -474,15 +477,16 @@ CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUs
 -- POPULAR BANCO DE DADOS
 
 -- CRIANDO USUARIO
-SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', now()'));
-SELECT inserir('Usuario', ('default, ''Kaio Lucas de Holanda'', ''kaioluks@gmail.com'', now()'));
+SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', current_date'));
+SELECT inserir('Usuario', ('default, ''Kaio Lucas de Holanda'', ''kaioluks@gmail.com'', current_date'));
 SELECT * FROM usuario;
 SELECT atualizar_dados('Usuario', 'id_usuario = 4', ' nome= ''Kassio Lucas de Holanda Leodido'' ');
 SELECT remover('usuario', 'id_usuario = 8');
 
 -- CRIANDO GRUPO
 SELECT inserir('Grupo', 'default, ''Grupo Da Fulia''');
-SELECT inserir('Grupo', 'default, ''Grupo Da Matematica''');
+SELECT inserir('Grupo', 'default, ''Grupo Dos Estudos''');
+SELECT inserir('Grupo', 'default, ''Grupo Gamer''');
 SELECT * FROM Grupo;
 
 -- CRIANDO INSTITUICAO
@@ -496,24 +500,35 @@ SELECT inserir('TipoEvento', 'default, ''Mini Cursos'' ');
 SELECT * FROM TipoEvento;
 
 -- CRIANDO PERIODO
-SELECT inserir('Periodo', 'default, now(), now() + INTERVAL ''20 days'' ');
-SELECT inserir('Periodo', 'default, now(), now() + INTERVAL ''15 days'' ');
+SELECT inserir('Periodo', 'default, current_date, current_date + INTERVAL ''20 days'' ');
+SELECT inserir('Periodo', 'default, current_date, current_date + INTERVAL ''15 days'' ');
 SELECT * FROM Periodo;
 
+select current_date;
+
 -- CRIANDO EVENTO
-SELECT inserir('Evento', 'default, ''Casa da Matematica'', 0, now(), ''EM_ANDAMENTO'', 1, 1, 2 ');
-SELECT inserir('Evento', 'default, ''FIFA'', 0, now(), ''EM_ANDAMENTO'', 2, 2, 1 ');
+SELECT inserir('Evento', 'default, ''Casa dos Estudos'', 0, current_date, ''EM_ANDAMENTO'', 1, 1, 2 ');
+SELECT inserir('Evento', 'default, ''FIFA'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
+SELECT inserir('Evento', 'default, ''GAMERS'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
 SELECT * FROM Evento;
 
 -- CRIANDO ATIVIDADE
-SELECT inserir('Atividade', 'default, ''Aprendendo a Bater Falta'', ''Nessa Atividade você Aprendera a Bater Falta no FIFA'', 15, 35.50, 1, 7');
-SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 7');
-SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1'); -- EVENTO NAO EXISTE
+SELECT inserir('Atividade', 'default, ''Aprendendo a Bater Falta'', ''Nessa Atividade você Aprendera a Bater Falta no FIFA'', 15, 35.50, 1, 3');
+SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1');
+SELECT inserir('Atividade', 'default, ''Geografia - Planiceis'', ''Nessa Atividade você Aprendera um Pouco Sobre Planicies'', 31, 35.50, 2, 1');
+SELECT inserir('Atividade', 'default, ''The Last Of Us'', ''Nessa Atividade você Aprendera tudo Sobre The Last Of Us, um dos melhores jogos de todos os tempos'', 25, 100.50, 1, 3');
+SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1000'); -- EVENTO NAO EXISTE
 SELECT * FROM Atividade;
+-- DELETE from Atividade;
+-- DELETE from Inscricao;
+-- DELETE from ItemInscricao;
+SELECT * FROM Evento;
+
 
 -- ASSOCIAR EVENTO INSTITUICAO
-SELECT associar_evento_instituicao('7','1');
-SELECT associar_evento_instituicao('8','2');
+-- Informar id_evento e id_instituicao
+SELECT associar_evento_instituicao('1','1');
+SELECT associar_evento_instituicao('3','2');
 SELECT * FROM EventoInstituicao;
 
 -- PARTICIPAR GRUPO
@@ -525,29 +540,36 @@ SELECT * from Usuario;
 
 -- INSCRICAO POR EVENTO
 -- INFORMAR ID_GRUPO E ID_EVENTO
-SELECT inscricao_completa('1','7');
-SELECT * FROM Inscricao
+SELECT inscricao_completa('2','3');
+SELECT id_grupo,Evento.id_evento,I2.id_atividade,* FROM Inscricao
   INNER JOIN ItemInscricao I2 ON Inscricao.id_inscricao = I2.id_inscricao
   INNER JOIN Atividade ON I2.id_atividade = Atividade.id_atividade
   INNER JOIN Evento ON Atividade.id_evento = Evento.id_evento
-WHERE id_grupo = 1;
+WHERE id_grupo = 2;
 
 SELECT * FROM Grupo;
 SELECT * FROM Evento;
+SELECT * FROM Inscricao;
+
 
 -- INSCRICAO POR ATIVIDADE
-SELECT inscricao_por_atividade('1', '7');
+-- informar id_grupo e id_atividade
+SELECT inscricao_por_atividade('1', '2');
+SELECT inscricao_por_atividade('1', '3');
 SELECT * FROM ItemInscricao
   INNER JOIN Inscricao I ON ItemInscricao.id_inscricao = I.id_inscricao
 WHERE id_grupo = 1;
 
 SELECT * FROM Atividade;
+SELECT * FROM Grupo;
 
 -- APLICANDO DESCONTOS
-SELECT aplicar_desconto('3');
+-- Informar Inscricao
+SELECT aplicar_desconto('2');
 SELECT * FROM Inscricao;
 
 -- PAGAR INSCRICAO
-SELECT pagar_inscricao('3','71');
+SELECT pagar_inscricao('3','35.5');
 SELECT * FROM Inscricao;
+
 
