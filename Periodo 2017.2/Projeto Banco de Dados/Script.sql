@@ -81,12 +81,12 @@ CREATE TABLE Grupo (
 CREATE TABLE Inscricao (
   id_inscricao    SERIAL PRIMARY KEY NOT NULL,
   valor_inscricao           FLOAT              NOT NULL,
-  data_vencimento_pagamento TIMESTAMP          NOT NULL,
-  status_pagamento          VARCHAR(255)       NOT NULL CHECK (status_pagamento = 'PAGO' OR
-                                                               status_pagamento = 'ABERTO'),
-  id_grupo                  INT                NOT NULL REFERENCES Grupo (id_grupo),
-  valor_pago FLOAT,
-  data_pagamento TIMESTAMP
+  data_vencimento_pagamento TIMESTAMP    NOT NULL,
+  status_pagamento          VARCHAR(255) NOT NULL CHECK (status_pagamento = 'PAGO' OR
+                                                         status_pagamento = 'ABERTO'),
+  id_grupo                  INT          NOT NULL REFERENCES Grupo (id_grupo),
+  valor_pago                FLOAT,
+  data_pagamento            TIMESTAMP
 );
 
 select * from Inscricao;
@@ -235,6 +235,9 @@ DECLARE
                           id_inscricao;
   data_pagamento  TEXT := 'UPDATE Inscricao SET data_pagamento = ''now()'' WHERE id_inscricao = ' || id_inscricao;
 BEGIN
+  if(SELECT data_vencimento_pagamento from Inscricao) > now() THEN
+    RAISE EXCEPTION 'A Periodo de Pagamento da sua Inscricao ja Venceu, Realize uma Nova Incrição';
+  END IF;
   IF (SELECT valor_inscricao FROM Inscricao) != cast(valor_pagar as DOUBLE PRECISION) THEN
     RAISE EXCEPTION 'O Valor Informado é Diferente do Valor da Inscrição';
   END IF;
@@ -389,10 +392,10 @@ select * from Evento;
 
 CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER AS $validar_cadastro_inscricao_evento$
   BEGIN
-    if(new.id_grupo not in (SELECT id_grupo from Grupo)) THEN
+    IF (new.id_grupo not in (SELECT id_grupo from Grupo)) THEN
       RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
     END IF;
-    if new.data_vencimento_pagamento < now() then
+    IF new.data_vencimento_pagamento < now() THEN
       raise EXCEPTION 'A data De Criação não pode ser Inferior a Data Atual';
     END IF;
     RETURN new;
@@ -400,10 +403,10 @@ CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER A
 $validar_cadastro_inscricao_evento$ language plpgsql;
 CREATE TRIGGER trigger_cadastro_inscricao BEFORE INSERT OR UPDATE ON Inscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_inscricao_evento();
 
-select * from Inscricao;
+SELECT * FROM Inscricao;
 SELECT * FROM ItemInscricao;
-SELECT * from Atividade;
-select * from Inscricao INNER JOIN ItemInscricao on Inscricao.id_inscricao = ItemInscricao.id_inscricao INNER JOIN Atividade on ItemInscricao.id_atividade = Atividade.id_atividade where id_grupo = 9;
+SELECT * FROM Atividade;
+SELECT * FROM Inscricao INNER JOIN ItemInscricao on Inscricao.id_inscricao = ItemInscricao.id_inscricao INNER JOIN Atividade on ItemInscricao.id_atividade = Atividade.id_atividade where id_grupo = 9;
 
 -- VALIDADANDO CADASTRO ITEM INSCRICAO
 CREATE OR REPLACE FUNCTION validar_cadastro_item_inscricao() RETURNS TRIGGER AS $validar_cadastro_item_inscricao$
@@ -522,10 +525,6 @@ SELECT * from Usuario;
 
 -- INSCRICAO POR EVENTO
 -- INFORMAR ID_GRUPO E ID_EVENTO
-
-select * from Grupo;
-SELECT * from Evento;
-
 SELECT inscricao_completa('1','7');
 SELECT * FROM Inscricao
   INNER JOIN ItemInscricao I2 ON Inscricao.id_inscricao = I2.id_inscricao
@@ -533,15 +532,16 @@ SELECT * FROM Inscricao
   INNER JOIN Evento ON Atividade.id_evento = Evento.id_evento
 WHERE id_grupo = 1;
 
+SELECT * FROM Grupo;
+SELECT * FROM Evento;
 
 -- INSCRICAO POR ATIVIDADE
-
-select * from Atividade;
-
 SELECT inscricao_por_atividade('1', '7');
 SELECT * FROM ItemInscricao
   INNER JOIN Inscricao I ON ItemInscricao.id_inscricao = I.id_inscricao
 WHERE id_grupo = 1;
+
+SELECT * FROM Atividade;
 
 -- APLICANDO DESCONTOS
 SELECT aplicar_desconto('3');
