@@ -1,0 +1,3 @@
+criar funcao pagar
+inserir valor pago em inscricao
+nao poder realizar uma inscricao se o evento nao tiver uma instituicao associada

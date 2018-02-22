@@ -85,8 +85,13 @@ CREATE TABLE Inscricao (
   data_vencimento_pagamento TIMESTAMP          NOT NULL,
   status_pagamento          VARCHAR(255)       NOT NULL CHECK (status_pagamento = 'PAGO' OR
                                                                status_pagamento = 'ABERTO'),
-  id_grupo                  INT                NOT NULL REFERENCES Grupo (id_grupo)
+  id_grupo                  INT                NOT NULL REFERENCES Grupo (id_grupo),
+  valor_pago FLOAT,
+  data_pagamento TIMESTAMP
 );
+
+select * from Inscricao;
+
 -- ITEM INSCRICAO
 CREATE TABLE ItemInscricao (
   id_item_inscricao      SERIAL PRIMARY KEY NOT NULL,
@@ -213,6 +218,23 @@ BEGIN
   END IF;
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION pagar_inscricao(id_inscricao TEXT, valor_pagar TEXT) RETURNS VOID AS $pagar_inscricao$
+DECLARE
+  pagar_inscricao TEXT := 'UPDATE Inscricao SET status_pagamento = PAGO WHERE id_inscricao = ' || id_inscricao;
+  valor_pago TEXT := 'UPDATE Inscricao SET valor_pago = ' || valor_pagar || ' WHERE id_inscricao = ' || id_inscricao;
+BEGIN
+  IF (SELECT valor_inscricao FROM Inscricao) != valor_pagar THEN
+    RAISE EXCEPTION 'O Valor Informado é Diferente do Valor da Inscrição';
+  END IF;
+  IF (SELECT valor_inscricao FROM Inscricao) = valor_pagar THEN
+    EXECUTE pagar_inscricao;
+    EXECUTE valor_pago;
+    RAISE INFO 'Inscrição Paga';
+  END IF;
+END;
+$pagar_inscricao$ LANGUAGE plpgsql;
+
 
 SELECT * from Inscricao;
 select * from Inscricao INNER JOIN Grupo on Inscricao.id_grupo = Grupo.id_grupo INNER JOIN grupousuario on Grupo.id_grupo = GrupoUsuario.id_grupo;
