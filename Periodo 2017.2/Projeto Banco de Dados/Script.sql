@@ -79,15 +79,20 @@ CREATE TABLE Grupo (
 
 -- INSCRICAO NA ATIVIDADE
 CREATE TABLE Inscricao (
-  id_inscricao    SERIAL PRIMARY KEY NOT NULL,
+  id_inscricao              SERIAL PRIMARY KEY NOT NULL,
   valor_inscricao           FLOAT              NOT NULL,
-  data_vencimento_pagamento Date    NOT NULL,
-  status_pagamento          VARCHAR(255) NOT NULL CHECK (status_pagamento = 'PAGO' OR
-                                                         status_pagamento = 'ABERTO'),
-  id_grupo                  INT          NOT NULL REFERENCES Grupo (id_grupo),
+  data_vencimento_pagamento DATE               NOT NULL,
+  status_pagamento          VARCHAR(255)       NOT NULL CHECK (status_pagamento = 'PAGO' OR
+                                                               status_pagamento = 'ABERTO'),
+  id_grupo                  INT                NOT NULL REFERENCES Grupo (id_grupo),
   valor_pago                FLOAT,
-  data_pagamento            Date
+  data_pagamento            DATE,
+  status_inscricao          VARCHAR(255)       NOT NULL CHECK (status_inscricao = 'ATIVA' OR
+                                                               status_inscricao = 'CANCELADA' OR
+                                                               status_inscricao = 'CONCLUIDA')
 );
+
+
 
 select * from Inscricao;
 
@@ -104,6 +109,12 @@ CREATE TABLE ItemInscricao (
 CREATE OR REPLACE FUNCTION inserir(tabela TEXT, valores TEXT) RETURNS VOID AS $inserir$
 DECLARE query TEXT := 'INSERT INTO ' || tabela || ' VALUES (' || valores || ');';
 BEGIN
+  IF tabela IS NULL THEN
+    RAISE EXCEPTION 'Voce nao informou a tabela';
+  END IF;
+  IF valores IS NULL THEN
+    RAISE EXCEPTION 'Voce nao informou os valores para adiconar na tabela';
+  END IF;
   IF tabela = 'inscricao' THEN
     RAISE EXCEPTION 'Voce não pode Realizar uma Inscricao por Aqui';
   END IF;
@@ -115,6 +126,12 @@ $inserir$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION remover(tabela TEXT, condicao TEXT) RETURNS VOID AS $remover$
 DECLARE query TEXT := 'DELETE FROM ' || tabela || ' WHERE ' || condicao || ';';
 BEGIN
+  IF tabela IS NULL THEN
+    RAISE EXCEPTION 'Voce nao informou a tabela';
+  END IF;
+  IF condicao IS NULL THEN
+    RAISE EXCEPTION 'Voce nao informou os valores para adiconar na tabela';
+  END IF;
   EXECUTE query;
 END;
 $remover$ LANGUAGE plpgsql;
@@ -144,6 +161,8 @@ CREATE OR REPLACE FUNCTION participar_grupo(id_grupo_participar TEXT, id_usuario
     EXECUTE criar_grupo_usuairo;
   END;
 $participar_grupo$ LANGUAGE plpgsql;
+
+SELECT * from ItemInscricao;
 
 -- INSCRICAO EM EVENTO, VOCE GANHA UM DESCONTO DE 5% SE INSCREVENDO EM UM EVENTO COMPLETO
 CREATE OR REPLACE FUNCTION inscricao_completa(id_grupo TEXT, id_evento_inscricao TEXT) RETURNS VOID AS $inscricao_completa$
@@ -251,9 +270,48 @@ BEGIN
 END;
 $pagar_inscricao$ LANGUAGE plpgsql;
 
+SELECT * from Inscricao;
+select * from ItemInscricao where id_inscricao = 2;
+select * from Inscricao INNER JOIN ItemInscricao on Inscricao.id_inscricao = ItemInscricao.id_inscricao;
 
+
+create or replace function cancelar_inscricao(id_inscricao_cancelar TEXT) returns void as $cancelar_inscricao$
+DECLARE
+  cancelar_item_inscricao TEXT := 'delete from ItemInscricao where id_inscricao = ' || id_inscricao_cancelar;
+  cancelar_inscricao TEXT := 'delete from Inscricao where id_inscricao = ' || id_inscricao_cancelar;
+BEGIN
+  if(SELECT status_pagamento FROM Inscricao where id_inscricao = cast(id_inscricao_cancelar as INTEGER)) = 'PAGO' THEN
+    RAISE EXCEPTION 'A Inscrição ja foi paga, não pode ser Cancelada';
+  END IF;
+  if(SELECT status_inscricao FROM Inscricao where id_inscricao = cast(id_inscricao_cancelar as INTEGER)) = 'CANCELADA' THEN
+    RAISE EXCEPTION 'A sua Inscrição ';
+  END IF;
+  if(SELECT status_inscricao FROM Inscricao where id_inscricao = cast(id_inscricao_cancelar as INTEGER)) = 'CONCLUIDA' THEN
+    RAISE EXCEPTION 'A sua Inscrição não esta Aberta, ja foi Cancelada ou Concluida';
+  END IF;
+  EXECUTE cancelar_item_inscricao;
+  EXECUTE cancelar_inscricao;
+END;
+$cancelar_inscricao$ LANGUAGE plpgsql;
+
+SELECT cancelar_inscricao('3'); -- INSCRICAO PAGA
+SELECT cancelar_inscricao('4');
+select * from Inscricao;
 -- SELECT pagar_inscricao('3', '71');
 
+create or REPLACE FUNCTION concluir_inscricao(id_inscricao_concluir TEXT) returns void as $concluir_inscricao$
+DECLARE
+  concluir_inscricao TEXT := 'update Inscricao set status_inscricao = ''CONCLUIDA''  ';
+BEGIN
+  if(SELECT status_pagamento FROM Inscricao where id_inscricao = cast(id_inscricao_concluir as INTEGER)) = 'PAGO' THEN
+    RAISE EXCEPTION 'Sua Inscrição não foi Paga, Pague sua Inscricao';
+  END IF;
+  if(SELECT status_inscricao FROM Inscricao where id_inscricao = cast(id_inscricao_concluir as INTEGER)) = 'CANCELADA' OR 'CONCLUIDA' THEN
+    RAISE EXCEPTION 'A sua Inscrição não esta Aberta, ja foi Cancelada ou Concluida';
+  END IF;
+  EXECUTE concluir_inscricao;
+END;
+$concluir_inscricao$ LANGUAGE plpgsql;
 
 SELECT * from Inscricao;
 select * from Inscricao INNER JOIN Grupo on Inscricao.id_grupo = Grupo.id_grupo INNER JOIN grupousuario on Grupo.id_grupo = GrupoUsuario.id_grupo;
@@ -293,6 +351,9 @@ CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $vali
 --        (SELECT periodo_inicio FROM periodo where id_periodo = new.id_periodo) THEN
 --       RAISE EXCEPTION 'O Periodo Informado Refere - se a uma Data Depois do Evento';
 --     END IF;
+    IF new.id_evento NOT IN (SELECT id_evento FROM EventoInstituicao) THEN
+      RAISE EXCEPTION 'O Evento Informado não possui Uma Instituicao Associada, Portanto Atividades estão Insdiponiveis Temporariamente';
+    END IF;
     IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
       raise EXCEPTION 'A Evento Informado não esta Cadastrado';
     END IF;
@@ -324,7 +385,9 @@ CREATE OR REPLACE FUNCTION validar_cadastro_grupo() RETURNS TRIGGER AS $validar_
    RETURN new;
  END;
 $validar_cadastro_grupo$ language plpgsql;
-CREATE TRIGGER trigger_cadastro_grupo BEFORE INSERT OR UPDATE ON Grupo FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo();
+CREATE TRIGGER trigger_cadastro_grupo BEFORE INSERT ON Grupo FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo();
+
+-- drop TRIGGER trigger_cadastro_grupo on Grupo;
 
 -- validando periodo
 CREATE OR REPLACE FUNCTION validar_periodo() RETURNS TRIGGER AS $validar_periodo$
@@ -480,8 +543,8 @@ CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUs
 SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', current_date'));
 SELECT inserir('Usuario', ('default, ''Kaio Lucas de Holanda'', ''kaioluks@gmail.com'', current_date'));
 SELECT * FROM usuario;
-SELECT atualizar_dados('Usuario', 'id_usuario = 4', ' nome= ''Kassio Lucas de Holanda Leodido'' ');
-SELECT remover('usuario', 'id_usuario = 8');
+-- SELECT atualizar_dados('Usuario', 'id_usuario = 4', ' nome= ''Kassio Lucas de Holanda Leodido'' ');
+-- SELECT remover('usuario', 'id_usuario = 8');
 
 -- CRIANDO GRUPO
 SELECT inserir('Grupo', 'default, ''Grupo Da Fulia''');
@@ -508,7 +571,7 @@ select current_date;
 
 -- CRIANDO EVENTO
 SELECT inserir('Evento', 'default, ''Casa dos Estudos'', 0, current_date, ''EM_ANDAMENTO'', 1, 1, 2 ');
-SELECT inserir('Evento', 'default, ''FIFA'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
+SELECT inserir('Evento', 'default, ''Evento de Tecnologia'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
 SELECT inserir('Evento', 'default, ''GAMERS'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
 SELECT * FROM Evento;
 
@@ -523,7 +586,6 @@ SELECT * FROM Atividade;
 -- DELETE from Inscricao;
 -- DELETE from ItemInscricao;
 SELECT * FROM Evento;
-
 
 -- ASSOCIAR EVENTO INSTITUICAO
 -- Informar id_evento e id_instituicao
@@ -551,7 +613,6 @@ SELECT * FROM Grupo;
 SELECT * FROM Evento;
 SELECT * FROM Inscricao;
 
-
 -- INSCRICAO POR ATIVIDADE
 -- informar id_grupo e id_atividade
 SELECT inscricao_por_atividade('1', '2');
@@ -572,4 +633,9 @@ SELECT * FROM Inscricao;
 SELECT pagar_inscricao('3','35.5');
 SELECT * FROM Inscricao;
 
+-- CANCELAR INSCRICAO
+-- Informar inscricao para cancelar
+SELECT cancelar_inscricao('3'); -- INSCRICAO PAGA
+SELECT cancelar_inscricao('4');
 
+SELECT * FROM Evento LEFT JOIN EventoInstituicao ON Evento.id_evento = EventoInstituicao.id_evento;
