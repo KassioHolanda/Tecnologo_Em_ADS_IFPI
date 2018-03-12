@@ -1,81 +1,58 @@
 -- CRIANDO TABELAS
--- EVENTO
-CREATE TABLE Evento (
-  id_evento          SERIAL PRIMARY KEY NOT NULL,
-  nome_evento        VARCHAR(255)       NOT NULL,
-  valor_total_evento FLOAT,
-  data_criacao       DATE          NOT NULL,
-  status_evento      VARCHAR(255)       NOT NULL CHECK (status_evento = 'EM_ANDAMENTO' OR
-                                                        status_evento = 'INSCRICOES_ABERTAS' OR
-                                                        status_evento = 'FECHADO' OR
-                                                        status_evento = 'CANCELADO'),
-  id_usuario        INT                NOT NULL REFERENCES Usuario (id_usuario),
-  id_tipo_evento     INT                NOT NULL REFERENCES TipoEvento (id_tipo_evento),
-  periodo_evento     INT                NOT NULL REFERENCES Periodo (id_periodo)
-);
--- ATIVIDADE
-CREATE TABLE Atividade (
-  id_atividade        SERIAL PRIMARY KEY NOT NULL,
-  titulo_atividade    VARCHAR(25)        NOT NULL,
-  descricao_atividade VARCHAR(255)       NOT NULL,
-  quantidade_vagas    INT                NOT NULL,
-  valor_atividade     FLOAT              NOT NULL,
-  id_periodo          INT                NOT NULL REFERENCES Periodo (id_periodo),
-  id_evento           INT                NOT NULL REFERENCES Evento (id_evento)
-);
--- PERIODO
-CREATE TABLE Periodo (
-  id_periodo     SERIAL PRIMARY KEY NOT NULL,
-  periodo_inicio DATE          NOT NULL,
-  periodo_fim    DATE          NOT NULL
-);
--- TIPO EVENTO
-CREATE TABLE TipoEvento (
-  id_tipo_evento        SERIAL PRIMARY KEY NOT NULL,
-  descricao_tipo_evento VARCHAR(255)       NOT NULL
-);
--- EVENTO INSTITUICAO
-CREATE TABLE EventoInstituicao (
-  id_evento_instituicao SERIAL PRIMARY KEY NOT NULL,
-  id_evento             INT                NOT NULL REFERENCES Evento (id_evento),
-  id_instituicao        INT                NOT NULL REFERENCES Instituicao (id_instituicao)
-);
--- INSTITUICAO
-CREATE TABLE Instituicao (
-  id_instituicao   SERIAL PRIMARY KEY NOT NULL,
-  nome_instituicao VARCHAR(255)       NOT NULL
-);
 -- USUARIO
 CREATE TABLE Usuario (
   id_usuario   SERIAL PRIMARY KEY NOT NULL,
   nome         VARCHAR(255)       NOT NULL,
   email        VARCHAR(255)       NOT NULL,
-  data_entrada DATE          NOT NULL
+  data_entrada DATE               NOT NULL
 );
--- GRUPO USUARIO
-CREATE TABLE GrupoUsuario (
-  id_grupo_usuario SERIAL PRIMARY KEY NOT NULL,
-  id_grupo         INT                NOT NULL REFERENCES Grupo (id_grupo),
-  id_usuario       INT                NOT NULL REFERENCES Usuario (id_usuario)
-);
+
 -- GRUPO
 CREATE TABLE Grupo (
   id_grupo SERIAL PRIMARY KEY NOT NULL,
   nome     VARCHAR(25)        NOT NULL
 );
 
--- INSCRICAO EM UM EVENTO, A INSCRICAO É FEITA EM TODAS AS ATIVIDADES DO EVENTO
--- CRIADO
--- CREATE TABLE InscricaoEvento (
---   id_inscricao_evento              SERIAL PRIMARY KEY NOT NULL,
---   data_inscricao                   DATE          NOT NULL,
---   valor_inscricao                  FLOAT              NOT NULL,
---   status_pagamento                 VARCHAR(255)       NOT NULL CHECK (status_pagamento = 'PAGO' OR
---                                                                       status_pagamento = 'ABERTO'),
---   id_evento                        INT                NOT NULL REFERENCES Evento (id_evento),
---   id_grupo                         INT                NOT NULL REFERENCES Grupo (id_grupo),
---   data_vencimento_pagamento_evento DATE          NOT NULL
--- );
+-- GRUPO USUARIO
+CREATE TABLE GrupoUsuario (
+  id_grupo_usuario SERIAL PRIMARY KEY NOT NULL,
+  id_grupo         INT                NOT NULL REFERENCES Grupo (id_grupo),
+  id_usuario       INT                NOT NULL REFERENCES Usuario (id_usuario)
+);
+
+-- PERIODO
+CREATE TABLE Periodo (
+  id_periodo     SERIAL PRIMARY KEY NOT NULL,
+  periodo_inicio DATE               NOT NULL,
+  periodo_fim    DATE               NOT NULL
+);
+
+-- INSTITUICAO
+CREATE TABLE Instituicao (
+  id_instituicao   SERIAL PRIMARY KEY NOT NULL,
+  nome_instituicao VARCHAR(255)       NOT NULL
+);
+
+-- TIPO EVENTO
+CREATE TABLE TipoEvento (
+  id_tipo_evento        SERIAL PRIMARY KEY NOT NULL,
+  descricao_tipo_evento VARCHAR(255)       NOT NULL
+);
+
+-- ITEM INSCRICAO
+CREATE TABLE ItemInscricao (
+  id_item_inscricao    SERIAL PRIMARY KEY NOT NULL,
+  valor_item_inscricao FLOAT              NOT NULL,
+  id_atividade         INT                NOT NULL REFERENCES Atividade (id_atividade),
+  id_inscricao         INT                NOT NULL REFERENCES Inscricao (id_inscricao)
+);
+
+-- EVENTO INSTITUICAO
+CREATE TABLE EventoInstituicao (
+  id_evento_instituicao SERIAL PRIMARY KEY NOT NULL,
+  id_evento             INT                NOT NULL REFERENCES Evento (id_evento),
+  id_instituicao        INT                NOT NULL REFERENCES Instituicao (id_instituicao)
+);
 
 -- INSCRICAO NA ATIVIDADE
 CREATE TABLE Inscricao (
@@ -89,112 +66,141 @@ CREATE TABLE Inscricao (
   data_pagamento            DATE,
   status_inscricao          VARCHAR(255)       NOT NULL CHECK (status_inscricao = 'ATIVA' OR
                                                                status_inscricao = 'CANCELADA' OR
-                                                               status_inscricao = 'CONCLUIDA')
+                                                               status_inscricao = 'CONCLUIDA' OR
+                                                               status_inscricao = 'VENCIDA')
+);
+
+-- EVENTO
+CREATE TABLE Evento (
+  id_evento          SERIAL PRIMARY KEY NOT NULL,
+  nome_evento        VARCHAR(255)       NOT NULL,
+  valor_total_evento FLOAT,
+  data_criacao       DATE               NOT NULL,
+  status_evento      VARCHAR(255)       NOT NULL CHECK (status_evento = 'EM_ANDAMENTO' OR
+                                                        status_evento = 'INSCRICOES_ABERTAS' OR
+                                                        status_evento = 'CONCLUIDO' OR
+                                                        status_evento = 'CANCELADO'),
+  id_usuario         INT                NOT NULL REFERENCES Usuario (id_usuario),
+  id_tipo_evento     INT                NOT NULL REFERENCES TipoEvento (id_tipo_evento),
+  periodo_evento     INT                NOT NULL REFERENCES Periodo (id_periodo)
+);
+
+-- ATIVIDADE
+CREATE TABLE Atividade (
+  id_atividade        SERIAL PRIMARY KEY NOT NULL,
+  titulo_atividade    VARCHAR(25)        NOT NULL,
+  descricao_atividade VARCHAR(255)       NOT NULL,
+  quantidade_vagas    INT                NOT NULL,
+  valor_atividade     FLOAT              NOT NULL,
+  id_periodo          INT                NOT NULL REFERENCES Periodo (id_periodo),
+  id_evento           INT                NOT NULL REFERENCES Evento (id_evento)
 );
 
 
+-- ==================================================================  CRIANDO FUNÇÕES  =====================================================================
 
-select * from Inscricao;
-
--- ITEM INSCRICAO
-CREATE TABLE ItemInscricao (
-  id_item_inscricao      SERIAL PRIMARY KEY NOT NULL,
-  valor_item_inscricao   FLOAT              NOT NULL,
-  id_atividade           INT                NOT NULL REFERENCES Atividade (id_atividade),
-  id_inscricao INT                NOT NULL REFERENCES Inscricao (id_inscricao)
-);
-
--- CRIANDO FUNÇÕES
 -- INSERIR GENERICO
 CREATE OR REPLACE FUNCTION inserir(tabela TEXT, valores TEXT) RETURNS VOID AS $inserir$
 DECLARE query TEXT := 'INSERT INTO ' || tabela || ' VALUES (' || valores || ');';
 BEGIN
-  IF tabela IS NULL THEN
-    RAISE EXCEPTION 'Voce nao informou a tabela';
+  IF lower(tabela) = 'evento' THEN
+    RAISE EXCEPTION 'Voce não pode Criar um evento por Aqui';
   END IF;
-  IF valores IS NULL THEN
-    RAISE EXCEPTION 'Voce nao informou os valores para adiconar na tabela';
-  END IF;
-  IF tabela = 'inscricao' THEN
+  IF lower(tabela) = 'inscricao' THEN
     RAISE EXCEPTION 'Voce não pode Realizar uma Inscricao por Aqui';
   END IF;
   EXECUTE query;
 END;
 $inserir$ LANGUAGE plpgsql;
 
+
 -- REMOVE GENERICO
 CREATE OR REPLACE FUNCTION remover(tabela TEXT, condicao TEXT) RETURNS VOID AS $remover$
-DECLARE query TEXT := 'DELETE FROM ' || tabela || ' WHERE ' || condicao || ';';
+DECLARE
+  query TEXT := 'DELETE FROM ' || tabela || ' WHERE ' || condicao || ';';
+  --   remover_item_inscricao TEXT := 'delete from ItemInscricao where ' || condicao;
 BEGIN
-  IF tabela IS NULL THEN
-    RAISE EXCEPTION 'Voce nao informou a tabela';
-  END IF;
-  IF condicao IS NULL THEN
-    RAISE EXCEPTION 'Voce nao informou os valores para adiconar na tabela';
+  IF tabela = 'Inscricao' THEN
+  --     EXECUTE remover_item_inscricao;
   END IF;
   EXECUTE query;
 END;
 $remover$ LANGUAGE plpgsql;
 
 -- UPDATE GENERICO
-CREATE OR REPLACE FUNCTION atualizar_dados(tabela TEXT, condicao TEXT, novos_dados TEXT) returns void as $atualizar_dados$
+CREATE OR REPLACE FUNCTION atualizar_dados(tabela TEXT, condicao TEXT, novos_dados TEXT) RETURNS VOID AS $atualizar_dados$
 DECLARE query TEXT := 'UPDATE ' || tabela || ' SET ' || novos_dados || ' WHERE ' || condicao;
 BEGIN
   EXECUTE query;
 END;
 $atualizar_dados$ LANGUAGE plpgsql;
 
-
 -- CRIANDO TABELA INSCRICAO
 CREATE OR REPLACE FUNCTION criar_inscricao(id_grupo INT) RETURNS VOID AS $criar_inscricao$
 BEGIN
   --   data de vencimento pagamento sempre 30 dias depois da data atual
-  INSERT INTO Inscricao VALUES (default, 0, current_date + INTERVAL '30 days', 'ABERTO', $1);
+  INSERT INTO Inscricao VALUES (default, 0, current_date + INTERVAL '30 days', 'ABERTO', $1, NULL, NULL, 'ATIVA');
 END;
 $criar_inscricao$ LANGUAGE plpgsql;
 
+-- CRIAR EVENTO
+CREATE OR REPLACE FUNCTION criar_evento(nome_evento TEXT, id_usuario_inscricao TEXT, id_tipo_evento TEXT, id_periodo_evento TEXT) RETURNS VOID AS $criar_evento$
+DECLARE cadastro_evento TEXT :=
+'insert into evento values (default, ''' || nome_evento || ''', 0, now(), ''INSCRICOES_ABERTAS'',' || id_usuario_inscricao || ', ' || id_tipo_evento || ', ' || id_periodo_evento || ');';
+BEGIN
+  IF nome_evento = '' THEN
+    RAISE EXCEPTION 'Nome Evento não Informado';
+  END IF;
+  IF id_usuario_inscricao = '' THEN
+    RAISE EXCEPTION 'Usuario não Informado';
+  END IF;
+  IF id_tipo_evento = '' THEN
+    RAISE EXCEPTION 'Tipo Evento não Informado';
+  END IF;
+  IF id_periodo_evento = '' THEN
+    RAISE EXCEPTION 'Periodo não Informado';
+  END IF;
+  EXECUTE cadastro_evento;
+END;
+$criar_evento$ LANGUAGE plpgsql;
+
 -- PARTICIPAR GRUPO
 CREATE OR REPLACE FUNCTION participar_grupo(id_grupo_participar TEXT, id_usuario_participar TEXT) RETURNS VOID AS $participar_grupo$
-  DECLARE
-    criar_grupo_usuairo TEXT := 'insert into GrupoUsuario values(DEFAULT, ' || id_grupo_participar || ',' || id_usuario_participar || ' )';
-  BEGIN
-    EXECUTE criar_grupo_usuairo;
-  END;
+DECLARE
+  criar_grupo_usuairo TEXT :=
+  'insert into GrupoUsuario values(DEFAULT, ' || id_grupo_participar || ',' || id_usuario_participar || ' )';
+BEGIN
+  EXECUTE criar_grupo_usuairo;
+END;
 $participar_grupo$ LANGUAGE plpgsql;
-
-SELECT * from ItemInscricao;
 
 -- INSCRICAO EM EVENTO, VOCE GANHA UM DESCONTO DE 5% SE INSCREVENDO EM UM EVENTO COMPLETO
 CREATE OR REPLACE FUNCTION inscricao_completa(id_grupo TEXT, id_evento_inscricao TEXT) RETURNS VOID AS $inscricao_completa$
 DECLARE
-  criar_inscricao TEXT := 'select criar_inscricao('|| ($1) ||')';
-  i INTEGER;
+  criar_inscricao  TEXT := 'select criar_inscricao(' || ($1) || ')';
+  i                INTEGER;
   valor_atividades FLOAT := 0;
 BEGIN
-  if (SELECT status_evento from Evento WHERE id_evento = cast(id_evento_inscricao as INT)) != 'EM_ANDAMENTO' THEN
-    RAISE EXCEPTION 'O Evento não Permite Inscricoes';
-  END IF;
+--   IF (SELECT status_evento FROM Evento WHERE id_evento = cast(id_evento_inscricao AS INT)) != 'EM_ANDAMENTO' THEN
+--     RAISE EXCEPTION 'O Evento não Permite Inscricoes';
+--   END IF;
   EXECUTE criar_inscricao;
-  FOR i IN (SELECT id_atividade FROM Atividade WHERE id_evento = cast(id_evento_inscricao as INT)) LOOP
-    INSERT INTO ItemInscricao VALUES (DEFAULT,
-                                      (SELECT valor_atividade FROM atividade WHERE id_atividade = i),
+  FOR i IN (SELECT id_atividade FROM Atividade WHERE id_evento = cast(id_evento_inscricao AS INT)) LOOP
+    INSERT INTO ItemInscricao VALUES (DEFAULT, (SELECT valor_atividade FROM atividade WHERE id_atividade = i),
                                       (SELECT id_atividade FROM atividade WHERE id_atividade = i),
                                       (SELECT max(id_inscricao) FROM Inscricao));
     valor_atividades := valor_atividades + (SELECT valor_atividade FROM atividade WHERE Atividade.id_atividade = i);
     UPDATE Atividade SET quantidade_vagas = ((SELECT quantidade_vagas FROM atividade WHERE id_atividade = i) - 1) WHERE id_atividade = i;
   END LOOP;
-  CREATE OR REPLACE view id_insc as SELECT max(id_inscricao) from Inscricao;
-  UPDATE Inscricao SET valor_inscricao = valor_atividades-(valor_atividades*0.05) WHERE id_inscricao IN (SELECT * FROM id_insc);
+  CREATE OR REPLACE VIEW id_insc AS SELECT max(id_inscricao) FROM Inscricao;
+  UPDATE Inscricao SET valor_inscricao = valor_atividades - (valor_atividades * 0.05) WHERE id_inscricao IN (SELECT * FROM id_insc);
 END;
 $inscricao_completa$ LANGUAGE plpgsql;
-
--- delete from Inscricao;
--- DELETE from ItemInscricao;
 
 -- INSCRICAO POR ATIVIDADE
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
-  id_atividade_insc INT := id_atividade_inscricao;
+  id_atividade_insc    INT := id_atividade_inscricao;
   criar_inscricao      TEXT := 'select criar_inscricao(' || id_grupo_inscricao || ')';
   criar_item_inscricao TEXT :=
   'insert into ItemInscricao values (default, (select valor_atividade from atividade where id_atividade = ' ||
@@ -203,65 +209,68 @@ DECLARE
   'update Atividade set quantidade_vagas = ( (select quantidade_vagas from atividade where id_atividade = ' ||
   id_atividade_inscricao || ') - 1) where id_atividade = ' || id_atividade_inscricao || ';';
 BEGIN
-    EXECUTE criar_inscricao;
-    EXECUTE criar_item_inscricao;
-    EXECUTE quantidade_vagas;
+  EXECUTE criar_inscricao;
+  EXECUTE criar_item_inscricao;
+  EXECUTE quantidade_vagas;
   UPDATE Inscricao
-  SET valor_inscricao = (SELECT valor_atividade FROM Atividade WHERE id_atividade = id_atividade_insc) WHERE id_inscricao IN
-                                                                                             (SELECT max(id_inscricao) FROM Inscricao);
+  SET valor_inscricao = (SELECT valor_atividade FROM Atividade WHERE id_atividade = id_atividade_insc) WHERE id_inscricao IN (SELECT max(id_inscricao) FROM Inscricao);
 END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
 
 -- ASSOCIAR EVENTO A UMA INSTITUICAO
 CREATE OR REPLACE FUNCTION associar_evento_instituicao(id_evento_associar TEXT, id_instituicao_associar TEXT) RETURNS VOID AS $associar_evento_instituicao$
-  DECLARE
-    criar_instituicao_evento TEXT := 'insert into EventoInstituicao values (default, ' || id_evento_associar || ', ' || id_instituicao_associar || ')';
-  BEGIN
-    EXECUTE criar_instituicao_evento;
-  END;
+DECLARE
+  criar_instituicao_evento TEXT := 'insert into EventoInstituicao values (default, ' || id_evento_associar || ', ' || id_instituicao_associar || ')';
+BEGIN
+  EXECUTE criar_instituicao_evento;
+END;
 $associar_evento_instituicao$ LANGUAGE plpgsql;
--- drop FUNCTION associar_evento_instituicao(text,text);
 
 -- APLICANDO DESCONTOS NA INSCRICAO
-CREATE OR REPLACE FUNCTION aplicar_desconto(id_inscricao_desconto TEXT) RETURNS void AS $aplicar_desconto$
+CREATE OR REPLACE FUNCTION aplicar_desconto(id_inscricao_desconto TEXT) RETURNS VOID AS $aplicar_desconto$
 DECLARE
-  inscricao_desconto_10 TEXT := 'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') * 0.10) where id_inscricao = ' || id_inscricao_desconto || ';';
-  inscricao_desconto_20 TEXT := 'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
+  inscricao_desconto_10 TEXT :=
+  'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
+  id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
+  || ') * 0.10) where id_inscricao = ' || id_inscricao_desconto || ';';
+  inscricao_desconto_20 TEXT :=
+  'update Inscricao set valor_inscricao = (select valor_inscricao from Inscricao where id_inscricao = ' ||
+  id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
+  || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
 BEGIN
---   ALTERAR METODO
-  if(SELECT status_pagamento FROM inscricao where id_inscricao = cast(id_inscricao_desconto as INTEGER)) = 'PAGO' THEN
+  --   ALTERAR METODO
+  IF (SELECT status_pagamento FROM inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INTEGER)) = 'PAGO' THEN
     RAISE EXCEPTION 'Não se pode Aplicar desconto em uma Inscrição que ja Foi Paga';
   END IF;
-  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo in (SELECT id_grupo from Inscricao where id_inscricao = cast(id_inscricao_desconto as INT))) = 1 THEN
+  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo IN (SELECT id_grupo FROM Inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INT))) = 1 THEN
     EXECUTE inscricao_desconto_10;
---     RAISE INFO 'Desconto de 10% Aplicado';
+  --     RAISE INFO 'Desconto de 10% Aplicado';
   END IF;
-  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo in (SELECT id_grupo from Inscricao where id_inscricao = cast(id_inscricao_desconto as INT))) >= 20  THEN
+  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo IN (SELECT id_grupo FROM Inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INT))) >= 20 THEN
     EXECUTE inscricao_desconto_20;
---     RAISE INFO 'Desconto de 20% Aplicado';
+  --     RAISE INFO 'Desconto de 20% Aplicado';
   END IF;
   RAISE INFO 'Desconto Aplicado';
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
 
-SELECT current_date;
-
--- select type(valor_inscricao) from Inscricao;
-
+-- FUNCAO PAGAR INSCRICAO
 CREATE OR REPLACE FUNCTION pagar_inscricao(id_inscricao_pagamento TEXT, valor_pagar TEXT) RETURNS VOID AS $pagar_inscricao$
 DECLARE
-  pagar_inscricao TEXT := 'UPDATE Inscricao SET status_pagamento = ''PAGO'' WHERE id_inscricao = ' || id_inscricao_pagamento;
+  pagar_inscricao TEXT := 'UPDATE Inscricao SET status_pagamento = ''PAGO'' WHERE id_inscricao = ' ||
+                          id_inscricao_pagamento;
   valor_pago      TEXT := 'UPDATE Inscricao SET valor_pago = ' || valor_pagar || ' WHERE id_inscricao = ' ||
                           id_inscricao_pagamento;
-  data_pagamento  TEXT := 'UPDATE Inscricao SET data_pagamento = current_date WHERE id_inscricao = ' || id_inscricao_pagamento;
+  data_pagamento  TEXT := 'UPDATE Inscricao SET data_pagamento = current_date WHERE id_inscricao = ' ||
+                          id_inscricao_pagamento;
 BEGIN
-  if(SELECT data_vencimento_pagamento from Inscricao where Inscricao.id_inscricao = cast(id_inscricao_pagamento as INTEGER)) < current_date THEN
+  IF (SELECT data_vencimento_pagamento FROM Inscricao WHERE Inscricao.id_inscricao = cast(id_inscricao_pagamento AS INTEGER)) < current_date THEN
     RAISE EXCEPTION 'A Periodo de Pagamento da sua Inscricao ja Venceu, Realize uma Nova Incrição';
   END IF;
-  IF (SELECT valor_inscricao FROM Inscricao where Inscricao.id_inscricao = cast(id_inscricao_pagamento as INTEGER)) != cast(valor_pagar as DOUBLE PRECISION) THEN
+  IF (SELECT valor_inscricao FROM Inscricao WHERE Inscricao.id_inscricao = cast(id_inscricao_pagamento AS INTEGER)) != cast(valor_pagar AS DOUBLE PRECISION) THEN
     RAISE EXCEPTION 'O Valor Informado é Diferente do Valor da Inscrição';
   END IF;
-  IF (SELECT valor_inscricao FROM Inscricao where Inscricao.id_inscricao = cast(id_inscricao_pagamento as INTEGER)) = cast(valor_pagar as DOUBLE PRECISION) THEN
+  IF (SELECT valor_inscricao FROM Inscricao WHERE Inscricao.id_inscricao = cast(id_inscricao_pagamento AS INTEGER)) = cast(valor_pagar AS DOUBLE PRECISION) THEN
     EXECUTE pagar_inscricao;
     EXECUTE valor_pago;
     EXECUTE data_pagamento;
@@ -270,224 +279,196 @@ BEGIN
 END;
 $pagar_inscricao$ LANGUAGE plpgsql;
 
-SELECT * from Inscricao;
-select * from ItemInscricao where id_inscricao = 2;
-select * from Inscricao INNER JOIN ItemInscricao on Inscricao.id_inscricao = ItemInscricao.id_inscricao;
-
-
-create or replace function cancelar_inscricao(id_inscricao_cancelar TEXT) returns void as $cancelar_inscricao$
+-- CANCELAR INSCRICAO
+CREATE OR REPLACE FUNCTION cancelar_inscricao(id_inscricao_cancelar TEXT) RETURNS VOID AS $cancelar_inscricao$
 DECLARE
-  cancelar_item_inscricao TEXT := 'delete from ItemInscricao where id_inscricao = ' || id_inscricao_cancelar;
-  cancelar_inscricao TEXT := 'delete from Inscricao where id_inscricao = ' || id_inscricao_cancelar;
+  cancelar_inscricao      TEXT := 'update Inscricao set status_inscricao = ''CANCELADA'' where id_inscricao = ' || id_inscricao_cancelar;
 BEGIN
-  if(SELECT status_pagamento FROM Inscricao where id_inscricao = cast(id_inscricao_cancelar as INTEGER)) = 'PAGO' THEN
+  IF(cast(id_inscricao_cancelar as INTEGER) not in (SELECT id_inscricao from Inscricao))THEN
+    RAISE EXCEPTION 'A inscricao informada não existe';
+  END IF;
+  IF (SELECT status_pagamento FROM Inscricao WHERE id_inscricao = cast(id_inscricao_cancelar AS INTEGER)) = 'PAGO' THEN
     RAISE EXCEPTION 'A Inscrição ja foi paga, não pode ser Cancelada';
   END IF;
-  if(SELECT status_inscricao FROM Inscricao where id_inscricao = cast(id_inscricao_cancelar as INTEGER)) = 'CANCELADA' THEN
-    RAISE EXCEPTION 'A sua Inscrição ';
+  IF (SELECT status_inscricao FROM Inscricao WHERE id_inscricao = cast(id_inscricao_cancelar AS INTEGER)) = 'CANCELADA' THEN
+    RAISE EXCEPTION 'A sua Inscrição ja esta cancelada';
   END IF;
-  if(SELECT status_inscricao FROM Inscricao where id_inscricao = cast(id_inscricao_cancelar as INTEGER)) = 'CONCLUIDA' THEN
+  IF (SELECT status_inscricao FROM Inscricao WHERE id_inscricao = cast(id_inscricao_cancelar AS INTEGER)) = 'CONCLUIDA' THEN
     RAISE EXCEPTION 'A sua Inscrição não esta Aberta, ja foi Cancelada ou Concluida';
   END IF;
-  EXECUTE cancelar_item_inscricao;
   EXECUTE cancelar_inscricao;
 END;
 $cancelar_inscricao$ LANGUAGE plpgsql;
 
-SELECT cancelar_inscricao('3'); -- INSCRICAO PAGA
-SELECT cancelar_inscricao('4');
-select * from Inscricao;
--- SELECT pagar_inscricao('3', '71');
-
-create or REPLACE FUNCTION concluir_inscricao(id_inscricao_concluir TEXT) returns void as $concluir_inscricao$
+-- FUNCAO PARA CONCLUIR INSCRICAO
+CREATE OR REPLACE FUNCTION concluir_inscricao(id_inscricao_concluir TEXT) RETURNS VOID AS $concluir_inscricao$
 DECLARE
   concluir_inscricao TEXT := 'update Inscricao set status_inscricao = ''CONCLUIDA''  ';
 BEGIN
-  if(SELECT status_pagamento FROM Inscricao where id_inscricao = cast(id_inscricao_concluir as INTEGER)) = 'PAGO' THEN
+  IF (SELECT status_pagamento FROM Inscricao WHERE id_inscricao = cast(id_inscricao_concluir AS INTEGER)) = 'PAGO' THEN
     RAISE EXCEPTION 'Sua Inscrição não foi Paga, Pague sua Inscricao';
   END IF;
-  if(SELECT status_inscricao FROM Inscricao where id_inscricao = cast(id_inscricao_concluir as INTEGER)) = 'CANCELADA' OR 'CONCLUIDA' THEN
+  IF (SELECT status_inscricao FROM Inscricao WHERE id_inscricao = cast(id_inscricao_concluir AS INTEGER)) = 'CANCELADA' OR 'CONCLUIDA' THEN
     RAISE EXCEPTION 'A sua Inscrição não esta Aberta, ja foi Cancelada ou Concluida';
   END IF;
   EXECUTE concluir_inscricao;
 END;
 $concluir_inscricao$ LANGUAGE plpgsql;
 
-SELECT * from Inscricao;
-select * from Inscricao INNER JOIN Grupo on Inscricao.id_grupo = Grupo.id_grupo INNER JOIN grupousuario on Grupo.id_grupo = GrupoUsuario.id_grupo;
-select count(*) from GrupoUsuario where id_grupo in (SELECT id_grupo from Inscricao where id_inscricao = 83);
-SELECT aplicar_desconto('84');
 
--- CRIANDO TRIGGERS
+-- ========================================================================  CRIANDO TRIGGERS  ====================================================================
 -- Verificando email usuario
 CREATE OR REPLACE FUNCTION validar_cadastro_usuario() RETURNS TRIGGER AS $validar_cadastro_usuario$
- BEGIN
-   IF new.email IN (SELECT email FROM usuario) THEN
-     RAISE EXCEPTION 'O Email Cadastrado ja Esta Em Uso';
-   END IF;
-   RETURN new;
- END;
-$validar_cadastro_usuario$ language plpgsql;
+BEGIN
+  IF new.email IN (SELECT email FROM usuario) THEN
+    RAISE EXCEPTION 'O Email Cadastrado ja Esta Em Uso';
+  END IF;
+  RETURN new;
+END;
+$validar_cadastro_usuario$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_usuario BEFORE INSERT ON Usuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_usuario();
 
--- drop TRIGGER trigger_cadastro_usuario on Usuario;
-
-select * from Atividade;
-
+-- VALIDANDO CADASTRO ATIVIDADE
 CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $validar_cadastro_atividade$
-  BEGIN
---     IF (SELECT periodo_inicio FROM Periodo WHERE id_periodo in
---                                                  (SELECT periodo_evento FROM Evento where Evento.id_evento = new.id_evento)) >
---        (SELECT periodo_inicio FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
---       RAISE EXCEPTION 'O periodo da Atividade é Inferior a Data de Inicio do Evento';
---     END IF;
---     IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
---                                                  (SELECT periodo_evento FROM Evento where Evento.id_evento = new.id_evento)) <
---        (SELECT periodo_fim FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
---       RAISE EXCEPTION 'A Data para Termino da Atividade Corresponde a uma Data Apos o Fim do Evento';
---     END IF;
---     IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
---                                                  (SELECT periodo_evento FROM Evento where id_evento = new.id_evento)) <
---        (SELECT periodo_inicio FROM periodo where id_periodo = new.id_periodo) THEN
---       RAISE EXCEPTION 'O Periodo Informado Refere - se a uma Data Depois do Evento';
---     END IF;
-    IF new.id_evento NOT IN (SELECT id_evento FROM EventoInstituicao) THEN
-      RAISE EXCEPTION 'O Evento Informado não possui Uma Instituicao Associada, Portanto Atividades estão Insdiponiveis Temporariamente';
-    END IF;
-    IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
-      raise EXCEPTION 'A Evento Informado não esta Cadastrado';
-    END IF;
-    IF new.id_periodo NOT IN (SELECT id_periodo FROM Periodo) THEN
-      raise EXCEPTION 'O Periodo Informado não esta Cadastrado';
-    END IF;
-    IF new.valor_atividade < 0 THEN
-      RAISE EXCEPTION 'O valor da Atividade não pode ser Inferior ou igual a Zero';
-    END IF;
-    IF new.quantidade_vagas < 0 THEN
-      RAISE EXCEPTION 'O Numero de Vagas Informado é Invalido';
-    END IF;
-    IF new.titulo_atividade IN (SELECT descricao_atividade FROM Atividade) THEN
-      RAISE EXCEPTION 'A Atividade Ja foi Cadastrada';
-    END IF;
-    UPDATE Evento SET valor_total_evento = ((SELECT valor_total_evento FROM Evento WHERE id_evento = new.id_evento) + new.valor_atividade) WHERE id_evento = new.id_evento;
-    RETURN new;
-  END;
+BEGIN
+  --     IF (SELECT periodo_inicio FROM Periodo WHERE id_periodo in
+  --                                                  (SELECT periodo_evento FROM Evento where Evento.id_evento = new.id_evento)) >
+  --        (SELECT periodo_inicio FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
+  --       RAISE EXCEPTION 'O periodo da Atividade é Inferior a Data de Inicio do Evento';
+  --     END IF;
+  --     IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
+
+  --                                                  (SELECT periodo_evento FROM Evento where Evento.id_evento = new.id_evento)) <
+  --        (SELECT periodo_fim FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
+  --       RAISE EXCEPTION 'A Data para Termino da Atividade Corresponde a uma Data Apos o Fim do Evento';
+  --     END IF;
+  --     IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
+  --                                                  (SELECT periodo_evento FROM Evento where id_evento = new.id_evento)) <
+  --        (SELECT periodo_inicio FROM periodo where id_periodo = new.id_periodo) THEN
+  --       RAISE EXCEPTION 'O Periodo Informado Refere - se a uma Data Depois do Evento';
+  --     END IF;
+  IF new.id_evento NOT IN (SELECT id_evento FROM EventoInstituicao) THEN
+    RAISE EXCEPTION 'O Evento Informado não possui Uma Instituicao Associada, Portanto Atividades estão Insdiponiveis Temporariamente';
+  END IF;
+  IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
+    RAISE EXCEPTION 'A Evento Informado não esta Cadastrado';
+  END IF;
+  IF new.id_periodo NOT IN (SELECT id_periodo FROM Periodo) THEN
+    RAISE EXCEPTION 'O Periodo Informado não esta Cadastrado';
+  END IF;
+  IF new.valor_atividade < 0 THEN
+    RAISE EXCEPTION 'O valor da Atividade não pode ser Inferior ou igual a Zero';
+  END IF;
+  IF new.quantidade_vagas < 0 THEN
+    RAISE EXCEPTION 'O Numero de Vagas Informado é Invalido';
+  END IF;
+  IF new.titulo_atividade IN (SELECT descricao_atividade FROM Atividade) THEN
+    RAISE EXCEPTION 'A Atividade Ja foi Cadastrada';
+  END IF;
+  UPDATE Evento SET valor_total_evento = ((SELECT valor_total_evento FROM Evento WHERE id_evento = new.id_evento) + new.valor_atividade) WHERE id_evento = new.id_evento;
+  RETURN new;
+END;
 $validar_cadastro_atividade$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_atividade BEFORE INSERT ON Atividade FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_atividade();
 
--- drop TRIGGER trigger_cadastro_atividade on Atividade;
-
+-- VALIDANDO CADASTRO GRUPO
 CREATE OR REPLACE FUNCTION validar_cadastro_grupo() RETURNS TRIGGER AS $validar_cadastro_grupo$
- BEGIN
-   IF new.nome IN (SELECT nome FROM grupo) THEN
-     RAISE EXCEPTION 'Esse Nome de Grupo ja foi Cadastrado';
-   END IF;
-   RETURN new;
- END;
-$validar_cadastro_grupo$ language plpgsql;
+BEGIN
+  IF new.nome IN (SELECT nome FROM grupo) THEN
+    RAISE EXCEPTION 'Esse Nome de Grupo ja foi Cadastrado';
+  END IF;
+  RETURN new;
+END;
+$validar_cadastro_grupo$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_grupo BEFORE INSERT ON Grupo FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo();
 
--- drop TRIGGER trigger_cadastro_grupo on Grupo;
-
--- validando periodo
+-- VALIDANDO PERIODO
 CREATE OR REPLACE FUNCTION validar_periodo() RETURNS TRIGGER AS $validar_periodo$
-  BEGIN
-    IF new.periodo_fim < new.periodo_inicio then
-      RAISE EXCEPTION 'A data de Inicio é Anterior a Data de Fim';
-    END IF;
-    IF new.periodo_inicio < current_date then
-      RAISE EXCEPTION 'A data de Inicio é Anterior a Data Atual';
-    END IF;
-    IF new.periodo_fim < current_date then
-      RAISE EXCEPTION 'A data de Fim é Anterior a Data Atual';
-    END IF;
-    RETURN new;
-  END;
-$validar_periodo$ language plpgsql;
+BEGIN
+  IF new.periodo_fim < new.periodo_inicio THEN
+    RAISE EXCEPTION 'A data de Inicio é Anterior a Data de Fim';
+  END IF;
+  IF new.periodo_inicio < current_date THEN
+    RAISE EXCEPTION 'A data de Inicio é Anterior a Data Atual';
+  END IF;
+  IF new.periodo_fim < current_date THEN
+    RAISE EXCEPTION 'A data de Fim é Anterior a Data Atual';
+  END IF;
+  RETURN new;
+END;
+$validar_periodo$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_periodo BEFORE INSERT OR UPDATE ON Periodo FOR EACH ROW EXECUTE PROCEDURE validar_periodo();
 
--- alter TABLE Evento RENAME COLUMN dono_evento to id_usuario;
-
-select * from Evento;
--- validando evento
+-- VALIDANDO EVENTO
 CREATE OR REPLACE FUNCTION validar_cadastro_evento() RETURNS TRIGGER AS $validar_cadastro_evento$
-  BEGIN
-    IF new.id_tipo_evento NOT IN (SELECT id_tipo_evento from TipoEvento) THEN
-      RAISE EXCEPTION 'O TipoEvento Informdado não foi Cadastrado';
-    END IF;
-    IF new.periodo_evento NOT IN (SELECT id_periodo from Periodo) THEN
-      RAISE EXCEPTION 'O Periodo Informdado não foi Cadastrado';
-    END IF;
-    IF new.id_usuario NOT IN (SELECT id_usuario from Usuario) THEN
-      RAISE EXCEPTION 'O Usuario Informdado não foi Cadastrado';
-    END IF;
-    IF new.nome_evento in (SELECT nome_evento FROM Evento) then
-      RAISE EXCEPTION 'Esse nome de Evento ja foi Cadastrado';
-    END IF;
-    IF new.valor_total_evento < 0 THEN
-      RAISE EXCEPTION 'O Valor Total do Evento não pode Ser Negativo';
-    END IF;
-    IF new.valor_total_evento > 0 THEN
-      RAISE EXCEPTION 'O Valor Total do Evento Precisa ser Zero';
-    END IF;
-    IF new.data_criacao < current_date THEN
-      RAISE EXCEPTION 'A Data do Evento Não pode Ser Inferior a Data Atual';
-    END IF;
-    return new;
-  END;
-$validar_cadastro_evento$ language plpgsql;
+BEGIN
+  IF new.id_tipo_evento NOT IN (SELECT id_tipo_evento FROM TipoEvento) THEN
+    RAISE EXCEPTION 'O TipoEvento Informdado não foi Cadastrado';
+  END IF;
+  IF new.periodo_evento NOT IN (SELECT id_periodo FROM Periodo) THEN
+    RAISE EXCEPTION 'O Periodo Informdado não foi Cadastrado';
+  END IF;
+  IF new.id_usuario NOT IN (SELECT id_usuario FROM Usuario) THEN
+    RAISE EXCEPTION 'O Usuario Informdado não foi Cadastrado';
+  END IF;
+  IF new.nome_evento IN (SELECT nome_evento FROM Evento) THEN
+    RAISE EXCEPTION 'Esse nome de Evento ja foi Cadastrado';
+  END IF;
+  IF new.valor_total_evento < 0 THEN
+    RAISE EXCEPTION 'O Valor Total do Evento não pode Ser Negativo';
+  END IF;
+  IF new.valor_total_evento > 0 THEN
+    RAISE EXCEPTION 'O Valor Total do Evento Precisa ser Zero';
+  END IF;
+  IF new.data_criacao < current_date THEN
+    RAISE EXCEPTION 'A Data do Evento Não pode Ser Inferior a Data Atual';
+  END IF;
+  RETURN new;
+END;
+$validar_cadastro_evento$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_evento BEFORE INSERT ON Evento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento();
 
--- drop TRIGGER trigger_cadastro_evento on Evento;
-
--- validando instituicao
-CREATE OR REPLACE FUNCTION validar_cadastro_instituicao() RETURNS TRIGGER AS $validar_cadastro_instituicao$
-  BEGIN
-    IF new.nome_instituicao in (SELECT nome_instituicao FROM Instituicao) then
-      RAISE EXCEPTION 'Esse nome de Instituicao ja foi Cadastrado';
-    END IF;
-    return new;
-  END;
-$validar_cadastro_instituicao$ language plpgsql;
+-- VALIDANDO INSTITUIÇÕES
+CREATE OR REPLACE FUNCTION validar_cadastro_instituicao()
+  RETURNS TRIGGER AS $validar_cadastro_instituicao$
+BEGIN
+  IF new.nome_instituicao IN (SELECT nome_instituicao FROM Instituicao) THEN
+    RAISE EXCEPTION 'Esse nome de Instituicao ja foi Cadastrado';
+  END IF;
+  RETURN new;
+END;
+$validar_cadastro_instituicao$
+LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT OR UPDATE ON Instituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_instituicao();
 
-select * from Inscricao;
-select * from ItemInscricao;
-select * from Atividade where id_atividade = 6;
-select * from Evento;
-
+-- VALIDANDO INSCRICAO EVENTO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER AS $validar_cadastro_inscricao_evento$
-  BEGIN
-    IF (new.id_grupo not in (SELECT id_grupo from Grupo)) THEN
-      RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
-    END IF;
-    IF new.data_vencimento_pagamento < current_date THEN
-      raise EXCEPTION 'A data De Criação não pode ser Inferior a Data Atual';
-    END IF;
-    RETURN new;
-  END;
-$validar_cadastro_inscricao_evento$ language plpgsql;
+BEGIN
+  IF (new.id_grupo NOT IN (SELECT id_grupo FROM Grupo)) THEN
+    RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
+  END IF;
+  IF new.data_vencimento_pagamento < current_date THEN
+    RAISE EXCEPTION 'A data De Criação não pode ser Inferior a Data Atual';
+  END IF;
+  RETURN new;
+END;
+$validar_cadastro_inscricao_evento$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_inscricao BEFORE INSERT OR UPDATE ON Inscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_inscricao_evento();
 
-SELECT * FROM Inscricao;
-SELECT * FROM ItemInscricao;
-SELECT * FROM Atividade;
-SELECT * FROM Inscricao INNER JOIN ItemInscricao on Inscricao.id_inscricao = ItemInscricao.id_inscricao INNER JOIN Atividade on ItemInscricao.id_atividade = Atividade.id_atividade where id_grupo = 9;
-
--- VALIDADANDO CADASTRO ITEM INSCRICAO
+-- VALIDADANDO CADASTRO ITEM INSCRICAO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_item_inscricao() RETURNS TRIGGER AS $validar_cadastro_item_inscricao$
 BEGIN
-  IF (SELECT status_evento
-      FROM Evento
-        INNER JOIN Atividade ON Evento.id_evento = Atividade.id_evento
-        INNER JOIN ItemInscricao I2 ON Atividade.id_atividade = I2.id_atividade
-      WHERE Atividade.id_atividade = new.id_atividade) != 'EM_ANDAMENTO' THEN
-    RAISE EXCEPTION 'O Evento dessa Atividade não Permite mais Inscricoes';
+  IF(SELECT status_evento FROM ItemInscricao
+    INNER JOIN Inscricao I ON ItemInscricao.id_inscricao = I.id_inscricao
+    INNER JOIN Atividade A ON ItemInscricao.id_atividade = A.id_atividade
+    INNER JOIN Evento E ON A.id_evento = E.id_evento
+  WHERE A.id_atividade = NEW.id_atividade) NOT ILIKE 'INSCRICOES_ABERTAS' THEN
+    RAISE EXCEPTION 'O PERIODO DAS INSCRIÇÕES JA ENCERROU';
   END IF;
-  IF new.id_inscricao not in (SELECT id_inscricao from Inscricao) THEN
+  IF new.id_inscricao NOT IN (SELECT id_inscricao FROM Inscricao) THEN
     RAISE EXCEPTION 'A Inscricao Informada não foi Cadastrada';
   END IF;
-  IF new.id_atividade not in (SELECT id_atividade from Atividade) THEN
+  IF new.id_atividade NOT IN (SELECT id_atividade FROM Atividade) THEN
     RAISE EXCEPTION 'A Atividade Informada não foi Cadastrada';
   END IF;
   IF new.id_atividade IN (SELECT id_atividade FROM iteminscricao) THEN
@@ -502,47 +483,43 @@ BEGIN
   END IF;
   RETURN new;
 END;
-$validar_cadastro_item_inscricao$ language plpgsql;
+$validar_cadastro_item_inscricao$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_item_inscricao BEFORE INSERT OR UPDATE ON ItemInscricao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_item_inscricao();
 
--- drop TRIGGER trigger_cadastro_inscricao on Inscricao;
--- drop FUNCTION validar_cadastro_inscricao_evento();
-
+-- VALIDAR CADASTRO INSTITUIÇÃO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_evento_instituicao() RETURNS TRIGGER AS $validar_cadastro_evento_instituicao$
-  BEGIN
-    IF new.id_evento NOT IN (SELECT id_evento from Evento) THEN
-      RAISE EXCEPTION 'O Evento Informado não foi Cadastrado';
-    END IF;
-    IF new.id_instituicao NOT IN (SELECT id_instituicao from Instituicao) THEN
-      RAISE EXCEPTION 'A Instituicao Informada não foi Cadastrada';
-    END IF;
-    return new;
-  END;
+BEGIN
+  IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
+    RAISE EXCEPTION 'O Evento Informado não foi Cadastrado';
+  END IF;
+  IF new.id_instituicao NOT IN (SELECT id_instituicao FROM Instituicao) THEN
+    RAISE EXCEPTION 'A Instituicao Informada não foi Cadastrada';
+  END IF;
+  RETURN new;
+END;
 $validar_cadastro_evento_instituicao$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_evento_instituicao BEFORE INSERT OR UPDATE ON EventoInstituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento_instituicao();
 
+-- VALIDAR CADASTRO GRUPO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_grupo_usuario() RETURNS TRIGGER AS $validar_cadastro_grupo_usuario$
-  BEGIN
-    IF new.id_grupo NOT IN (SELECT id_grupo FROM Grupo) THEN
-      RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
-    END IF;
-    IF new.id_usuario NOT IN (SELECT id_usuario FROM Usuario) THEN
-      RAISE EXCEPTION 'O Usuario Informado não foi Cadastrado';
-    END IF;
-    RETURN new;
-  END;
+BEGIN
+  IF new.id_grupo NOT IN (SELECT id_grupo FROM Grupo) THEN
+    RAISE EXCEPTION 'O grupo Informado não foi Cadastrado';
+  END IF;
+  IF new.id_usuario NOT IN (SELECT id_usuario FROM Usuario) THEN
+    RAISE EXCEPTION 'O Usuario Informado não foi Cadastrado';
+  END IF;
+  RETURN new;
+END;
 $validar_cadastro_grupo_usuario$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUsuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo_usuario();
 
 
--- ============================================================
-
--- POPULAR BANCO DE DADOS
+-- ============================================================   POPULAR BANCO DE DADOS  ===============================================================
 
 -- CRIANDO USUARIO
 SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', current_date'));
 SELECT inserir('Usuario', ('default, ''Kaio Lucas de Holanda'', ''kaioluks@gmail.com'', current_date'));
-SELECT * FROM usuario;
 -- SELECT atualizar_dados('Usuario', 'id_usuario = 4', ' nome= ''Kassio Lucas de Holanda Leodido'' ');
 -- SELECT remover('usuario', 'id_usuario = 8');
 
@@ -565,77 +542,57 @@ SELECT * FROM TipoEvento;
 -- CRIANDO PERIODO
 SELECT inserir('Periodo', 'default, current_date, current_date + INTERVAL ''20 days'' ');
 SELECT inserir('Periodo', 'default, current_date, current_date + INTERVAL ''15 days'' ');
-SELECT * FROM Periodo;
 
-select current_date;
 
 -- CRIANDO EVENTO
-SELECT inserir('Evento', 'default, ''Casa dos Estudos'', 0, current_date, ''EM_ANDAMENTO'', 1, 1, 2 ');
-SELECT inserir('Evento', 'default, ''Evento de Tecnologia'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
-SELECT inserir('Evento', 'default, ''GAMERS'', 0, current_date, ''EM_ANDAMENTO'', 2, 2, 1 ');
-SELECT * FROM Evento;
+-- INFORMAR NOME EVENTO, ID USUARIO, ID TIPO EVENTO, ID PERIRODO
+SELECT criar_evento('Casa dos Estudos', '1', '1', '1');
+SELECT criar_evento('GAMERS', '2', '2', '2');
 
--- CRIANDO ATIVIDADE
-SELECT inserir('Atividade', 'default, ''Aprendendo a Bater Falta'', ''Nessa Atividade você Aprendera a Bater Falta no FIFA'', 15, 35.50, 1, 3');
-SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1');
-SELECT inserir('Atividade', 'default, ''Geografia - Planiceis'', ''Nessa Atividade você Aprendera um Pouco Sobre Planicies'', 31, 35.50, 2, 1');
-SELECT inserir('Atividade', 'default, ''The Last Of Us'', ''Nessa Atividade você Aprendera tudo Sobre The Last Of Us, um dos melhores jogos de todos os tempos'', 25, 100.50, 1, 3');
-SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1000'); -- EVENTO NAO EXISTE
-SELECT * FROM Atividade;
--- DELETE from Atividade;
--- DELETE from Inscricao;
--- DELETE from ItemInscricao;
-SELECT * FROM Evento;
 
 -- ASSOCIAR EVENTO INSTITUICAO
--- Informar id_evento e id_instituicao
-SELECT associar_evento_instituicao('1','1');
-SELECT associar_evento_instituicao('3','2');
-SELECT * FROM EventoInstituicao;
+-- INFORMAR ID_EVENTO E ID_INSTITUICAO
+SELECT associar_evento_instituicao('3', '1');
+SELECT associar_evento_instituicao('4', '2');
+
+
+-- CRIANDO ATIVIDADE
+SELECT inserir('Atividade', 'default, ''Aprendendo a Bater Falta'', ''Nessa Atividade você Aprendera a Bater Falta no FIFA'', 15, 35.50, 1, 4');
+SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 3');
+SELECT inserir('Atividade', 'default, ''Geografia - Planiceis'', ''Nessa Atividade você Aprendera um Pouco Sobre Planicies'', 31, 35.50, 2, 3');
+SELECT inserir('Atividade', 'default, ''The Last Of Us'', ''Nessa Atividade você Aprendera tudo Sobre The Last Of Us, um dos melhores jogos de todos os tempos'', 25, 100.50, 1, 4');
+SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1000'); -- EVENTO NAO EXISTE
+
 
 -- PARTICIPAR GRUPO
+-- INFORMAR ID_GRUPO E ID_USUARIO
 SELECT participar_grupo('1', '1');
 SELECT participar_grupo('2', '2');
-SELECT * FROM GrupoUsuario;
-SELECT * from Grupo;
-SELECT * from Usuario;
+
 
 -- INSCRICAO POR EVENTO
 -- INFORMAR ID_GRUPO E ID_EVENTO
-SELECT inscricao_completa('2','3');
-SELECT id_grupo,Evento.id_evento,I2.id_atividade,* FROM Inscricao
-  INNER JOIN ItemInscricao I2 ON Inscricao.id_inscricao = I2.id_inscricao
-  INNER JOIN Atividade ON I2.id_atividade = Atividade.id_atividade
-  INNER JOIN Evento ON Atividade.id_evento = Evento.id_evento
-WHERE id_grupo = 2;
-
-SELECT * FROM Grupo;
-SELECT * FROM Evento;
-SELECT * FROM Inscricao;
+SELECT inscricao_completa('2', '3');
 
 -- INSCRICAO POR ATIVIDADE
--- informar id_grupo e id_atividade
-SELECT inscricao_por_atividade('1', '2');
-SELECT inscricao_por_atividade('1', '3');
-SELECT * FROM ItemInscricao
-  INNER JOIN Inscricao I ON ItemInscricao.id_inscricao = I.id_inscricao
-WHERE id_grupo = 1;
+-- INFORMAR ID_GRUPO E ID_ATIVIDADE
+SELECT inscricao_por_atividade('2', '6');
+SELECT inscricao_por_atividade('1', '4');
 
-SELECT * FROM Atividade;
-SELECT * FROM Grupo;
 
 -- APLICANDO DESCONTOS
--- Informar Inscricao
-SELECT aplicar_desconto('2');
+-- INFOROMAR ID_INCRICAO
+SELECT aplicar_desconto('4');
 SELECT * FROM Inscricao;
+
 
 -- PAGAR INSCRICAO
-SELECT pagar_inscricao('3','35.5');
+SELECT pagar_inscricao('4', '31.95');
 SELECT * FROM Inscricao;
 
--- CANCELAR INSCRICAO
--- Informar inscricao para cancelar
-SELECT cancelar_inscricao('3'); -- INSCRICAO PAGA
-SELECT cancelar_inscricao('4');
 
-SELECT * FROM Evento LEFT JOIN EventoInstituicao ON Evento.id_evento = EventoInstituicao.id_evento;
+-- CANCELAR INSCRICAO
+-- INFORMAR ID_INSCRICAO PARA CANCELAR
+SELECT cancelar_inscricao('4'); -- INSCRICAO PAGA
+SELECT cancelar_inscricao('6');
+SELECT cancelar_inscricao('5211');
