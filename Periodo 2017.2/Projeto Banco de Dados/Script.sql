@@ -489,6 +489,17 @@ END;
 $validar_cadastro_grupo_usuario$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUsuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo_usuario();
 
+-- VALIDAR TIPO EVENTO
+CREATE OR REPLACE FUNCTION validar_cadastro_tipo_evento() RETURNS TRIGGER AS $$
+BEGIN
+  IF(NEW.descricao_tipo_evento IN (SELECT descricao_tipo_evento FROM TipoEvento))THEN
+    RAISE EXCEPTION 'A DESCRICAO INFORMADA JA FOI CADASTRADA';
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trigger_cadastro_tipo_evento BEFORE INSERT OR UPDATE ON TipoEvento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_tipo_evento();
+
+CREATE OR REPLACE FUNCTION verificar_delete() RETURNS 
 
 -- CRIANDO TRIGGER PERMISSAO USER
 CREATE OR REPLACE FUNCTION permissao_user() RETURNS TRIGGER AS $$
@@ -499,12 +510,11 @@ BEGIN
     IF usuario NOT LIKE 'USUARIO_GRUPO' AND usuario NOT LIKE 'postgres' THEN
       RAISE EXCEPTION 'O USUARIO NAO TEM PERMISSAO PARA ALTERAÇÃO DE DADOS';
     END IF;
+  RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Usuario EXECUTE PROCEDURE permissao_user();
-CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Grupo EXECUTE PROCEDURE permissao_user();
-CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON GrupoUsuario EXECUTE PROCEDURE permissao_user();
+
 CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Inscricao EXECUTE PROCEDURE permissao_user();
 CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Evento EXECUTE PROCEDURE permissao_user();
 CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON ItemInscricao EXECUTE PROCEDURE permissao_user();
@@ -514,7 +524,6 @@ CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON TipoEvento EXECUTE PROCED
 
 
 -- ============================================================   POPULAR BANCO DE DADOS  ===============================================================
-CREATE USER ADMINISTRADOR WITH PASSWORD '123';
 CREATE USER USUARIO_GRUPO WITH PASSWORD '123';
 
 SELECT USER;
