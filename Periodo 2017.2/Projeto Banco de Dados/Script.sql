@@ -570,6 +570,11 @@ BEGIN
     END IF;
     UPDATE Evento SET id_tipo_evento = 0 WHERE id_tipo_evento = OLD.ID_TIPO_EVENTO;
   END IF;
+  IF(tg_table_name = 'periodo') THEN
+    IF OLD.ID_PERIODO IN (SELECT id_periodo FROM Evento) THEN
+      RAISE EXCEPTION 'O PERIODO ESTA ASSOCIADO A UM EVENTO, NAO PODE SER EXCLUIDO';
+    END IF;
+  END IF;
   RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -579,6 +584,7 @@ CREATE TRIGGER trigger_on_delete BEFORE DELETE on Grupo FOR EACH ROW EXECUTE PRO
 CREATE TRIGGER trigger_on_delete BEFORE DELETE on Inscricao FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
 CREATE TRIGGER trigger_on_delete BEFORE DELETE on Usuario FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
 CREATE TRIGGER trigger_on_delete BEFORE DELETE on TipoEvento FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
+CREATE TRIGGER trigger_on_delete BEFORE DELETE on Periodo FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
 
 select * from Inscricao INNER JOIN ItemInscricao I2 ON Inscricao.id_inscricao = I2.id_inscricao;
 SELECT * from Evento;
