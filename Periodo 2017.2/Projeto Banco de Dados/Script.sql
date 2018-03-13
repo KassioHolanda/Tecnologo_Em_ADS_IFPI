@@ -114,18 +114,7 @@ END;
 $inserir$ LANGUAGE plpgsql;
 
 
--- REMOVE GENERICO
-CREATE OR REPLACE FUNCTION remover(tabela TEXT, condicao TEXT) RETURNS VOID AS $remover$
-DECLARE
-  query TEXT := 'DELETE FROM ' || tabela || ' WHERE ' || condicao || ';';
-  --   remover_item_inscricao TEXT := 'delete from ItemInscricao where ' || condicao;
-BEGIN
-  IF tabela = 'Inscricao' THEN
-  --     EXECUTE remover_item_inscricao;
-  END IF;
-  EXECUTE query;
-END;
-$remover$ LANGUAGE plpgsql;
+
 
 -- UPDATE GENERICO
 CREATE OR REPLACE FUNCTION atualizar_dados(tabela TEXT, condicao TEXT, novos_dados TEXT) RETURNS VOID AS $atualizar_dados$
@@ -315,6 +304,7 @@ $concluir_inscricao$ LANGUAGE plpgsql;
 -- VALIDANDO CADASTRO USUARIO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_usuario() RETURNS TRIGGER AS $validar_cadastro_usuario$
 BEGIN
+
   IF new.email IN (SELECT email FROM usuario) THEN
     RAISE EXCEPTION 'O Email Cadastrado ja Esta Em Uso';
   END IF;
@@ -326,17 +316,16 @@ CREATE TRIGGER trigger_cadastro_usuario BEFORE INSERT ON Usuario FOR EACH ROW EX
 -- VALIDANDO CADASTRO ATIVIDADE => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $validar_cadastro_atividade$
 BEGIN
-  IF((SELECT periodo_inicio FROM Periodo WHERE Periodo.id_periodo = NEW.id_periodo) IN
-     (SELECT periodo_inicio FROM Periodo
-       INNER JOIN Atividade A ON Periodo.id_periodo = A.id_periodo INNER JOIN Evento E ON A.id_evento = E.id_evento WHERE E.status_evento NOT ILIKE 'CONCLUIDO' OR 'CANCELADO')) THEN
-        RAISE EXCEPTION 'JA POSSUI UMA ATIVIDADE QUE INICIA NESSE PERIODO';
-  END IF;
-  IF new.id_evento NOT IN (SELECT id_evento FROM EventoInstituicao) THEN
-    RAISE EXCEPTION 'O Evento Informado não possui Uma Instituicao Associada, Portanto Atividades estão Insdiponiveis Temporariamente';
+  IF(NEW.id_periodo IN (SELECT id_periodo FROM Atividade INNER JOIN Evento E ON Atividade.id_evento = E.id_evento WHERE E.id_evento = NEW.id_evento))THEN
+    RAISE EXCEPTION 'JA EXISTE UMA ATIVIDADE NESSE HORARIO PARA ESSE EVENTO';
   END IF;
   IF new.id_evento NOT IN (SELECT id_evento FROM Evento) THEN
     RAISE EXCEPTION 'A Evento Informado não esta Cadastrado';
   END IF;
+  IF new.id_evento NOT IN (SELECT id_evento FROM EventoInstituicao) THEN
+    RAISE EXCEPTION 'O Evento Informado não possui Uma Instituicao Associada, Portanto Atividades estão Insdiponiveis Temporariamente';
+  END IF;
+
   IF new.id_periodo NOT IN (SELECT id_periodo FROM Periodo) THEN
     RAISE EXCEPTION 'O Periodo Informado não esta Cadastrado';
   END IF;
@@ -414,7 +403,8 @@ BEGIN
 END;
 $validar_cadastro_instituicao$
 LANGUAGE plpgsql;
-CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT OR UPDATE ON Instituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_instituicao();
+CREATE TRIGGER trigger_cadastro_instituicao BEFORE INSERT ON Instituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_instituicao();
+-- DROP TRIGGER trigger_cadastro_instituicao ON Instituicao;
 
 -- VALIDANDO INSCRICAO EVENTO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_inscricao_evento() RETURNS TRIGGER AS $validar_cadastro_inscricao_evento$
@@ -473,7 +463,8 @@ BEGIN
   RETURN new;
 END;
 $validar_cadastro_evento_instituicao$ LANGUAGE plpgsql;
-CREATE TRIGGER trigger_cadastro_evento_instituicao BEFORE INSERT OR UPDATE ON EventoInstituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento_instituicao();
+CREATE TRIGGER trigger_cadastro_evento_instituicao BEFORE INSERT ON EventoInstituicao FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento_instituicao();
+-- DROP TRIGGER trigger_cadastro_evento_instituicao ON EventoInstituicao;
 
 -- VALIDAR CADASTRO GRUPO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_grupo_usuario() RETURNS TRIGGER AS $validar_cadastro_grupo_usuario$
@@ -487,7 +478,9 @@ BEGIN
   RETURN new;
 END;
 $validar_cadastro_grupo_usuario$ LANGUAGE plpgsql;
-CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUsuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo_usuario();
+CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT ON GrupoUsuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo_usuario();
+-- DROP TRIGGER trigger_cadastro_grupo_usuario ON GrupoUsuario;
+
 
 -- VALIDAR TIPO EVENTO
 CREATE OR REPLACE FUNCTION validar_cadastro_tipo_evento() RETURNS TRIGGER AS $$
@@ -495,11 +488,13 @@ BEGIN
   IF(NEW.descricao_tipo_evento IN (SELECT descricao_tipo_evento FROM TipoEvento))THEN
     RAISE EXCEPTION 'A DESCRICAO INFORMADA JA FOI CADASTRADA';
   END IF;
+  RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_tipo_evento BEFORE INSERT OR UPDATE ON TipoEvento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_tipo_evento();
 
-CREATE OR REPLACE FUNCTION verificar_delete() RETURNS 
+SELECT * FROM Instituicao;
+DELETE FROM Instituicao WHERE id_instituicao = 1;
 
 -- CRIANDO TRIGGER PERMISSAO USER
 CREATE OR REPLACE FUNCTION permissao_user() RETURNS TRIGGER AS $$
@@ -522,17 +517,50 @@ CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Periodo EXECUTE PROCEDURE
 CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON EventoInstituicao EXECUTE PROCEDURE permissao_user();
 CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON TipoEvento EXECUTE PROCEDURE permissao_user();
 
+CREATE OR REPLACE FUNCTION CRIAR_TABELAS_DELETE() RETURNS VOID AS $$
+BEGIN
+  INSERT INTO Usuario VALUES (0, '', '', NOW());
+  INSERT INTO Grupo VALUES (0,'');
+  INSERT INTO Instituicao VALUES (0, '');
+  INSERT INTO Periodo VALUES (0, NOW(), NOW());
+  INSERT INTO TipoEvento VALUES (0,'');
+  INSERT INTO Evento VALUES (0, '', 1, NOW(), 'CANCELADO', 0, 0, 0);
+  INSERT  INTO EventoInstituicao VALUES (0,0,0);
+  INSERT INTO Atividade VALUES (0, '', '', 1, 1, 0, 0);
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- REMOVE GENERICO
+-- CREATE OR REPLACE FUNCTION remover(tabela TEXT, condicao TEXT) RETURNS VOID AS $remover$
+-- DECLARE
+--   query TEXT := 'DELETE FROM ' || tabela || ' WHERE ' || condicao || ';';
+-- BEGIN
+-- 
+--   IF(tabela = lower('instituicao')) THEN
+--     IF(OLD.ID_INSTITUICAO IN (SELECT Instituicao.ID_INSTITUICAO FROM Instituicao INNER JOIN EventoInstituicao E ON Instituicao.id_instituicao = E.id_instituicao INNER JOIN Evento E2 ON E.id_evento = E2.id_evento WHERE status_evento = 'EME_ANDAMENTO'))THEN
+--       RAISE EXCEPTION 'VOCE NAO PODE DELETAR INSTITUICAO COM UM EVENTO EM ANDAMENTO';
+--     END IF;
+--     DELETE FROM EventoInstituicao WHERE ''||$2;
+--     DELETE FROM Instituicao WHERE ''||$2;
+--   END IF;
+--   EXECUTE query;
+-- END;
+-- $remover$ LANGUAGE plpgsql;
+-- 
+-- SELECT remover('instituicao', 'id_instituicao  = 1');
 
 -- ============================================================   POPULAR BANCO DE DADOS  ===============================================================
 CREATE USER USUARIO_GRUPO WITH PASSWORD '123';
 
-SELECT USER;
+SELECT CRIAR_TABELAS_DELETE();
 
 -- CRIANDO USUARIO
 SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', current_date'));
 SELECT inserir('Usuario', ('default, ''Kaio Lucas de Holanda'', ''kaioluks@gmail.com'', current_date'));
 -- SELECT atualizar_dados('Usuario', 'id_usuario = 4', ' nome= ''Kassio Lucas de Holanda Leodido'' ');
 -- SELECT remover('usuario', 'id_usuario = 8');
+SELECT * from Usuario;
 
 -- CRIANDO GRUPO
 SELECT inserir('Grupo', 'default, ''Grupo Da Fulia''');
@@ -553,49 +581,55 @@ SELECT * FROM TipoEvento;
 -- CRIANDO PERIODO
 SELECT inserir('Periodo', 'default, current_date, current_date + INTERVAL ''20 days'' ');
 SELECT inserir('Periodo', 'default, current_date, current_date + INTERVAL ''15 days'' ');
-
+SELECT * FROM Periodo;
 
 -- CRIANDO EVENTO
 -- INFORMAR NOME EVENTO, ID USUARIO, ID TIPO EVENTO, ID PERIRODO
-SELECT criar_evento('Casa dos Estudos', '1', '1', '1');
-SELECT criar_evento('GAMERS', '2', '2', '2');
+SELECT criar_evento('Casa dos Estudos', '3', '1', '1');
+SELECT criar_evento('GAMERS', '6', '2', '2');
+SELECT * from Evento;
 
 
 -- ASSOCIAR EVENTO INSTITUICAO
 -- INFORMAR ID_EVENTO E ID_INSTITUICAO
-SELECT associar_evento_instituicao('3', '1');
+SELECT associar_evento_instituicao('5', '1');
 SELECT associar_evento_instituicao('4', '2');
+SELECT * from EventoInstituicao;
 
 
 -- CRIANDO ATIVIDADE
 SELECT inserir('Atividade', 'default, ''Aprendendo a Bater Falta'', ''Nessa Atividade você Aprendera a Bater Falta no FIFA'', 15, 35.50, 1, 4');
-SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 3');
-SELECT inserir('Atividade', 'default, ''Geografia - Planiceis'', ''Nessa Atividade você Aprendera um Pouco Sobre Planicies'', 31, 35.50, 2, 3');
-SELECT inserir('Atividade', 'default, ''The Last Of Us'', ''Nessa Atividade você Aprendera tudo Sobre The Last Of Us, um dos melhores jogos de todos os tempos'', 25, 100.50, 1, 4');
+SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 5');
+SELECT inserir('Atividade', 'default, ''Geografia - Planiceis'', ''Nessa Atividade você Aprendera um Pouco Sobre Planicies'', 31, 35.50, 2, 5');
+SELECT inserir('Atividade', 'default, ''The Last Of Us'', ''Nessa Atividade você Aprendera tudo Sobre The Last Of Us, um dos melhores jogos de todos os tempos'', 25, 100.50, 2, 4');
 SELECT inserir('Atividade', 'default, ''Matematica - Matrizes'', ''Nessa Atividade você Aprendera um Pouco Sobre Matrizes'', 15, 35.50, 2, 1000'); -- EVENTO NAO EXISTE
-
+SELECT * FROM Atividade;
+SELECT * FROM Evento;
 
 -- PARTICIPAR GRUPO
 -- INFORMAR ID_GRUPO E ID_USUARIO
-SELECT participar_grupo('1', '1');
-SELECT participar_grupo('2', '2');
-
+SELECT participar_grupo('1', '3');
+SELECT participar_grupo('2', '6');
+SELECT * FROM Usuario;
+SELECT * FROM GrupoUsuario;
 
 -- INSCRICAO POR EVENTO
 -- INFORMAR ID_GRUPO E ID_EVENTO
-SELECT inscricao_completa('2', '3');
+SELECT inscricao_completa('2', '4');
+SELECT * FROM Inscricao;
 
 
 -- INSCRICAO POR ATIVIDADE
 -- INFORMAR ID_GRUPO E ID_ATIVIDADE
-SELECT inscricao_por_atividade('2', '6');
-SELECT inscricao_por_atividade('1', '4');
+SELECT inscricao_por_atividade('2', '7');
+-- SELECT inscricao_por_atividade('1', '4');
+SELECT * FROM Atividade;
 
 
 -- APLICANDO DESCONTOS
 -- INFOROMAR ID_INCRICAO
-SELECT aplicar_desconto('10');
-
+SELECT aplicar_desconto('1');
+SELECT * FROM Inscricao;
 
 -- PAGAR INSCRICAO
 -- INFORMAR ID_INSCRICAO E VALOR A PAGAR
@@ -607,3 +641,4 @@ SELECT pagar_inscricao('4', '31.95');
 SELECT cancelar_inscricao('4'); -- INSCRICAO PAGA
 SELECT cancelar_inscricao('6');
 SELECT cancelar_inscricao('5211');
+
