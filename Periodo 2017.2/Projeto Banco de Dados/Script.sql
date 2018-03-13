@@ -564,6 +564,12 @@ BEGIN
     UPDATE Evento SET id_usuario = 0 WHERE id_usuario = old.ID_USUARIO;
     DELETE FROM GrupoUsuario WHERE id_usuario = OLD.ID_USUARIO;
   END IF;
+  IF(tg_table_name = 'tipoevento') THEN
+    IF OLD.ID_TIPO_EVENTO IN (SELECT id_tipo_evento FROM Evento WHERE status_evento = 'EM_ANDAMENTO')THEN
+      RAISE EXCEPTION 'VOCE NAO PODE EXCLUIR UM TIPO ASSOCIADO A UM EVENTO EM ANDAMENTO';
+    END IF;
+    UPDATE Evento SET id_tipo_evento = 0 WHERE id_tipo_evento = OLD.ID_TIPO_EVENTO;
+  END IF;
   RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -572,6 +578,7 @@ CREATE TRIGGER trigger_on_delete BEFORE DELETE on Evento FOR EACH ROW EXECUTE PR
 CREATE TRIGGER trigger_on_delete BEFORE DELETE on Grupo FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
 CREATE TRIGGER trigger_on_delete BEFORE DELETE on Inscricao FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
 CREATE TRIGGER trigger_on_delete BEFORE DELETE on Usuario FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
+CREATE TRIGGER trigger_on_delete BEFORE DELETE on TipoEvento FOR EACH ROW EXECUTE PROCEDURE verificar_delete();
 
 select * from Inscricao INNER JOIN ItemInscricao I2 ON Inscricao.id_inscricao = I2.id_inscricao;
 SELECT * from Evento;
