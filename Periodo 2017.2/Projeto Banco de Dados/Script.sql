@@ -135,7 +135,7 @@ BEGIN
 END;
 $atualizar_dados$ LANGUAGE plpgsql;
 
--- CRIANDO TABELA INSCRICAO
+-- CRIANDO TABELA INSCRICAO => CONCLUIDO
 CREATE OR REPLACE FUNCTION criar_inscricao(id_grupo INT) RETURNS VOID AS $criar_inscricao$
 BEGIN
   --   data de vencimento pagamento sempre 30 dias depois da data atual
@@ -143,7 +143,7 @@ BEGIN
 END;
 $criar_inscricao$ LANGUAGE plpgsql;
 
--- CRIAR EVENTO
+-- CRIAR EVENTO => CONCLUIDO
 CREATE OR REPLACE FUNCTION criar_evento(nome_evento TEXT, id_usuario_inscricao TEXT, id_tipo_evento TEXT, id_periodo_evento TEXT) RETURNS VOID AS $criar_evento$
 DECLARE cadastro_evento TEXT :=
 'insert into evento values (default, ''' || nome_evento || ''', 0, now(), ''INSCRICOES_ABERTAS'',' || id_usuario_inscricao || ', ' || id_tipo_evento || ', ' || id_periodo_evento || ');';
@@ -164,7 +164,7 @@ BEGIN
 END;
 $criar_evento$ LANGUAGE plpgsql;
 
--- PARTICIPAR GRUPO
+-- PARTICIPAR GRUPO => CONCLUIDO
 CREATE OR REPLACE FUNCTION participar_grupo(id_grupo_participar TEXT, id_usuario_participar TEXT) RETURNS VOID AS $participar_grupo$
 DECLARE
   criar_grupo_usuairo TEXT :=
@@ -174,16 +174,13 @@ BEGIN
 END;
 $participar_grupo$ LANGUAGE plpgsql;
 
--- INSCRICAO EM EVENTO, VOCE GANHA UM DESCONTO DE 5% SE INSCREVENDO EM UM EVENTO COMPLETO
+-- INSCRICAO EM EVENTO, VOCE GANHA UM DESCONTO DE 5% SE INSCREVENDO EM UM EVENTO COMPLETO => CONCLUIDO
 CREATE OR REPLACE FUNCTION inscricao_completa(id_grupo TEXT, id_evento_inscricao TEXT) RETURNS VOID AS $inscricao_completa$
 DECLARE
   criar_inscricao  TEXT := 'select criar_inscricao(' || ($1) || ')';
   i                INTEGER;
   valor_atividades FLOAT := 0;
 BEGIN
---   IF (SELECT status_evento FROM Evento WHERE id_evento = cast(id_evento_inscricao AS INT)) != 'EM_ANDAMENTO' THEN
---     RAISE EXCEPTION 'O Evento não Permite Inscricoes';
---   END IF;
   EXECUTE criar_inscricao;
   FOR i IN (SELECT id_atividade FROM Atividade WHERE id_evento = cast(id_evento_inscricao AS INT)) LOOP
     INSERT INTO ItemInscricao VALUES (DEFAULT, (SELECT valor_atividade FROM atividade WHERE id_atividade = i),
@@ -197,7 +194,7 @@ BEGIN
 END;
 $inscricao_completa$ LANGUAGE plpgsql;
 
--- INSCRICAO POR ATIVIDADE
+-- INSCRICAO POR ATIVIDADE => CONCLUIDO
 CREATE OR REPLACE FUNCTION inscricao_por_atividade(id_grupo_inscricao TEXT, id_atividade_inscricao TEXT) RETURNS VOID AS $inscricao_por_atividade$
 DECLARE
   id_atividade_insc    INT := id_atividade_inscricao;
@@ -217,7 +214,7 @@ BEGIN
 END;
 $inscricao_por_atividade$ LANGUAGE plpgsql;
 
--- ASSOCIAR EVENTO A UMA INSTITUICAO
+-- ASSOCIAR EVENTO A UMA INSTITUICAO => CONCLUIDO
 CREATE OR REPLACE FUNCTION associar_evento_instituicao(id_evento_associar TEXT, id_instituicao_associar TEXT) RETURNS VOID AS $associar_evento_instituicao$
 DECLARE
   criar_instituicao_evento TEXT := 'insert into EventoInstituicao values (default, ' || id_evento_associar || ', ' || id_instituicao_associar || ')';
@@ -238,23 +235,20 @@ DECLARE
   id_inscricao_desconto || ') - ((select valor_inscricao from Inscricao where id_inscricao = ' || id_inscricao_desconto
   || ') * 0.20) where id_inscricao = ' || id_inscricao_desconto || ';';
 BEGIN
-  --   ALTERAR METODO
   IF (SELECT status_pagamento FROM inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INTEGER)) = 'PAGO' THEN
     RAISE EXCEPTION 'Não se pode Aplicar desconto em uma Inscrição que ja Foi Paga';
   END IF;
-  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo IN (SELECT id_grupo FROM Inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INT))) = 1 THEN
+  IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo IN (SELECT id_grupo FROM Inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INT))) BETWEEN 10 AND 19 THEN
     EXECUTE inscricao_desconto_10;
-  --     RAISE INFO 'Desconto de 10% Aplicado';
   END IF;
   IF (SELECT count(*) FROM GrupoUsuario WHERE id_grupo IN (SELECT id_grupo FROM Inscricao WHERE id_inscricao = cast(id_inscricao_desconto AS INT))) >= 20 THEN
     EXECUTE inscricao_desconto_20;
-  --     RAISE INFO 'Desconto de 20% Aplicado';
   END IF;
-  RAISE INFO 'Desconto Aplicado';
+  RAISE NOTICE 'Desconto Aplicado';
 END;
 $aplicar_desconto$ LANGUAGE plpgsql;
 
--- FUNCAO PAGAR INSCRICAO
+-- FUNCAO PAGAR INSCRICAO => CONCLUIDO
 CREATE OR REPLACE FUNCTION pagar_inscricao(id_inscricao_pagamento TEXT, valor_pagar TEXT) RETURNS VOID AS $pagar_inscricao$
 DECLARE
   pagar_inscricao TEXT := 'UPDATE Inscricao SET status_pagamento = ''PAGO'' WHERE id_inscricao = ' ||
@@ -279,7 +273,7 @@ BEGIN
 END;
 $pagar_inscricao$ LANGUAGE plpgsql;
 
--- CANCELAR INSCRICAO
+-- CANCELAR INSCRICAO => CONCLUIDO
 CREATE OR REPLACE FUNCTION cancelar_inscricao(id_inscricao_cancelar TEXT) RETURNS VOID AS $cancelar_inscricao$
 DECLARE
   cancelar_inscricao      TEXT := 'update Inscricao set status_inscricao = ''CANCELADA'' where id_inscricao = ' || id_inscricao_cancelar;
@@ -300,10 +294,10 @@ BEGIN
 END;
 $cancelar_inscricao$ LANGUAGE plpgsql;
 
--- FUNCAO PARA CONCLUIR INSCRICAO
+-- FUNCAO PARA CONCLUIR INSCRICAO => CONCLUIDO
 CREATE OR REPLACE FUNCTION concluir_inscricao(id_inscricao_concluir TEXT) RETURNS VOID AS $concluir_inscricao$
 DECLARE
-  concluir_inscricao TEXT := 'update Inscricao set status_inscricao = ''CONCLUIDA''  ';
+  concluir_inscricao TEXT := 'update Inscricao set status_inscricao = ''CONCLUIDA'' WHERE ID_INSCRICAO = ' || id_inscricao_concluir;
 BEGIN
   IF (SELECT status_pagamento FROM Inscricao WHERE id_inscricao = cast(id_inscricao_concluir AS INTEGER)) = 'PAGO' THEN
     RAISE EXCEPTION 'Sua Inscrição não foi Paga, Pague sua Inscricao';
@@ -317,7 +311,8 @@ $concluir_inscricao$ LANGUAGE plpgsql;
 
 
 -- ========================================================================  CRIANDO TRIGGERS  ====================================================================
--- Verificando email usuario
+
+-- VALIDANDO CADASTRO USUARIO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_usuario() RETURNS TRIGGER AS $validar_cadastro_usuario$
 BEGIN
   IF new.email IN (SELECT email FROM usuario) THEN
@@ -328,25 +323,14 @@ END;
 $validar_cadastro_usuario$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_usuario BEFORE INSERT ON Usuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_usuario();
 
--- VALIDANDO CADASTRO ATIVIDADE
+-- VALIDANDO CADASTRO ATIVIDADE => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_atividade() RETURNS TRIGGER AS $validar_cadastro_atividade$
 BEGIN
-  --     IF (SELECT periodo_inicio FROM Periodo WHERE id_periodo in
-  --                                                  (SELECT periodo_evento FROM Evento where Evento.id_evento = new.id_evento)) >
-  --        (SELECT periodo_inicio FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
-  --       RAISE EXCEPTION 'O periodo da Atividade é Inferior a Data de Inicio do Evento';
-  --     END IF;
-  --     IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
-
-  --                                                  (SELECT periodo_evento FROM Evento where Evento.id_evento = new.id_evento)) <
-  --        (SELECT periodo_fim FROM periodo WHERE Atividade.id_periodo = new.id_periodo) THEN
-  --       RAISE EXCEPTION 'A Data para Termino da Atividade Corresponde a uma Data Apos o Fim do Evento';
-  --     END IF;
-  --     IF (SELECT periodo_fim FROM Periodo WHERE id_periodo in
-  --                                                  (SELECT periodo_evento FROM Evento where id_evento = new.id_evento)) <
-  --        (SELECT periodo_inicio FROM periodo where id_periodo = new.id_periodo) THEN
-  --       RAISE EXCEPTION 'O Periodo Informado Refere - se a uma Data Depois do Evento';
-  --     END IF;
+  IF((SELECT periodo_inicio FROM Periodo WHERE Periodo.id_periodo = NEW.id_periodo) IN
+     (SELECT periodo_inicio FROM Periodo
+       INNER JOIN Atividade A ON Periodo.id_periodo = A.id_periodo INNER JOIN Evento E ON A.id_evento = E.id_evento WHERE E.status_evento NOT ILIKE 'CONCLUIDO' OR 'CANCELADO')) THEN
+        RAISE EXCEPTION 'JA POSSUI UMA ATIVIDADE QUE INICIA NESSE PERIODO';
+  END IF;
   IF new.id_evento NOT IN (SELECT id_evento FROM EventoInstituicao) THEN
     RAISE EXCEPTION 'O Evento Informado não possui Uma Instituicao Associada, Portanto Atividades estão Insdiponiveis Temporariamente';
   END IF;
@@ -371,7 +355,7 @@ END;
 $validar_cadastro_atividade$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_atividade BEFORE INSERT ON Atividade FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_atividade();
 
--- VALIDANDO CADASTRO GRUPO
+-- VALIDANDO CADASTRO GRUPO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_grupo() RETURNS TRIGGER AS $validar_cadastro_grupo$
 BEGIN
   IF new.nome IN (SELECT nome FROM grupo) THEN
@@ -382,7 +366,7 @@ END;
 $validar_cadastro_grupo$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_grupo BEFORE INSERT ON Grupo FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo();
 
--- VALIDANDO PERIODO
+-- VALIDANDO PERIODO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_periodo() RETURNS TRIGGER AS $validar_periodo$
 BEGIN
   IF new.periodo_fim < new.periodo_inicio THEN
@@ -399,7 +383,7 @@ END;
 $validar_periodo$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_periodo BEFORE INSERT OR UPDATE ON Periodo FOR EACH ROW EXECUTE PROCEDURE validar_periodo();
 
--- VALIDANDO EVENTO
+-- VALIDANDO EVENTO => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_evento() RETURNS TRIGGER AS $validar_cadastro_evento$
 BEGIN
   IF new.id_tipo_evento NOT IN (SELECT id_tipo_evento FROM TipoEvento) THEN
@@ -414,21 +398,12 @@ BEGIN
   IF new.nome_evento IN (SELECT nome_evento FROM Evento) THEN
     RAISE EXCEPTION 'Esse nome de Evento ja foi Cadastrado';
   END IF;
-  IF new.valor_total_evento < 0 THEN
-    RAISE EXCEPTION 'O Valor Total do Evento não pode Ser Negativo';
-  END IF;
-  IF new.valor_total_evento > 0 THEN
-    RAISE EXCEPTION 'O Valor Total do Evento Precisa ser Zero';
-  END IF;
-  IF new.data_criacao < current_date THEN
-    RAISE EXCEPTION 'A Data do Evento Não pode Ser Inferior a Data Atual';
-  END IF;
   RETURN new;
 END;
 $validar_cadastro_evento$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_evento BEFORE INSERT ON Evento FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_evento();
 
--- VALIDANDO INSTITUIÇÕES
+-- VALIDANDO INSTITUIÇÕES => CONCLUIDO
 CREATE OR REPLACE FUNCTION validar_cadastro_instituicao()
   RETURNS TRIGGER AS $validar_cadastro_instituicao$
 BEGIN
@@ -515,7 +490,34 @@ $validar_cadastro_grupo_usuario$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_cadastro_grupo_usuario BEFORE INSERT OR UPDATE ON GrupoUsuario FOR EACH ROW EXECUTE PROCEDURE validar_cadastro_grupo_usuario();
 
 
+-- CRIANDO TRIGGER PERMISSAO USER
+CREATE OR REPLACE FUNCTION permissao_user() RETURNS TRIGGER AS $$
+DECLARE
+  usuario TEXT;
+BEGIN
+    SELECT USER INTO usuario;
+    IF usuario NOT LIKE 'USUARIO_GRUPO' AND usuario NOT LIKE 'postgres' THEN
+      RAISE EXCEPTION 'O USUARIO NAO TEM PERMISSAO PARA ALTERAÇÃO DE DADOS';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Usuario EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Grupo EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON GrupoUsuario EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Inscricao EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Evento EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON ItemInscricao EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON Periodo EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON EventoInstituicao EXECUTE PROCEDURE permissao_user();
+CREATE TRIGGER trigger_user BEFORE INSERT OR DELETE ON TipoEvento EXECUTE PROCEDURE permissao_user();
+
+
 -- ============================================================   POPULAR BANCO DE DADOS  ===============================================================
+CREATE USER ADMINISTRADOR WITH PASSWORD '123';
+CREATE USER USUARIO_GRUPO WITH PASSWORD '123';
+
+SELECT USER;
 
 -- CRIANDO USUARIO
 SELECT inserir('Usuario', ('default, ''Kassio Lucas de Holanda'', ''kassioholandaleodido@gmail.com'', current_date'));
@@ -574,6 +576,7 @@ SELECT participar_grupo('2', '2');
 -- INFORMAR ID_GRUPO E ID_EVENTO
 SELECT inscricao_completa('2', '3');
 
+
 -- INSCRICAO POR ATIVIDADE
 -- INFORMAR ID_GRUPO E ID_ATIVIDADE
 SELECT inscricao_por_atividade('2', '6');
@@ -582,13 +585,12 @@ SELECT inscricao_por_atividade('1', '4');
 
 -- APLICANDO DESCONTOS
 -- INFOROMAR ID_INCRICAO
-SELECT aplicar_desconto('4');
-SELECT * FROM Inscricao;
+SELECT aplicar_desconto('10');
 
 
 -- PAGAR INSCRICAO
+-- INFORMAR ID_INSCRICAO E VALOR A PAGAR
 SELECT pagar_inscricao('4', '31.95');
-SELECT * FROM Inscricao;
 
 
 -- CANCELAR INSCRICAO
