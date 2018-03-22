@@ -1,0 +1,54 @@
+.file-path-wrapper{
+    display: none;
+}
+#id_image_container{
+        margin-left: 10.5em;
+}
+#id_email_container{
+    width: 120%;
+}
+img.responsive-img, video.responsive-video {
+    width: 250px;
+    height: 230px;
+    float: right;
+}
+
+#id_nome_container {
+    width: 60%;
+}
+
+#id_telefone_container {
+    width: 60%;
+    margin-top: -143px;
+}
+
+#id_cpf_container {
+    width: 60%;
+    margin-top: -70px;
+}
+
+@media only screen and (max-width: 700px) {
+    img.responsive-img {
+        width: 80px;
+        height: 80px;
+    }
+      #id_nome_container {
+    width: 70%;
+}
+#id_image_container{
+        margin-left: 0px;
+}
+.file-path-wrapper{
+    display: block;
+}
+
+#id_telefone_container {
+    width: 100%;
+    margin-top: 0px;
+}
+
+#id_cpf_container {
+    width: 100%;
+    margin-top: 0px;
+}
+}

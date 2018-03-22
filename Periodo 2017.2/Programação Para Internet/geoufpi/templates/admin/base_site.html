@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_static static material_form %}
+{% load static %}
+{% block extrastyle %}
+    <link type='text/css' id="tema" rel="stylesheet" href="{% static 'css/arquivo.css' %}"/>
+
+{% endblock %}
+{% block userphoto %}
+    {% if user.image %}
+        <a href="#"><img class="circle" src="{{ user.image.url }}"></a>
+    {% else %}
+        <a href="#"><img class="circle" src="{% static 'material/imgs/user.png' %}"></a>
+    {% endif %}
+{% endblock %}
+{% block extrajs %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if (document.getElementById('id_nome_do_condutor_container') != null) {
+                document.getElementById('id_nome_do_condutor_container').style.display = "none";
+                document.getElementById('id_placa_container').style.display = "none";
+                document.getElementById('id_bilhete_ida_container').style.display = "none";
+                document.getElementById('id_bilhete_volta_container').style.display = "none";
+            }
+        });
+
+        $("#id_transporte").change(function () {
+
+            el = document.getElementById('id_transporte');
+            if (el.options[el.selectedIndex].text == "Moto" || el.options[el.selectedIndex].text == "Carro") {
+                document.getElementById('id_nome_do_condutor_container').style.display = "block";
+                document.getElementById('id_placa_container').style.display = "block";
+                document.getElementById('id_bilhete_ida_container').style.display = "none";
+                document.getElementById('id_bilhete_volta_container').style.display = "none";
+                $("#id_nome_do_condutor").prop('required', true);
+                $("#id_placa").prop('required', true);
+
+
+            }
+            if (el.options[el.selectedIndex].text == "Onibus" || el.options[el.selectedIndex].text == "Aviao") {
+                document.getElementById('id_nome_do_condutor_container').style.display = "none";
+                document.getElementById('id_placa_container').style.display = "none";
+                document.getElementById('id_bilhete_ida_container').style.display = "block";
+                document.getElementById('id_bilhete_volta_container').style.display = "block";
+                $("#id_bilhete_ida").prop('required', true);
+                $("#id_bilhete_volta").prop('required', true);
+
+
+            }
+        });
+
+        var url = $(location).attr('href');
+        url = url.split("/")
+        console.log(url[3])
+        if (url[3].toLowerCase() == "matematica") {
+            document.getElementById('imagem').src = "{% static 'admin/matematica.png' %}";
+        }
+
+    </script>
+{% endblock %}

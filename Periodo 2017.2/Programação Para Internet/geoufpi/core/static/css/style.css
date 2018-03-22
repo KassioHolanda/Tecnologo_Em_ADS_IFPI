@@ -1,0 +1,134 @@
+.page-footer, nav {
+	padding-top: 20px;
+	color: #FFFFFF;
+	text-color: #FFFFFF;
+	background-color: #2865bd;
+}
+.page-footer a{
+	padding-top: 20px;
+	color: #FFFFFF;
+
+}
+.nav-wrapper{
+	margin-top: -20px;
+}
+h2{
+		color: black;
+		padding-bottom: 900px;
+	}
+h3 {
+	font-size: 2.2rem;
+	line-height: 110%;
+	margin: 1.46rem 0 1.168rem 0;
+	text-align: center;
+	margin-bottom: 4px;
+	margin-top: 12px;
+}
+
+h1{
+	font-size: 2.0em;
+	font-family: Overlock;
+	text-align: left;
+	margin-left: 3.1em;
+
+
+}
+.row{
+	text-align: -webkit-center;
+}
+.card{
+	width: 70%;
+	float: center;
+}
+@media screen and (max-width: 765px){
+	h1{
+		font-size: 2.8em;
+		font-family: Overlock;
+	}
+	h2{
+		color: black;
+	}
+	h3{
+		font-size: 3.8em;
+		margin-top: 17px;
+
+	}
+	.nav-wrapper{
+		margin-top: -20px;
+		font-size: 5px;
+		text-align: center;
+
+	}
+	a.brand-logo.center{
+		font-size: 1.8em;
+
+	}
+	.logo {
+		left: 0!important;
+		text-align: center;
+
+	}
+	.row.col.s6{
+		width: 100%;
+	}
+	.card{
+		width: 100%;
+		float: center;
+	}
+	span{
+		font-size: 14px;
+	}
+	.row .col.s6 {
+		width: 100%;
+		margin-left: auto;
+		left: auto;
+		right: auto;
+	}
+
+}
+@media screen and (max-width: 480px){
+	h1{
+		font-size: 1.8em;
+		font-family: Overlock;
+		text-align: center;
+		margin-left: 0px;
+	}
+	h3{
+		font-size: 3.5em;
+		margin-top: 17px;
+		text-align: center;
+	}
+	.nav-wrapper{
+		margin-top: -20px;
+		font-size: 5px;
+		text-align: center;
+
+	}
+	a.brand-logo.center{
+		font-size: 1.8em;
+
+	}
+	.logo {
+		left: 0!important;
+		text-align: center;
+
+	}
+	.row.col.s6{
+		width: 100%;
+	}
+	.card{
+		width: 100%;
+		float: center;
+	}
+	span{
+		font-size: 14px;
+	}
+	.row .col.s6 {
+		width: 100%;
+		margin-left: auto;
+		left: auto;
+		right: auto;
+	}
+
+}
+

@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_static material_admin %}
+{% load i18n admin_static static material_form %}
+{% load static %}
+{% block extrastyle %}
+{{ block.super }}
+{{ media.css }}
+
+<style>
+
+    .btn {
+        background-color: #56B6DE;
+    }
+    ul:not(.browser-default){
+        background-color: #0E1E28;
+    }
+    .input-field .prefix.active{
+        color: #56B6DE;
+    }
+   input:not([type]):focus:not([readonly])+label,input[type=date]:focus:not([readonly])+label,input[type=datetime-local]:focus:not([readonly])+label,input[type=datetime]:focus:not([readonly])+label,input[type=email]:focus:not([readonly])+label,input[type=number]:focus:not([readonly])+label,input[type=password]:focus:not([readonly])+label,input[type=search]:focus:not([readonly])+label,input[type=tel]:focus:not([readonly])+label,input[type=text]:focus:not([readonly])+label,input[type=time]:focus:not([readonly])+label,input[type=url]:focus:not([readonly])+label,textarea.materialize-textarea:focus:not([readonly])+label {
+     color:#56B6DE
+   }
+
+    .nav-wrapper, .breadcrumbs, .topbar, #nav-mobile, select.material-ignore{
+        background-color: #102331;
+    }
+    .material-icons, h6{
+        color: #008BF3;
+    }
+    #slide-out, .userView{
+        background-color: #0E1E28;
+        color: white;
+    }
+    .app, .content, .card, .card-title{
+        background-color: #102331;
+    }
+    #changelist-search{
+        background-color: #102331;
+    }
+    .card{
+        padding: 4px;
+
+    }
+
+    tbody,html,thead t, .actions-card span.action-counter, .actions-card span.all, .actions-card span.clear, .actions-card span.question{
+        color: white;
+    }
+    .side-nav li>a,.side-nav li>a>i.material-icons{
+        color: white;
+    }
+</style>
+{% endblock %}
+
+

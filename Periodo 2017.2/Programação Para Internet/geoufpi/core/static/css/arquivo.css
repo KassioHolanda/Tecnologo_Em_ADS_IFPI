@@ -1,0 +1,16 @@
+.btn {
+    background-color: #2865BD;
+}
+.input-field .prefix.active{
+    color: #2865BD;
+}
+input:not([type]):focus:not([readonly])+label,input[type=date]:focus:not([readonly])+label,input[type=datetime-local]:focus:not([readonly])+label,input[type=datetime]:focus:not([readonly])+label,input[type=email]:focus:not([readonly])+label,input[type=number]:focus:not([readonly])+label,input[type=password]:focus:not([readonly])+label,input[type=search]:focus:not([readonly])+label,input[type=tel]:focus:not([readonly])+label,input[type=text]:focus:not([readonly])+label,input[type=time]:focus:not([readonly])+label,input[type=url]:focus:not([readonly])+label,textarea.materialize-textarea:focus:not([readonly])+label {
+ color:#2865BD;
+}
+
+.nav-wrapper, .userView, .breadcrumbs, .topbar{
+    background-color: #2865BD;
+}
+.material-icons, h6{
+    color: #2865BD;
+}

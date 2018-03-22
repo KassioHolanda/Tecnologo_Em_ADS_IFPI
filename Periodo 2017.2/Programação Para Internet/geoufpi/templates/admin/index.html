@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static material_admin %}
+{% load material_form %}
+
+{% block topbar %}
+    <nav class="topbar">
+        <div class="nav-wrapper">
+            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            <div class="brand-logo" style="tex">
+
+                {% block page_title %}
+                    {{ user.teste|default:'Bem-Vindo' }}
+                {% endblock %}
+            </div>
+            <ul id="nav-mobile" class="button right">
+
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'admin:logout' %}">{% trans 'Sair' %}</a></li>
+
+                {% else %}
+                    <li><a href="{% url 'login' %}" data-turbolinks="false"><i
+                            class="material-icons right">lock_open</i>{% trans "Entrar" %}</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endblock topbar %}
+{% block breadcrumbs_items %}
+    <a href="{% url 'admin:index' %}" style="font-size: 15px">{% trans 'Inicio' %}</a>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="app-list">
+            {% get_app_list request as app_list %}
+            {% for app in app_list %}
+                <div class="app">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title ">{{ app.name }}</span>
+                            <div class="row">
+                                {% for model in app.models %}
+                                    <div class="app-item col s6 m6 l4">
+                                        <a href="{{ model.admin_url }}">
+                                            {{ model.icon }}
+                                            <h6>{{ model.name }}</h6>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block extrajs %}
+    <script type="text/javascript">
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            $('#nav-mobile li.senha').remove()
+        }
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+        $().ready(function () {
+            $('select').material_select();
+        });
+    </script>
+{% endblock %}

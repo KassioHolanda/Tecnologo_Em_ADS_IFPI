@@ -1,0 +1,1 @@
+web: gunicorn ead.wsgi --log-file -

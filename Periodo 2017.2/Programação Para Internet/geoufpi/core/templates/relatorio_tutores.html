@@ -1,0 +1,341 @@
+<!doctype html>
+{% load static %}
+
+<html lang=pt-br>
+<head>
+    <!--<meta charset="utf-8">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="">
+    <style>
+
+        font{
+
+        }
+
+        /*.cabecalho{*/
+             /*width: 100px; !* you can use % *!*/
+            /*margin-top:-100px;*/
+            /*padding: 0;*/
+            /*transform:  translateY(-80%);*/
+        /*}*/
+
+        h1 {
+            text-align: center;
+            line-height: 20px;
+            /*cellpadding:"4"*/
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        body {
+            font-size: 8pt;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-family: "Arial";
+
+        }
+        @page {
+            /*size: letter landscape;*/
+            margin: 0.5cm;
+        }
+        /*h1 { display: block; height: 400px; line-height: 400px; text-align: center; }*/
+
+        td, th {
+            border: 0.5px solid black;
+            padding-bottom: 1px;
+        }
+
+        .fadex{
+            width: 150px;
+        }
+        .detalhes{
+            width: 250px;
+        }
+
+        .td0,.tr0{
+            padding-bottom: 0px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="cabecalho">
+    <table class="table0">
+        <tr class="tr0" style="border: 0px;">
+
+            <td class="td0">.<img align="left" class="fadex"  src="https://image.ibb.co/iKpJJR/fadex.jpg" alt=""></td>
+            <td>.<img align="right" class="detalhes"  src="https://image.ibb.co/dfAsdR/detalhes.jpg" alt=""></td>
+        </tr>
+    </table>
+
+
+</div>
+
+
+<table cellpadding="4">
+
+    <tr>
+        <td colspan="5">
+            <h1>RELATÓRIO DE VIAGEM</h1>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="font-size: 12px"> CURSO /CONVENIO OU SETOR SOLICITANTE</td>
+        <td> DATA/LOCAL</td>
+    </tr>
+    <tr>
+        <td align="left" colspan="4"> Contrato nº 48/2017 - Oferta do curso já em andamento no âmbito do sistema Universidade Aberta do Brasil.
+        </td>
+        <td rowspan="3"> Teresina PI, {{data_atual  }}</td>
+    </tr>
+    <tr>
+        <td align="left"><b>RUBRICA:</b></td>
+        <td colspan=3 align="left"> 33.90.14 Diárias - Pessoa Civil</td>
+
+
+    <tr>
+        <td  colspan="2" align="left"><b> Banco/ Agencia: BB - 3791-5</b></td>
+        <td align="center"><b>Conta Corrente</b></td>
+        <td align="left"><b> 10.292-X</b></td>
+    </tr>
+
+    <tr>
+        <td colspan="5" align="left">A Fundação Cultural e de Fomento à Pesquisa, Ensino e Extensão - FADEX</td>
+    </tr>
+    <tr>
+        <td colspan="5" align="left">Apresentamos relatório de viagem executada em conformidade com a respectiva
+            solicitação de diária, realizada pelo requerente abaixo identificado.
+        </td>
+    </tr>
+    <tr>
+        <td align="left">Nome:</td>
+        <td colspan="4" align="left">{{tutor.nome}} </td>
+    </tr>
+    <tr>
+        <td align="left">Endereço:</td>
+        <td colspan="4" align="left">{{tutor.logradouro}} , {{tutor.numero}}</td>
+    </tr>
+    <tr>
+        <td align="left">Bairro:</td>
+        <td align="left">{{tutor.bairro}}</td>
+        <td align="left">Cidade/UF: {{tutor.cidade}} ({{tutor.estado}})</td>
+        <td align="left" colspan="2">CEP: {{tutor.cep}}</td>
+    </tr>
+    <tr>
+        <td align="left">CPF:</td>
+        <td align="left">{{tutor.cpf}}</td>
+        <td align="left">RG:{{tutor.rg}}</td>
+        <td align="left" colspan="2">Órgão expedidor: {{tutor.expedidor}}</td>
+    </tr>
+    <tr>
+        <td align="left">Telefone:</td>
+        <td align="left">{{tutor.telefone}}</td>
+        <td align="left" colspan="3	">E-mail:{{tutor.email}}</td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <h1>DADOS DA VIAGEM</h1>
+        </td>
+    </tr>
+
+    <td colspan="5" rowspan="1" align="left">
+    {{relatorio.dados_da_viagem}}
+    </td>
+    <tr>
+        <td colspan="5" align="left">
+            TIPO DE DIÁRIAS
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+        {% if relatorio.is_nacional %}
+        (x)Nacionais
+        {% else %}
+        ( )Nacionais
+        {% endif %}
+        </td>
+        <td colspan="4" align="left">
+        {% if relatorio.is_internacional %}
+        (x)Internacionais
+        {% else %}
+        ( )Internacionais
+        {% endif %}</td>
+    </tr>
+    <tr>
+        <td align="left">Localidade de destino:</td>
+        <td colspan="4" align="left">{{relatorio.viagem.polo}} </td>
+    </tr>
+    <tr>
+        <td align="left">Data da viagem</td>
+        <td align="left">Ida: </td>
+        <td align="left">{{relatorio.viagem.ida}}</td>
+        <td align="left">Volta:</td>
+        <td align="left">{{relatorio.viagem.retorno}}</td>
+    </tr>
+    <tr>
+        <td align="left">Nº de Diárias Recebidas</td>
+        <td align="left">{{ relatorio.viagem.diarias }}</td>
+        <td align="left">Valor Unitário R$ 177,00</td>
+        <td align="left" colspan="2">(Cento e setenta e sete reais)</td>
+    </tr>
+
+    {% if relatorio.viagem.is_ajuda %}
+
+    <tr>
+        <td colspan="2" align="left">Adicional de embarque e desembarque</td>
+        <td colspan="1" align="left" >R$ 95,00 &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  Recebido:</td>
+        <td colspan="2" align="left">Sim(&nbsp;x&nbsp;) Não(&nbsp;&nbsp; )</td>
+    </tr>
+    {% else %}
+         <tr>
+        <td colspan="2" align="left">Adicional de embarque e desembarque</td>
+        <td colspan="1" align="left" >R$ 95,00 &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  Recebido:</td>
+        <td colspan="2" align="left">Sim(&nbsp;&nbsp;) Não(&nbsp;x&nbsp;)</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td align="left">Nº memo da viagem</td>
+        <td align="left" colspan="1">{{ solicitacao.memo }} </td>
+        <td align="left" colspan="1">Valor Total: R$ {{relatorio.viagem.valor_total_str}} </td>
+        <td align="left" colspan="2">({{relatorio.viagem.extenso}})</td>
+    </tr>
+
+    <tr>
+        <td colspan="5">
+            <h1 align="left">Resultados alcançados: Descrever detalhadamente as atividades.</h1>
+        </td>
+    </tr>
+    <td colspan="5" rowspan="1" align="left">{{relatorio.resultados}}
+</td>
+    <tr>
+        <td colspan="5" >
+            <h1><br>Assinatura do Favorecido:____________________________________________________</h1>
+        </td>
+    </tr>
+    <tr>
+    <td colspan="5" rowspan="1" align="left">Meio de Transporte:
+        {% if relatorio.is_moto %}
+        (  X ) Moto -
+        {% else %}
+        (     ) Moto -
+        {% endif %}
+        {% if relatorio.is_carro %}
+        (  X) Carro -
+        {% else %}
+        (   ) Carro -
+        {% endif %}
+        {% if relatorio.is_onibus %}
+        ( X  ) Ônibus -
+        {% else %}
+        (   ) Ônibus -
+        {% endif %}
+        {% if relatorio.is_aviao %}
+        (  X ) Avião -
+        {% else %}
+        (     ) Avião -
+        {% endif %}
+        {% if relatorio.is_outros %}
+        ( X ) Outros </td>
+        {% else %}
+        (     ) Outros </td>
+        {% endif %}
+
+    </tr>
+    <tr>
+    {% if relatorio.is_onibus or relatorio.is_aviao %}
+
+    <td colspan="5" rowspan="1" align="left">Nº bilhete:  ida =  {{ relatorio.bilhete_ida }} volta = {{ relatorio.bilhete_volta }} </td>
+    {% else %}
+            <td colspan="5" rowspan="1" align="left">Nº bilhete: </td>
+
+    {% endif %}
+
+    </tr>
+    <tr>
+        <td colspan="5" rowspan="1" align="left">Se veículo:
+            {% if relatorio.is_oficial %}
+            (   x  ) Oficial -
+            {% else %}
+            (     ) Oficial -
+            {% endif %}
+
+            {% if relatorio.is_locado %}
+            (   x )Locado -
+            {% else %}
+            (    )Locado -
+            {% endif %}
+            {% if relatorio.is_proprio %}
+            (   x  ) Próprio -
+            {% else %}
+            (     ) Próprio -
+            {% endif %}
+            {% if relatorio.is_outros %}
+            (   x  ) Outros</td>
+            {% else %}
+            (     ) Outros</td>
+            {% endif %}
+
+    </tr>
+    <tr>
+        {% if relatorio.is_moto or relatorio.is_carro %}
+        <td colspan="5" rowspan="1" align="left">Nome do condutor: {{ relatorio.nome_do_condutor }} </td>
+        {% else %}
+        <td colspan="5" rowspan="1" align="left">Nome do condutor:  </td>
+        {% endif %}
+
+    </tr>
+    <tr>
+        {% if relatorio.is_moto or relatorio.is_carro %}
+            <td colspan="5" rowspan="1" align="left">Placa: {{ relatorio.placa }}</td>
+        {% else %}
+            <td colspan="5" rowspan="1" align="left">Placa: </td>
+        {% endif %}
+
+    </tr>
+    <tr>
+        <td colspan="3"  align="left">DATA ______/______/_______ </td>
+        <td colspan="2"  align="left">DATA ______/______/_______</td>
+    </tr>
+     <tr>
+         <td colspan="2">
+             <br>
+             <br>
+             .....................ASSINATURA .........................
+            <br>APROVAÇÃO DA FADEX
+
+         </td>
+           <td colspan="3">
+             <br>
+             <br>
+             .....................ASSINATURA .........................
+            <br>ASSINATURA DO COORDENADOR
+
+         </td>
+    </tr>
+     <tr>
+         <td colspan="2" align="left">
+             Controle FADEX
+             <br>Recebi em:_____/_____/_____
+
+         </td>
+           <td colspan="3" align="left">
+
+             <br>
+             Assinatura
+
+         </td>
+    </tr>
+
+
+</table>
+
+
+</body>
+</html>

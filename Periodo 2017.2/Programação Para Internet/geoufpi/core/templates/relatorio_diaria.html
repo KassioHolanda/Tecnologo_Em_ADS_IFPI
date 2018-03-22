@@ -1,0 +1,140 @@
+<!doctype html>
+
+<html lang=pt-br>
+<head>
+    <!--<meta charset="utf-8">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="">
+    <style>
+
+        font{
+
+        }
+
+        /*.cabecalho{*/
+             /*width: 100px; !* you can use % *!*/
+            /*margin-top:-100px;*/
+            /*padding: 0;*/
+            /*transform:  translateY(-80%);*/
+        /*}*/
+
+        h1 {
+            text-align: center;
+            line-height: 20px;
+            /*cellpadding:"4"*/
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        body {
+            font-size: 9px;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-family: "Calibri";
+
+        }
+        @page {
+            size: letter landscape;
+            margin: 0.5cm;
+            /*margin: 0.5cm;*/
+
+        }
+        /*h1 { display: block; height: 400px; line-height: 400px; text-align: center; }*/
+
+        td, th {
+            border: 0.5px solid black;
+            padding-bottom: 1px;
+        }
+
+        .fadex{
+            width: 150px;
+        }
+        .detalhes{
+            width: 250px;
+        }
+
+        .td0,.tr0{
+            padding-bottom: 0px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="cabecalho">
+</div>
+
+
+<table cellpadding="4">
+
+    <tr>
+        <td colspan="18">
+            <h1>UAB IV - COORDENAÇÃO DE CURSO E TUTORIA</h1>
+        </td>
+    </tr>
+     <tr>
+        <td colspan="18">
+            <h2>Justificativa : {{ solicitacao.justificativa }} </h2>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" > {% trans 'ORIGEM' %}  </td>
+        <td colspan="2" > {% trans 'DESTINO' %}</td>
+        <td colspan="2" > {% trans 'PROFESSOR' %}   </td>
+        <td colspan="2" > CPF </td>
+        <td colspan="2" > RG </td>
+        <td colspan="2" > {% trans 'DADOS BANCARIOS' %} </td>
+        <td colspan="2" > {% trans 'ENDEREÇO' %}  </td>
+        <td colspan="2" > {% trans 'DATAS DA VIAGEM' %} </td>
+        <td colspan="1" > {% trans 'QTD. DIARIAS' %} </td>
+        <td colspan="1" > {% trans 'VALOR' %}(R$) </td>
+    </tr>
+    {% for v in viagem %}
+     <tr>
+         <td colspan="2" align="center">{{ v.origem }}</td>
+         <td colspan="2" align="center">{{ v.polo.nome }}</td>
+         <td colspan="2" align="left">{{v.tutor.nome |upper}}</td>
+         <td colspan="2" align="center">{{ v.tutor.cpf }}</td>
+         <td colspan="2" align="center">{{ v.tutor.rg }} {{ v.tutor.expedidor }}</td>
+         <td colspan="2" align="left">
+            {{ v.tutor.banco|upper }}
+             <br>AGENCIA: {{ v.tutor.agencia }}
+             <br>CONTA: {{ v.tutor.conta  }}
+             <br>
+         </td>
+         <td colspan="2" align="left">
+             {{ v.tutor.logradouro }} ,{{ v.tutor.numero }}
+             <br>{{ v.tutor.bairro }} - {{ v.tutor.cidade }} / {{ v.tutor.estado }}
+             <br>CEP: {{ v.tutor.cep }}
+         </td>
+         <td colspan="2" align="left">
+             IDA:{{ v.ida |date:'d-m-Y' }}
+             <br>
+             <br>
+             <br>
+             VOLTA: {{ v.retorno |date:'d-m-Y' }}
+
+
+         </td>
+         <td colspan="1" align="center">{{ v.diarias }}</td>
+         <td colspan="1" align="center">{{ v.valor_total_str }}</td>
+    </tr>
+    {% endfor %}
+
+     <tr>
+
+        <td colspan="16" align="right"> {% trans 'TOTAL DE DIARIAS' %} </td>
+        <td colspan="1" > {{ solicitacao.qtd_diarias }} </td>
+        <td colspan="1" > {{ solicitacao.total }} </td>
+    </tr>
+
+</table>
+
+</body>
+</html>

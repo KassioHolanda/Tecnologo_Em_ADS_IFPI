@@ -1,0 +1,696 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-21 21:41-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\core\admin.py:41 .\core\admin.py:284
+msgid "viagem"
+msgstr ""
+
+#: .\core\admin.py:88 .\core\models.py:90 .\core\models.py:305
+msgid "Numero"
+msgstr "Numero"
+
+#: .\core\admin.py:214
+msgid "Endereço"
+msgstr ""
+
+#: .\core\admin.py:215
+msgid "Dados Bancarios"
+msgstr ""
+
+#: .\core\admin.py:216
+msgid "Conta"
+msgstr ""
+
+#: .\core\forms.py:10
+msgid "Username"
+msgstr ""
+
+#: .\core\forms.py:11
+msgid "Senha"
+msgstr ""
+
+#: .\core\forms.py:12 .\core\models.py:104
+msgid "Telefone"
+msgstr ""
+
+#: .\core\forms.py:22
+msgid "User"
+msgstr ""
+
+#: .\core\forms.py:23
+msgid "Password"
+msgstr ""
+
+#: .\core\forms.py:36
+msgid "New password"
+msgstr ""
+
+#: .\core\forms.py:42
+msgid "Username ja existe"
+msgstr ""
+
+#: .\core\models.py:16
+msgid "Nome do Polo"
+msgstr ""
+
+#: .\core\models.py:22 .\core\models.py:83
+msgid "Polo"
+msgstr ""
+
+#: .\core\models.py:23
+msgid "Polos"
+msgstr ""
+
+#: .\core\models.py:29
+msgid "Masculino"
+msgstr ""
+
+#: .\core\models.py:30
+msgid "Feminino"
+msgstr ""
+
+#: .\core\models.py:34
+msgid "Coordenador Geral"
+msgstr ""
+
+#: .\core\models.py:35
+msgid "Coordenador Curso"
+msgstr ""
+
+#: .\core\models.py:36
+msgid "Coordenador de Tutoria"
+msgstr ""
+
+#: .\core\models.py:37
+msgid "Coordenador de Polo"
+msgstr ""
+
+#: .\core\models.py:38
+msgid "Professor Formador"
+msgstr ""
+
+#: .\core\models.py:39
+msgid "Professor Conteudista"
+msgstr ""
+
+#: .\core\models.py:40
+msgid "Assistente a Docencia"
+msgstr ""
+
+#: .\core\models.py:41 .\core\models.py:47 .\core\models.py:213
+#: .\core\models.py:219
+msgid "Outros"
+msgstr ""
+
+#: .\core\models.py:44
+msgid "Doutor"
+msgstr ""
+
+#: .\core\models.py:45
+msgid "Mestre"
+msgstr ""
+
+#: .\core\models.py:46
+msgid "Especialista"
+msgstr ""
+
+#: .\core\models.py:50
+msgid "Conta Corrente"
+msgstr ""
+
+#: .\core\models.py:51
+msgid "Conta Poupança"
+msgstr ""
+
+#: .\core\models.py:82
+msgid "usuario"
+msgstr ""
+
+#: .\core\models.py:84 .\core\models.py:199 .\core\models.py:311
+msgid "Curso"
+msgstr ""
+
+#: .\core\models.py:85
+msgid "Nome Completo"
+msgstr ""
+
+#: .\core\models.py:86
+msgid "Pais"
+msgstr ""
+
+#: .\core\models.py:87
+msgid "Cidade"
+msgstr ""
+
+#: .\core\models.py:88
+msgid "Bairro"
+msgstr ""
+
+#: .\core\models.py:96
+msgid "Tipo"
+msgstr ""
+
+#: .\core\models.py:97
+msgid "Formacao"
+msgstr ""
+
+#: .\core\models.py:99
+msgid "Estado"
+msgstr ""
+
+#: .\core\models.py:100
+msgid "Nome do Banco"
+msgstr ""
+
+#: .\core\models.py:101
+msgid "Agencia Bancaria"
+msgstr ""
+
+#: .\core\models.py:102
+msgid "Numero da Conta"
+msgstr ""
+
+#: .\core\models.py:105
+msgid "Orgao Expedidor"
+msgstr ""
+
+#: .\core\models.py:108 .\core\models.py:192
+msgid "Imagem"
+msgstr ""
+
+#: .\core\models.py:111
+msgid "Tipo de Conta"
+msgstr ""
+
+#: .\core\models.py:126
+msgid "Colaborador(a)"
+msgstr ""
+
+#: .\core\models.py:127
+msgid "Colaboradores"
+msgstr ""
+
+#: .\core\models.py:131
+msgid "tutor"
+msgstr ""
+
+#: .\core\models.py:132
+msgid "Data de Ida"
+msgstr ""
+
+#: .\core\models.py:133
+msgid "Data de retorno"
+msgstr ""
+
+#: .\core\models.py:134
+msgid "Cidade de Origem"
+msgstr ""
+
+#: .\core\models.py:135
+msgid "Cidade de Destino"
+msgstr ""
+
+#: .\core\models.py:137
+msgid "Ajuda com o transporte"
+msgstr ""
+
+#: .\core\models.py:138
+msgid "È Relatorio"
+msgstr ""
+
+#: .\core\models.py:139
+msgid "Diarias"
+msgstr ""
+
+#: .\core\models.py:185 .\core\models.py:222
+msgid "Viagem"
+msgstr ""
+
+#: .\core\models.py:186
+msgid "Viagens"
+msgstr ""
+
+#: .\core\models.py:190
+msgid "Nome do Curso"
+msgstr ""
+
+#: .\core\models.py:200
+msgid "Cursos"
+msgstr ""
+
+#: .\core\models.py:205
+msgid "Nacionais"
+msgstr ""
+
+#: .\core\models.py:206
+msgid "Internacionais"
+msgstr ""
+
+#: .\core\models.py:209
+msgid "Moto"
+msgstr ""
+
+#: .\core\models.py:210
+msgid "Carro"
+msgstr ""
+
+#: .\core\models.py:211
+msgid "Onibus"
+msgstr ""
+
+#: .\core\models.py:212
+msgid "Aviao"
+msgstr ""
+
+#: .\core\models.py:216
+msgid "Oficial"
+msgstr ""
+
+#: .\core\models.py:217
+msgid "Locado"
+msgstr ""
+
+#: .\core\models.py:218
+msgid "Proprio"
+msgstr ""
+
+#: .\core\models.py:223
+msgid "Dados da Viagem"
+msgstr ""
+
+#: .\core\models.py:224
+msgid "Resultados Alcançados"
+msgstr ""
+
+#: .\core\models.py:225
+msgid "Nome do condutor"
+msgstr ""
+
+#: .\core\models.py:226
+msgid "Placa do Veiculo"
+msgstr ""
+
+#: .\core\models.py:227
+msgid "Bilhete de Ida"
+msgstr ""
+
+#: .\core\models.py:229
+msgid "Tipo de Diaria"
+msgstr ""
+
+#: .\core\models.py:230
+msgid "Tipo de Veiculo"
+msgstr ""
+
+#: .\core\models.py:233
+msgid "Meio de Transporte"
+msgstr ""
+
+#: .\core\models.py:300
+msgid "Relatorio"
+msgstr ""
+
+#: .\core\models.py:301
+msgid "Relatorios"
+msgstr ""
+
+#: .\core\models.py:306
+msgid "Assunto"
+msgstr ""
+
+#: .\core\models.py:307
+msgid "Texto"
+msgstr ""
+
+#: .\core\models.py:308
+msgid "Destinatario"
+msgstr ""
+
+#: .\core\models.py:309
+msgid "Diretoria do Centro de Educação Aberta e à Distância - CEAD/UFPI"
+msgstr ""
+
+#: .\core\models.py:325 .\core\models.py:330
+msgid "Memorando"
+msgstr ""
+
+#: .\core\models.py:326
+msgid "Memorandos"
+msgstr ""
+
+#: .\core\models.py:331
+msgid "Justificativa"
+msgstr ""
+
+#: .\core\models.py:332
+msgid "solicitacoes"
+msgstr ""
+
+#: .\core\models.py:360
+msgid "Memorando "
+msgstr ""
+
+#: .\core\models.py:363
+msgid "Solicitação de Diaria"
+msgstr ""
+
+#: .\core\models.py:364
+msgid "Solicitações de Diarias"
+msgstr ""
+
+#: .\core\templates\index.html:35
+msgid "Cursos Disponiveis"
+msgstr ""
+
+#: .\core\templates\registre.html:21
+msgid "Cadastre-se"
+msgstr ""
+
+#: .\core\templates\registre.html:35
+msgid "Cadastrar"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:87
+msgid "ORIGEM"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:88
+msgid "DESTINO"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:89
+msgid "PROFESSOR"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:92
+msgid "DADOS BANCARIOS"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:93
+msgid "ENDEREÇO"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:94
+msgid "DATAS DA VIAGEM"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:95
+msgid "QTD. DIARIAS"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:96
+msgid "VALOR"
+msgstr ""
+
+#: .\core\templates\relatorio_diaria.html:132
+msgid "TOTAL DE DIARIAS"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "um"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "dois"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "três"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "quatro"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "cinco"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "seis"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "sete"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "oito"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "nove"
+msgstr ""
+
+#: .\core\utils.py:23
+msgid "dez"
+msgstr ""
+
+#: .\core\utils.py:24
+msgid "onze"
+msgstr ""
+
+#: .\core\utils.py:24
+msgid "doze"
+msgstr ""
+
+#: .\core\utils.py:24
+msgid "treze"
+msgstr ""
+
+#: .\core\utils.py:24
+msgid "quatorze"
+msgstr ""
+
+#: .\core\utils.py:24
+msgid "quinze"
+msgstr ""
+
+#: .\core\utils.py:25
+msgid "dezesseis"
+msgstr ""
+
+#: .\core\utils.py:25
+msgid "dezessete"
+msgstr ""
+
+#: .\core\utils.py:25
+msgid "dezoito"
+msgstr ""
+
+#: .\core\utils.py:25
+msgid "dezenove"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "vinte"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "trinta"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "quarenta"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "cinquenta"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "sessenta"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "setenta"
+msgstr ""
+
+#: .\core\utils.py:26
+msgid "oitenta"
+msgstr ""
+
+#: .\core\utils.py:27
+msgid "noventa"
+msgstr ""
+
+#: .\core\utils.py:28
+msgid "cento"
+msgstr ""
+
+#: .\core\utils.py:28
+msgid "duzentos"
+msgstr ""
+
+#: .\core\utils.py:28
+msgid "trezentos"
+msgstr ""
+
+#: .\core\utils.py:28
+msgid "quatrocentos"
+msgstr ""
+
+#: .\core\utils.py:28
+msgid "quinhentos"
+msgstr ""
+
+#: .\core\utils.py:28
+msgid "seissentos"
+msgstr ""
+
+#: .\core\utils.py:29
+msgid "setessentos"
+msgstr ""
+
+#: .\core\utils.py:29
+msgid "oitocentos"
+msgstr ""
+
+#: .\core\utils.py:29
+msgid "novecentos"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " mil"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " milhão"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " milhões"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " bilhão"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " bilhões"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " trilhão"
+msgstr ""
+
+#: .\core\utils.py:31
+msgid " trilhões"
+msgstr ""
+
+#: .\core\utils.py:39
+msgid "cem"
+msgstr ""
+
+#: .\templates\admin\index.html:18
+msgid "Sair"
+msgstr ""
+
+#: .\templates\admin\index.html:22 .\templates\admin\login.html:44
+msgid "Entrar"
+msgstr ""
+
+#: .\templates\admin\index.html:29 .\templates\core\change_forms.html:17
+#: .\templates\core\change_viagem.html:45
+msgid "Inicio"
+msgstr ""
+
+#: .\templates\admin\login.html:28 .\templates\admin\login.html:34
+msgid "Registre-se"
+msgstr ""
+
+#: .\templates\admin\login.html:39
+msgid "Esqueceu sua Senha ou Usuario?"
+msgstr ""
+
+#: .\templates\core\change_forms.html:20
+#: .\templates\core\change_viagem.html:48
+msgid "Adicionar"
+msgstr ""
+
+#: .\templates\core\change_forms.html:20
+#: .\templates\core\change_viagem.html:48
+msgid "Alterar"
+msgstr ""
+
+#: .\templates\core\change_forms.html:67 .\templates\core\change_forms.html:68
+#: .\templates\core\change_viagem.html:86
+#: .\templates\core\change_viagem.html:87
+msgid "Por favor, Corrija o erro Abaixo."
+msgstr ""
+
+#: .\templates\core\change_forms.html:88
+#: .\templates\core\change_viagem.html:107
+msgid "Ferramentas"
+msgstr ""
+
+#: .\templates\core\change_forms.html:93
+#: .\templates\core\change_viagem.html:112
+msgid "Historico"
+msgstr ""
+
+#: .\templates\core\change_forms.html:97
+#: .\templates\core\change_viagem.html:116
+msgid "Ver no Site"
+msgstr ""
+
+#: .\templates\registration\logged_out.html:16
+msgid "Obrigado!!!"
+msgstr ""
+
+#: .\templates\registration\logged_out.html:24
+msgid "Entrar Novamente"
+msgstr ""
+
+#: .\user\admin.py:25
+msgid "Important dates"
+msgstr ""
+
+#: .\user\models.py:12
+msgid "Nome do Usuário"
+msgstr ""
+
+#: .\user\models.py:16
+msgid "E-mail"
+msgstr ""
+
+#: .\user\models.py:17
+msgid "Nome"
+msgstr ""
+
+#: .\user\models.py:19
+msgid "Esta ativo"
+msgstr ""
+
+#: .\user\models.py:20
+msgid "E da equipe"
+msgstr ""
+
+#: .\user\models.py:21
+msgid "Data de entrada"
+msgstr ""
+
+#: .\user\models.py:41
+msgid "Usuario"
+msgstr ""
+
+#: .\user\models.py:42
+msgid "Usuarios"
+msgstr ""
