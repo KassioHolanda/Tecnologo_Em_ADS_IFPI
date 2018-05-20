@@ -1,12 +1,22 @@
 import datetime
 from rest_framework import serializers
-from .models import Game
+from rest_framework.relations import SlugRelatedField
+
+from .models import Game, GameCategory, Score, Player
 
 
-class GameSerializer(serializers.ModelSerializer):
+class GameSerializer(serializers.HyperlinkedModelSerializer):
+    game_category = SlugRelatedField(queryset=GameCategory.objects.all(), slug_field='name')
+
     class Meta:
         model = Game
-        fields = ('id', 'name', 'release_date', 'game_category')
+        fields = (
+            'url',
+            'game_category',
+            'name',
+            'release_date',
+            'played'
+        )
 
     def validar_campos(self, game):
         if game.name == None or game.name == '':
@@ -29,3 +39,46 @@ class GameSerializer(serializers.ModelSerializer):
     #         return game
     #     else:
     #         raise serializers.ValidationError('Jogo ja lancada, não pode ser excluido')
+
+
+class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = GameCategory
+        fields = ('url', 'pk', 'name', 'games')
+
+
+class ScoreSerializer(serializers.HyperlinkedModelSerializer):
+    game = serializers.SlugRelatedField(queryset=Game.objects.all(), slug_field='name')
+    player = serializers.SlugRelatedField(queryset=Player.objects.all(), slug_field='name')
+
+    class Meta:
+        model = Score
+        fields = (
+            'url',
+            'pk',
+            'score',
+            'score_date',
+            'player',
+            'game'
+        )
+
+    def validar_campos(self, score):
+        if score.game is None or score.played is None:
+            raise serializers.ValidationError('Os campos game ou played podem estar vazios, preencha-os')
+        elif score.score < 0 or score.score is None:
+            raise serializers.ValidationError('O campo score não foi preenchido corretamente')
+        elif score.score_date > datetime.now().date():
+            raise serializers.ValidationError('O campo score_date não foi preenchido corretamente')
+
+
+class PlayerSerializer(serializers.HyperlinkedModelSerializer):
+    scores = ScoreSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Player
+        fields = (
+            'url',
+            'name',
+            'gender',
+            'scores'
+        )
