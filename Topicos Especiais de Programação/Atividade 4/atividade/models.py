@@ -32,7 +32,7 @@ class User(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='address',on_delete=models.CASCADE)
     street = models.CharField(max_length=255)
     suite = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -48,7 +48,7 @@ class Address(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     body = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='my_posts',on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('pk',)

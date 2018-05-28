@@ -105,8 +105,8 @@ class PostsOfUserList(APIView):
 
     def get(self, request, pk_user, format=None):
         posts = Post.objects.filter(user_id=pk_user)
-        serializer = PostSerializer(posts, many=True, context={'request': request})
-        return Response(serializer.data)
+        post_serializer = PostSerializer(posts, many=True, context={'request': request})
+        return Response(post_serializer.data)
 
 
 class PostsOfUserDetail(APIView):
@@ -116,8 +116,24 @@ class PostsOfUserDetail(APIView):
 
     def get(self, request, pk_user, pk_post):
         posts = Post.objects.get(user_id=pk_user, id=pk_post)
-        serializer = PostSerializer(posts, context={'request': request})
-        return Response(serializer.data)
+        post_serializer = PostSerializer(posts, context={'request': request})
+        return Response(post_serializer.data)
+
+
+    def post(self, request):
+        post_serializer = PostSerializer(data=request.data)
+        if post_serializer.is_valid():
+            post_serializer.save()
+            return Response(post_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk_user, pk_post):
+        posts = Post.objects.get(user_id=pk_user, id=pk_post)
+        comments = Comment.objects.filter(post_id=posts.id)
+        for i in comments:
+            i.delete()
+        posts.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CommentsOfPostList(APIView):
@@ -140,5 +156,18 @@ class CommentOfPostDetail(APIView):
     def get(self, request, pk_post, pk_user, pk_comment):
         post_id = Post.objects.get(user_id=pk_user, id=pk_post)
         comment = Comment.objects.filter(post_id=post_id, id=pk_comment)
-        serializer = CommentSerializer(comment, many=True, context={'request': request})
-        return Response(serializer.data)
+        comment_serializer = CommentSerializer(comment, many=True, context={'request': request})
+        return Response(comment_serializer.data)
+
+    def post(self, request):
+        comment_serializer = CommentSerializer(data=request.data)
+        if comment_serializer.is_valid():
+            comment_serializer.save()
+            return Response(comment_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(comment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk_user, pk_post, pk_comment):
+        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
+        comment = Comment.objects.filter(post_id=post_id, id=pk_comment)
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
