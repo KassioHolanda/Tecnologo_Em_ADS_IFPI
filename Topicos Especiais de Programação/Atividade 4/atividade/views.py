@@ -1,14 +1,28 @@
 from django.shortcuts import render
 
 # Create your views here.
-from requests import Response
-from rest_framework import generics
+from django.views import View
+from rest_framework.response import Response
+from rest_framework import generics, status
 from rest_framework.reverse import reverse
+from rest_framework.views import APIView
 
 from atividade.models import Post, Comment
-from atividade.serializer import PostSerializer, CommentSerializer, UserPostSerializer, UserSerializer
+from atividade.serializer import PostSerializer, CommentSerializer, UserSerializer
 from atividade.models import User, Address
 from atividade.serializer import UserPostSerializer, AdreesSerializer
+
+
+class ApiRoot(generics.GenericAPIView):
+    name = 'api-root'
+
+    def get(self, request, *args, **kwargs):
+        return Response({
+            'users': reverse(UserList.name, request=request),
+            'posts': reverse(PostList.name, request=request),
+            'comments': reverse(CommentList.name, request=request),
+            'user-posts': reverse(UserPostList.name, request=request),
+        })
 
 
 class PostList(generics.ListCreateAPIView):
@@ -71,11 +85,51 @@ class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'userpost-detail'
 
 
-class ApiRoot(generics.GenericAPIView):
-    name = 'api-root'
+class PostsOfUserList(APIView):
+    # serializer_class = PostSerializer
+    # name = 'postsofuser-list'
 
-    def get(self, request, *args, **kwargs):
-        return Response({
-            'users': reverse(UserList.name, request=request),
-            'posts': reverse(PostList.name, request=request)
-        })
+    # def get_queryset(self):
+    #     queryset = Post.objects.filter(user_id=self.kwargs['pk_user'])
+    #     return queryset
+
+    def get_object(self, pk_user):
+        return Post.objects.filter(user_id=pk_user)
+
+    def get(self, request, pk_user, format=None):
+        posts = Post.objects.filter(user_id=pk_user)
+        serializer = PostSerializer(posts, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class PostsOfUserDetail(APIView):
+
+    def get_object(self, pk_user, pk_post):
+        return Post.objects.get(user_id=pk_user, id=pk_post)
+
+    def get(self, request, pk_user, pk_post):
+        posts = Post.objects.get(user_id=pk_user, id=pk_post)
+        serializer = PostSerializer(posts, context={'request': request})
+        return Response(serializer.data)
+
+class CommentsOfPostList(APIView):
+    def get_object(self, pk_post, pk_user):
+        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
+        return Comment.objects.filter(post_id=post_id)
+
+    def get(self, request, pk_post, pk_user):
+        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
+        comments = Comment.objects.filter(post_id=post_id)
+        serializer = CommentSerializer(comments, many=True, context={'request': request})
+        return Response(serializer.data)
+
+class CommentOfPostDetail(APIView):
+    def get_object(self, pk_post, pk_user, pk_comment):
+        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
+        return Comment.objects.filter(post_id=post_id, id=pk_comment)
+
+    def get(self, request, pk_post, pk_user, pk_comment):
+        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
+        comment = Comment.objects.filter(post_id=post_id, id=pk_comment)
+        serializer = CommentSerializer(comment, many=True, context={'request': request})
+        return Response(serializer.data)

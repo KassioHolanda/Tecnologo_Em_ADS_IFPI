@@ -39,7 +39,7 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('title',)
+        ordering = ('pk',)
 
     def __str__(self):
         return self.title
@@ -50,7 +50,7 @@ class Post(models.Model):
 
     @property
     def count_comments(self):
-        return self.comment.all().count()
+        return Comment.objects.filter(post=self).count()
 
 
 class Comment(models.Model):

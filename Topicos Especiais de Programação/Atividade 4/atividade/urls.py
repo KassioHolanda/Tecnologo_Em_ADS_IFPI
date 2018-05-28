@@ -22,17 +22,28 @@ from django.contrib import admin
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('atividade/', views.PostList.as_view(), name=views.PostList.name),
+
+    path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
+    # path('atividade/', views.PostList.as_view(), name=views.PostList.name),
     path('user/', views.UserList.as_view(), name=views.UserList.name),
-    
-    path('userpost/', views.UserPostList.as_view(), name=views.UserPostList.name),
-    path('userpost/<int:pk>', views.UserPostDetail.as_view(), name=views.UserPostDetail.name),
-    
     path('post/', views.PostList.as_view(), name=views.PostList.name),
     path('post/<int:pk>', views.PostDetail.as_view(), name=views.PostDetail.name),
     path('comment/', views.CommentList.as_view(), name=views.CommentList.name),
-    path('comment/<int:pk>', views.CommentDetail.as_view(), name=views.CommentDetail.name),
+    path('comment/<int:pk>/', views.CommentDetail.as_view(), name=views.CommentDetail.name),
     path('address/', views.AdreesList.as_view(), name=views.AdreesList.name),
-    path('address/<int:pk>', views.AdreesDetail.as_view(), name=views.AdreesDetail.name),
-    path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
+    path('address/<int:pk>/', views.AdreesDetail.as_view(), name=views.AdreesDetail.name),
+
+    path('userpost/', views.UserPostList.as_view(), name=views.UserPostList.name),
+    path('userpost/<int:pk>/', views.UserPostDetail.as_view(), name=views.UserPostDetail.name),
+
+    path('userpost/<int:pk_user>/posts/', views.PostsOfUserList.as_view(), name='post-user-list'),
+    path('userpost/<int:pk_user>/posts/<int:pk_post>/', views.PostsOfUserDetail.as_view(), name='post-user-detail'),
+
+    path('userpost/<int:pk_user>/posts/<int:pk_post>/comments/', views.CommentsOfPostList.as_view(),
+         name='comments-post-list'),
+    path('userpost/<int:pk_user>/posts/<int:pk_post>/comments/<int:pk_comment>', views.CommentOfPostDetail.as_view(),
+         name='comments-post-detail'),
+
+
+
 ]

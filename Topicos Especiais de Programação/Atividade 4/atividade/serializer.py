@@ -8,7 +8,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('pk', 'name', 'email', 'body', 'post')
+        fields = ('pk', 'name', 'email', 'body', 'post', 'url')
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,7 +17,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('pk', 'user', 'title', 'body', 'comments', 'count_comments')
+        fields = ('pk', 'user', 'title', 'body', 'count_comments', 'comments')
 
 
 class AdreesSerializer(serializers.HyperlinkedModelSerializer):
@@ -42,3 +42,5 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('name', 'email')
 
+class UserCountPostComment(serializers.HyperlinkedModelSerializer):
+    pass
