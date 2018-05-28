@@ -15,6 +15,18 @@ class User(models.Model):
     def posts(self):
         return Post.objects.filter(user=self)
 
+    @property
+    def count_posts(self):
+        return Post.objects.filter(user=self).count()
+
+    @property
+    def count_comments(self):
+        count_comment = 0
+        for i in self.posts:
+            for x in Comment.objects.filter(post=i):
+                count_comment += 1
+        return count_comment
+
     def __str__(self):
         return self.name
 

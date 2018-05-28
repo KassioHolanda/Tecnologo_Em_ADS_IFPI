@@ -8,7 +8,7 @@ from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
 from atividade.models import Post, Comment
-from atividade.serializer import PostSerializer, CommentSerializer, UserSerializer
+from atividade.serializer import PostSerializer, CommentSerializer, UserSerializer, UserCountPostCommentSerializer
 from atividade.models import User, Address
 from atividade.serializer import UserPostSerializer, AdreesSerializer
 
@@ -22,6 +22,7 @@ class ApiRoot(generics.GenericAPIView):
             'posts': reverse(PostList.name, request=request),
             'comments': reverse(CommentList.name, request=request),
             'user-posts': reverse(UserPostList.name, request=request),
+            'user-detail': reverse(UserCountPostComment.name, request=request),
         })
 
 
@@ -85,6 +86,12 @@ class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'userpost-detail'
 
 
+class UserCountPostComment(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCountPostCommentSerializer
+    name = 'usercountpostcomment-detail'
+
+
 class PostsOfUserList(APIView):
     # serializer_class = PostSerializer
     # name = 'postsofuser-list'
@@ -112,6 +119,7 @@ class PostsOfUserDetail(APIView):
         serializer = PostSerializer(posts, context={'request': request})
         return Response(serializer.data)
 
+
 class CommentsOfPostList(APIView):
     def get_object(self, pk_post, pk_user):
         post_id = Post.objects.get(user_id=pk_user, id=pk_post)
@@ -122,6 +130,7 @@ class CommentsOfPostList(APIView):
         comments = Comment.objects.filter(post_id=post_id)
         serializer = CommentSerializer(comments, many=True, context={'request': request})
         return Response(serializer.data)
+
 
 class CommentOfPostDetail(APIView):
     def get_object(self, pk_post, pk_user, pk_comment):

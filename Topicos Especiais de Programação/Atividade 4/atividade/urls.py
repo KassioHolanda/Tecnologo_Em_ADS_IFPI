@@ -43,7 +43,6 @@ urlpatterns = [
          name='comments-post-list'),
     path('userpost/<int:pk_user>/posts/<int:pk_post>/comments/<int:pk_comment>', views.CommentOfPostDetail.as_view(),
          name='comments-post-detail'),
-
-
+    path('userdetail/', views.UserCountPostComment.as_view(), name=views.UserCountPostComment.name),
 
 ]
