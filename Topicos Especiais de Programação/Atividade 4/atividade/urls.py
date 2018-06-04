@@ -26,6 +26,8 @@ urlpatterns = [
     path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
     # path('atividade/', views.PostList.as_view(), name=views.PostList.name),
     path('user/', views.UserList.as_view(), name=views.UserList.name),
+    path('user/<int:pk>', views.UserDetail.as_view(), name=views.UserDetail.name),
+
     path('post/', views.PostList.as_view(), name=views.PostList.name),
     path('post/<int:pk>', views.PostDetail.as_view(), name=views.PostDetail.name),
     path('comment/', views.CommentList.as_view(), name=views.CommentList.name),
@@ -34,7 +36,7 @@ urlpatterns = [
     path('address/<int:pk>/', views.AdreesDetail.as_view(), name=views.AdreesDetail.name),
 
     path('profile-posts/', views.ProfilePostsList.as_view(), name=views.ProfilePostsList.name),
-    path('profile-posts/<int:pk:', views.ProfilePostsDetail.as_view(), name=views.ProfilePostsDetail.name),
+    path('profile-posts/<int:pk>', views.ProfilePostsDetail.as_view(), name=views.ProfilePostsDetail.name),
 
     path('profiles/', views.UserPostList.as_view(), name=views.UserPostList.name),
     path('profiles/<int:pk>/', views.UserPostDetail.as_view(), name=views.UserPostDetail.name),
