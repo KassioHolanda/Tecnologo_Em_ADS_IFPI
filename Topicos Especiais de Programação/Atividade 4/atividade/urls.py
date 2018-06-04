@@ -33,16 +33,19 @@ urlpatterns = [
     path('address/', views.AdreesList.as_view(), name=views.AdreesList.name),
     path('address/<int:pk>/', views.AdreesDetail.as_view(), name=views.AdreesDetail.name),
 
-    path('userpost/', views.UserPostList.as_view(), name=views.UserPostList.name),
-    path('userpost/<int:pk>/', views.UserPostDetail.as_view(), name=views.UserPostDetail.name),
+    path('profile-posts/', views.ProfilePostsList.as_view(), name=views.ProfilePostsList.name),
+    path('profile-posts/<int:pk:', views.ProfilePostsDetail.as_view(), name=views.ProfilePostsDetail.name),
 
-    path('userpost/<int:pk_user>/posts/', views.PostsOfUserList.as_view(), name='post-user-list'),
-    path('userpost/<int:pk_user>/posts/<int:pk_post>/', views.PostsOfUserDetail.as_view(), name='post-user-detail'),
+    path('profiles/', views.UserPostList.as_view(), name=views.UserPostList.name),
+    path('profiles/<int:pk>/', views.UserPostDetail.as_view(), name=views.UserPostDetail.name),
 
-    path('userpost/<int:pk_user>/posts/<int:pk_post>/comments/', views.CommentsOfPostList.as_view(),
-         name='comments-post-list'),
-    path('userpost/<int:pk_user>/posts/<int:pk_post>/comments/<int:pk_comment>', views.CommentOfPostDetail.as_view(),
-         name='comments-post-detail'),
+    path('profiles/<int:pk_user>/posts/', views.PostsOfUserList.as_view(), name='posts-list'),
+    path('profiles/<int:pk_user>/posts/<int:pk_post>/', views.PostsOfUserDetail.as_view(), name='posts-detail'),
+
+    path('profiles/<int:pk_user>/posts/<int:pk_post>/comments/', views.CommentsOfPostList.as_view(),
+         name='comments-list'),
+    path('profiles/<int:pk_user>/posts/<int:pk_post>/comments/<int:pk_comment>', views.CommentOfPostDetail.as_view(),
+         name='comments-detail'),
     path('userdetail/', views.UserCountPostComment.as_view(), name=views.UserCountPostComment.name),
 
 ]

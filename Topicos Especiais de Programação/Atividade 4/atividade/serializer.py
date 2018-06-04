@@ -46,4 +46,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserCountPostCommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('pk', 'name', 'count_posts', 'count_comments')
+        fields = ('pk', 'name', 'total_posts', 'total_comments')

@@ -21,7 +21,9 @@ class ApiRoot(generics.GenericAPIView):
             'users': reverse(UserList.name, request=request),
             'posts': reverse(PostList.name, request=request),
             'comments': reverse(CommentList.name, request=request),
-            'user-posts': reverse(UserPostList.name, request=request),
+            'address': reverse(AdreesList.name, request=request),
+            'profile-posts': reverse(ProfilePostsList.name, request=request),
+            'profile': reverse(UserPostList.name, request=request),
             'user-detail': reverse(UserCountPostComment.name, request=request),
         })
 
@@ -62,6 +64,18 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'user-detail'
 
 
+class ProfilePostsList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserPostSerializer
+    name = 'profileposts-list'
+
+
+class ProfilePostsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserPostSerializer
+    name = 'profileposts-detail'
+
+
 class AdreesList(generics.ListCreateAPIView):
     queryset = Address.objects.all()
     serializer_class = AdreesSerializer
@@ -100,9 +114,6 @@ class PostsOfUserList(APIView):
     #     queryset = Post.objects.filter(user_id=self.kwargs['pk_user'])
     #     return queryset
 
-    def get_object(self, pk_user):
-        return Post.objects.filter(user_id=pk_user)
-
     def get(self, request, pk_user, format=None):
         posts = Post.objects.filter(user_id=pk_user)
         post_serializer = PostSerializer(posts, many=True, context={'request': request})
@@ -111,14 +122,10 @@ class PostsOfUserList(APIView):
 
 class PostsOfUserDetail(APIView):
 
-    def get_object(self, pk_user, pk_post):
-        return Post.objects.get(user_id=pk_user, id=pk_post)
-
     def get(self, request, pk_user, pk_post):
         posts = Post.objects.get(user_id=pk_user, id=pk_post)
         post_serializer = PostSerializer(posts, context={'request': request})
         return Response(post_serializer.data)
-
 
     def post(self, request):
         post_serializer = PostSerializer(data=request.data)
@@ -137,9 +144,6 @@ class PostsOfUserDetail(APIView):
 
 
 class CommentsOfPostList(APIView):
-    def get_object(self, pk_post, pk_user):
-        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
-        return Comment.objects.filter(post_id=post_id)
 
     def get(self, request, pk_post, pk_user):
         post_id = Post.objects.get(user_id=pk_user, id=pk_post)
@@ -149,12 +153,9 @@ class CommentsOfPostList(APIView):
 
 
 class CommentOfPostDetail(APIView):
-    def get_object(self, pk_post, pk_user, pk_comment):
-        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
-        return Comment.objects.filter(post_id=post_id, id=pk_comment)
 
     def get(self, request, pk_post, pk_user, pk_comment):
-        post_id = Post.objects.get(user_id=pk_user, id=pk_post)
+        post_id = Post.objects.get(id=pk_post)
         comment = Comment.objects.filter(post_id=post_id, id=pk_comment)
         comment_serializer = CommentSerializer(comment, many=True, context={'request': request})
         return Response(comment_serializer.data)
@@ -162,6 +163,8 @@ class CommentOfPostDetail(APIView):
     def post(self, request):
         comment_serializer = CommentSerializer(data=request.data)
         if comment_serializer.is_valid():
+            # comment_serializer.post(post=Post.objects.get(id=pk_post))
+            # comment_serializer.post.use
             comment_serializer.save()
             return Response(comment_serializer.data, status=status.HTTP_201_CREATED)
         return Response(comment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

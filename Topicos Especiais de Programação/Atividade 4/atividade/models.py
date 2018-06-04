@@ -16,11 +16,11 @@ class User(models.Model):
         return Post.objects.filter(user=self)
 
     @property
-    def count_posts(self):
+    def total_posts(self):
         return Post.objects.filter(user=self).count()
 
     @property
-    def count_comments(self):
+    def total_comments(self):
         count_comment = 0
         for i in self.posts:
             for x in Comment.objects.filter(post=i):
