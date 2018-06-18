@@ -1,6 +1,8 @@
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 
 from atividade import views
+from atividade.views import CustomAuthToken
 
 """atividadeapi URL Configuration
 
@@ -17,7 +19,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
@@ -49,5 +51,9 @@ urlpatterns = [
     path('profiles/<int:pk_user>/posts/<int:pk_post>/comments/<int:pk_comment>', views.CommentOfPostDetail.as_view(),
          name='comments-detail'),
     path('userdetail/', views.UserCountPostComment.as_view(), name=views.UserCountPostComment.name),
+
+    path('api-auth/', include('rest_framework.urls')),
+    # path('api-token-auth/', obtain_auth_token),
+    path('api-token-auth2/', CustomAuthToken.as_view()),
 
 ]

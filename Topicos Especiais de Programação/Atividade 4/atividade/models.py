@@ -1,23 +1,28 @@
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 
 
 # Create your models here.
 
-class User(models.Model):
-    name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
+class Usuario(AbstractUser):
+    name = models.CharField(max_length=255, unique=True)
+    email = models.EmailField('Email', max_length=255)
+    objects = UserManager()
+
+    # USERNAME_FIELD = 'username'
 
     @property
     def address(self):
-        return Address.objects.filter(user=self)
+        return Address.objects.filter(usuario=self)
 
     @property
     def posts(self):
-        return Post.objects.filter(user=self)
+        return Post.objects.filter(usuario=self)
 
     @property
     def total_posts(self):
-        return Post.objects.filter(user=self).count()
+        return Post.objects.filter(usuario=self).count()
 
     @property
     def total_comments(self):
@@ -32,7 +37,7 @@ class User(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(User, related_name='address',on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, related_name='address', on_delete=models.CASCADE)
     street = models.CharField(max_length=255)
     suite = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -46,9 +51,10 @@ class Address(models.Model):
 
 
 class Post(models.Model):
+    owner = models.ForeignKey(Usuario, related_name='posts', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     body = models.CharField(max_length=255)
-    user = models.ForeignKey(User, related_name='my_posts',on_delete=models.CASCADE)
+    # usuario = models.ForeignKey('auth.User', related_name='my_posts', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('pk',)

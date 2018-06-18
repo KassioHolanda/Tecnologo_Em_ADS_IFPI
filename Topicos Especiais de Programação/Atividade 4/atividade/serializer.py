@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from atividade.models import Post, Comment, User, Address
+from atividade.models import Post, Comment, Usuario, Address
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
@@ -12,20 +12,22 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
-    user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='name')
+    owner = serializers.ReadOnlyField(source='owner.username')
+    # comments = CommentSerializer(many=True, read_only=True)
+
+    # usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field='username')
 
     class Meta:
         model = Post
-        fields = ('pk', 'user', 'title', 'body', 'count_comments', 'comments')
+        fields = ('pk', 'owner', 'title', 'body', 'count_comments')
 
 
 class AdreesSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='name')
+    usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field='name')
 
     class Meta:
         model = Address
-        fields = ('pk', 'street', 'suite', 'city', 'zipcode', 'user')
+        fields = ('pk', 'street', 'suite', 'city', 'zipcode', 'usuario')
 
 
 class UserPostSerializer(serializers.HyperlinkedModelSerializer):
@@ -33,17 +35,17 @@ class UserPostSerializer(serializers.HyperlinkedModelSerializer):
     posts = PostSerializer(many=True, read_only=True)
 
     class Meta:
-        model = User
+        model = Usuario
         fields = ('pk', 'name', 'email', 'address', 'posts')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
+        model = Usuario
         fields = ('name', 'email')
 
 
 class UserCountPostCommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
+        model = Usuario
         fields = ('pk', 'name', 'total_posts', 'total_comments')

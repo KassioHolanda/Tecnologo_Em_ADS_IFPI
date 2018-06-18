@@ -2,14 +2,18 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views import View
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.reverse import reverse
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from atividade.models import Post, Comment
+from atividade.permissions import IsPostOwnerOrReadOnly
 from atividade.serializer import PostSerializer, CommentSerializer, UserSerializer, UserCountPostCommentSerializer
-from atividade.models import User, Address
+from atividade.models import Usuario, Address
 from atividade.serializer import UserPostSerializer, AdreesSerializer
 
 
@@ -21,6 +25,8 @@ class ApiRoot(generics.GenericAPIView):
             'users': reverse(UserList.name, request=request),
             'posts': reverse(PostList.name, request=request),
             'comments': reverse(CommentList.name, request=request),
+            '': '',
+            # '': '',
             'address': reverse(AdreesList.name, request=request),
             'profile-posts': reverse(ProfilePostsList.name, request=request),
             'profile': reverse(UserPostList.name, request=request),
@@ -28,16 +34,45 @@ class ApiRoot(generics.GenericAPIView):
         })
 
 
+class CustomAuthToken(ObtainAuthToken):
+    throttle_scope = 'api-token'
+    throttle_classes = (ScopedRateThrottle,)
+
+    def post(self, request, *args):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        print(serializer)
+        serializer.is_valid(raise_exception=True)
+        usuario = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=usuario)
+        return Response({
+            'token': token.key,
+            'user_id': usuario.pk,
+            'email': usuario.email
+        })
+
+
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    name = 'atividade-list'
+    name = 'post-list'
+
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly,
+    )
+    throttle_classes = (ScopedRateThrottle,)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    name = 'atividade-list'
+    name = 'post-detail'
+
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly,
+    )
+    throttle_classes = (ScopedRateThrottle,)
 
 
 class CommentList(generics.ListCreateAPIView):
@@ -45,35 +80,70 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     name = 'comment-list'
 
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly,
+    )
+    throttle_classes = (ScopedRateThrottle,)
+
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     name = 'comment-detail'
 
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly,
+    )
+    throttle_classes = (ScopedRateThrottle,)
 
-class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+
+class UserList(generics.ListAPIView):
+    queryset = Usuario.objects.all()
     serializer_class = UserSerializer
     name = 'user-list'
 
+    permission_classes = (
+        permissions.IsAuthenticated,
+        # IsOwnerOrReadOnly
+    )
+    throttle_classes = (ScopedRateThrottle,)
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = Usuario.objects.all()
     serializer_class = UserSerializer
     name = 'user-detail'
 
+    permission_classes = (
+        permissions.IsAuthenticated,
+        # IsOwnerOrReadOnly
+    )
+    throttle_classes = (ScopedRateThrottle,)
+
 
 class ProfilePostsList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+    queryset = Usuario.objects.all()
     serializer_class = UserPostSerializer
     name = 'profileposts-list'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly
+    )
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class ProfilePostsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    queryset = Usuario.objects.all()
     serializer_class = UserPostSerializer
     name = 'profileposts-detail'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly
+    )
 
 
 class AdreesList(generics.ListCreateAPIView):
@@ -89,24 +159,33 @@ class AdreesDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserPostList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+    queryset = Usuario.objects.all()
     serializer_class = UserPostSerializer
     name = 'userpost-list'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly
+    )
 
 
 class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    queryset = Usuario.objects.all()
     serializer_class = UserPostSerializer
     name = 'userpost-detail'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsPostOwnerOrReadOnly
+    )
 
 
 class UserCountPostComment(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+    queryset = Usuario.objects.all()
     serializer_class = UserCountPostCommentSerializer
     name = 'usercountpostcomment-detail'
 
 
 class PostsOfUserList(APIView):
+
     # serializer_class = PostSerializer
     # name = 'postsofuser-list'
 
@@ -115,16 +194,16 @@ class PostsOfUserList(APIView):
     #     return queryset
 
     def get(self, request, pk_user, format=None):
-        posts = Post.objects.filter(user_id=pk_user)
+        posts = Post.objects.filter(usuario_id=pk_user)
         post_serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(post_serializer.data)
 
 
 class PostsOfUserDetail(APIView):
-
     def get(self, request, pk_user, pk_post):
-        posts = Post.objects.get(user_id=pk_user, id=pk_post)
+        posts = Post.objects.get(usuario_id=pk_user, id=pk_post)
         post_serializer = PostSerializer(posts, context={'request': request})
+
         return Response(post_serializer.data)
 
     def post(self, request):
@@ -135,7 +214,7 @@ class PostsOfUserDetail(APIView):
         return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk_user, pk_post):
-        posts = Post.objects.get(user_id=pk_user, id=pk_post)
+        posts = Post.objects.get(usuario_id=pk_user, id=pk_post)
         comments = Comment.objects.filter(post_id=posts.id)
         for i in comments:
             i.delete()

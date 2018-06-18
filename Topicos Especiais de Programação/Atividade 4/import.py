@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from atividade.models import *
 
 file = "db.json"
@@ -10,15 +12,19 @@ comments = json['comments']
 # addresses = json['users']['address']
 
 for user in users:
-    User.objects.create(
+
+    Usuario.objects.create_user(
         name=user['name'],
         email=user['email'],
+        username=user['username'].lower(),
+        password='senha12345',
+        is_superuser=True,
     ).save()
 
-    user_id = User.objects.get(id=user['id'])
+    user_id = Usuario.objects.get(id=user['id'])
 
     Address(
-        user=user_id,
+        usuario=user_id,
         street=user['address']['street'],
         suite=user['address']['suite'],
         city=user['address']['city'],
@@ -27,7 +33,8 @@ for user in users:
 
 for post in posts:
     Post.objects.create(
-        user=User.objects.get(id=post['userId']),
+        owner=Usuario.objects.get(id=post['userId']),
+        # usuario=Usuario.objects.get(id=post['userId']),
         title=post['title'].replace('\n', ''),
         body=post['body'].replace('\n', '')
     ).save()

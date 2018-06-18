@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'atividade',
     'rest_framework',
+    'rest_framework.authtoken'
+    # 'django.contrib.auth'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,23 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'atividade.urls'
+AUTH_USER_MODEL = 'atividade.Usuario'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '20/hour',
+        'user': '50/hour',
+        'api-token': '1/hour',
+    }
+}
 
 TEMPLATES = [
     {
