@@ -47,6 +47,7 @@ class CustomAuthToken(ObtainAuthToken):
         return Response({
             'token': token.key,
             'user_id': usuario.pk,
+            'name': usuario.name,
             'email': usuario.email
         })
 
@@ -60,7 +61,10 @@ class PostList(generics.ListCreateAPIView):
         permissions.IsAuthenticatedOrReadOnly,
         IsPostOwnerOrReadOnly,
     )
-    throttle_classes = (ScopedRateThrottle,)
+
+    throttle_classes = (
+        ScopedRateThrottle,
+                        )
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
