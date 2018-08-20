@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/titulos_adm_id"
+            android:icon="@drawable/home_account"
+            android:title="Pagina Inicial" />
+        <item
+            android:id="@+id/editoras_adm_id"
+            android:icon="@drawable/library_books"
+            android:title="Editoras" />
+        <item
+            android:id="@+id/emprestimos_adm_id"
+            android:icon="@drawable/note_multiple"
+            android:title="Emprestimos" />
+        <item
+            android:id="@+id/meus_dados_id"
+            android:icon="@drawable/database"
+            android:title="Meus dados" />
+        <item
+            android:id="@+id/usuario_adm_id"
+            android:icon="@drawable/account_2"
+            android:title="Usuarios" />
+        <item
+            android:id="@+id/sair_adm_id"
+            android:icon="@drawable/logout"
+            android:title="Sair" />
+
+    </group>
+
+
+</menu>

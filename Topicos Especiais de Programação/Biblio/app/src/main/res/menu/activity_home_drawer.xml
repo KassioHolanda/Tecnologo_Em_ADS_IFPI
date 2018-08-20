@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/pagina_inicial_id"
+            android:icon="@drawable/home_account"
+            android:title="Pagina Inicial" />
+        <item
+            android:id="@+id/meus_emprestimos_id"
+            android:icon="@drawable/library_books"
+            android:title="Meus Emprestimos" />
+
+        <item
+            android:id="@+id/reservas_id"
+            android:icon="@drawable/database"
+            android:title="Minhas Reservas" />
+        <item
+            android:id="@+id/meus_dados_id"
+            android:icon="@drawable/database"
+            android:title="Meus dados" />
+
+        <!--<item-->
+            <!--android:id="@+id/nav_manage"-->
+            <!--android:icon="@drawable/ic_menu_manage"-->
+            <!--android:title="Tools" />-->
+        <item
+            android:id="@+id/sair_id"
+            android:icon="@drawable/logout"
+            android:title="Sair" />
+    </group>
+</menu>

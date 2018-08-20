@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        card_view:cardBackgroundColor="#ffffff">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+
+            tools:context=".fragments.bibliotecario.RegistrarTituloFragment">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/nome_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Nome" />
+
+                <EditText
+                    android:id="@+id/descricao_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Descrição" />
+
+                <EditText
+                    android:id="@+id/isbn_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="ISBN" />
+
+                <EditText
+                    android:id="@+id/preco_titulo_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Preço Aluguel"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/ano_titulo_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Ano Titulo"
+                    android:inputType="date" />
+
+                <EditText
+                    android:id="@+id/estoque_titulo_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Quantidade Estoque: "
+                    android:inputType="number" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="Autor"
+                        android:textSize="20dp" />
+
+                    <Spinner
+                        android:id="@+id/autores_spinner_id"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="2"
+                        android:fontFamily="sans-serif-condensed"></Spinner>
+
+                    <Button
+                        android:id="@+id/registrar_autor_id"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/plus_2" />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="Editora"
+                        android:textSize="20dp" />
+
+                    <Spinner
+                        android:id="@+id/editoras_spinner_id"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+
+                        android:layout_weight="2"
+                        android:fontFamily="sans-serif-condensed"></Spinner>
+
+                    <Button
+                        android:id="@+id/registrar_editora_id"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/plus_2" />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="Categoria"
+                        android:textSize="20dp" />
+
+                    <Spinner
+                        android:id="@+id/categorias_spinner_id"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="2"
+                        android:fontFamily="sans-serif-condensed"></Spinner>
+
+                    <Button
+                        android:id="@+id/registrar_categoria_id"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/plus_2" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/registrar_titulos_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#112799"
+                    android:text="Registrar"
+                    android:textColor="#fff" />
+            </LinearLayout>
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+</ScrollView>

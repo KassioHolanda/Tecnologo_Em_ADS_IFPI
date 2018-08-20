@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.user.EmprestimosFragment">
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/recycler_view_emprestimo_usuario_id"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--</android.support.v7.widget.RecyclerView>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/titulo_emprestimo_detalhe_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Titulo" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/quantidade_dias_emprestimo_detalhe_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Quantidade de Dias" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/data_emprestimo_detalhe_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Data Emprestimo" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/data_devolucao_detalhe_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Data Devolução" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/cancelar_emprestiom_id"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#112799"
+            android:text="Cancelar Emprestimo"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/devolver_emprestiom_id"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#112799"
+            android:text="Devolver"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+</FrameLayout>
