@@ -4,7 +4,7 @@ cairocffi==0.8.0
 certifi==2017.11.5
 cffi==1.11.2
 chardet==3.0.4
-cryptography==2.1.4
+cryptography==3.2
 cssselect==1.0.1
 cssselect2==0.2.0
 dj-database-url==0.4.2
