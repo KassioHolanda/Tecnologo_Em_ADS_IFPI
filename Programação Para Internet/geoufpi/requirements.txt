@@ -40,7 +40,7 @@ templated-docs==0.3.1
 tinycss==0.4
 tinycss2==0.6.0
 updatable==0.2.0
-urllib3==1.22
+urllib3==1.26.5
 webencodings==0.5.1
 whitenoise==3.3.1
 xhtml2pdf==0.2b1
